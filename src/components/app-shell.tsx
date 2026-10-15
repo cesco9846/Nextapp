@@ -49,9 +49,12 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   const path = usePathname();
-  const navigationPath = path.startsWith("/app/team")
-    ? "/app/impostazioni"
-    : path;
+  const navigationPath =
+    path.startsWith("/app/team") || path.startsWith("/app/documenti")
+      ? "/app/impostazioni"
+      : path.startsWith("/app/appuntamenti")
+        ? "/app/agenda"
+        : path;
   const queryClient = useQueryClient();
   const { data, error, refetch } = useQuery({
     queryKey: ["workspace"],
@@ -66,7 +69,11 @@ export function AppShell({
   }
   const currentTitle = path.startsWith("/app/team")
     ? "Team"
-    : (navigation.find((n) => path.startsWith(n.href))?.title ?? "Studio");
+    : path.startsWith("/app/documenti")
+      ? "Consensi e pigmenti"
+      : path.startsWith("/app/appuntamenti")
+        ? "Preparazione trattamento"
+        : (navigation.find((n) => path.startsWith(n.href))?.title ?? "Studio");
   const accessError =
     error instanceof RequestError && [401, 403].includes(error.status);
   return (

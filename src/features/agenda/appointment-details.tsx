@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   CalendarDays,
@@ -159,6 +160,19 @@ export function AppointmentDetails({
               Promemoria email automatici non attivi.
             </p>
           </section>
+          {(profile.role === "owner" || profile.clinical_access) && (
+            <section className="border-t pt-6">
+              <h3 className="text-lg">Prima del trattamento</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Modelli, anamnesi e lotti scelti per questa seduta.
+              </p>
+              <Button variant="outline" asChild className="mt-4 w-full">
+                <Link href={`/app/appuntamenti/${a.id}/preparazione`}>
+                  Apri preparazione
+                </Link>
+              </Button>
+            </section>
+          )}
           {editable && (
             <div className="space-y-3 border-t pt-6">
               <Button variant="outline" className="w-full" onClick={onEdit}>

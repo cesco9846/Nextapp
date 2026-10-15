@@ -35,6 +35,16 @@ const dbErrors: Record<string, [number, string]> = {
   P0002: [404, "L'elemento non è stato trovato."],
 };
 const reasons: Record<string, string> = {
+  INVALID_TEMPLATE: "Controlla tipo, testo e servizio del modello selezionato.",
+  INVALID_QUESTIONS:
+    "Controlla le domande: massimo 30, con etichetta e tipo di risposta.",
+  INVALID_PIGMENT: "Inserisci marca e nome del pigmento.",
+  INVALID_LOT: "Controlla numero, scadenza ed etichetta del lotto.",
+  INVALID_PREPARATION: "Controlla modelli e lotti della preparazione.",
+  INVALID_ANSWERS:
+    "Le risposte non corrispondono al questionario selezionato. Ricarica il modello.",
+  LOT_UNAVAILABLE:
+    "Un lotto è archiviato o scade prima del trattamento. Scegli un lotto utilizzabile.",
   INVALID_FILE: "Seleziona un’immagine JPEG, PNG o WebP, fino a 10 MB.",
   FILE_EXPIRED:
     "Il caricamento è scaduto o è stato annullato. Avviane uno nuovo.",

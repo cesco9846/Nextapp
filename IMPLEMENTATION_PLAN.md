@@ -93,7 +93,8 @@ non avviati restano **pianificati**.
 | W09              | Implementato e migrato                | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; migrazioni remote applicate e revisione grafica ship.                 |
 | W18              | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                         |
 | W10              | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                       |
-| W11–W17, W19–W25 | Pianificato                           | Prossimo incremento: modelli consenso, questionari e lotti; poi flusso cliente e firma.                                              |
+| W11              | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                 |
+| W12–W17, W19–W25 | Pianificato                           | Prossimo incremento: compilazione cliente con link limitato e modalità tablet, poi firma/PDF e foto.                             |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -171,14 +172,19 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-Proseguire W11 con modelli consenso/anamnesi versionati e pigmenti/lotti,
-riusando la base Storage W10. Poi W12–W14: link cliente, firma/PDF e foto.
+Proseguire W12 con link cliente a scopo limitato e modalità tablet isolata,
+riusando le versioni pubblicate e la preparazione W11. Poi W13–W14: firma/PDF e foto.
 Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
 [STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
 W05/W07 nei collaudi browser residui e scheduler file restano aperti. W15 può
 avanzare sulla coda transazionale; nessun invio reale finché provider e
 osservabilità non sono verificati. Nessun dato clinico reale prima dei relativi
 permessi, flussi e criteri di conservazione.
+
+Per i reminder, [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md) confronta mittente Glow
+con Reply-To dello studio, domini dedicati e collegamenti Gmail/Outlook. Il primo
+è la proposta iniziale, ancora da confermare; Resend è un’opzione e `noreply` non
+è un requisito. Nessun account, dominio a pagamento o invio reale è stato attivato.
 
 ## Registro di avanzamento
 
@@ -212,3 +218,15 @@ verifica/normalizzazione, lettura auditata con URL 30s, pulizia con lease e
 controllo del tipo di operazione Storage e riconciliazione degli upload tardivi. Tutte e tre migrate e ripetute sul remoto,
 senza fixture. 10 unit, 141 pgTAP e 18 E2E passati, build/lint/tipi superati.
 Scheduler remoto, UI foto e dossier non ancora consegnati: prossimi W11–W14.
+
+### Quarto incremento — modelli, pigmenti e preparazione, 15 ottobre 2026
+
+W11 implementato: catalogo clinico con pubblicazioni immutabili, domande tipizzate,
+pigmenti/lotti ed etichette private; preparazione non firmata per appuntamento.
+Le risposte restano private e ogni lettura è auditata prima di restituirle.
+Versioni e snapshot dei lotti rimangono stabili dopo edit del catalogo. La
+migrazione 011 serializza accessi clinici e revoche, ricontrollando i permessi
+dopo eventuale attesa. Test di contesa reali verificano che una revoca prevalga
+su letture e scritture già in attesa. Corretto l’ingombro delle schede su telefono.
+Stato ed evidenze definitive in DEVELOPMENT_CHECKPOINT.md. Prossimo W12;
+nessuna firma, PDF o email reale dichiarata completata da questa consegna.

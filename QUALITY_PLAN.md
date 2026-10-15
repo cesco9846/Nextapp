@@ -1,21 +1,31 @@
 # Piano di verifica e rilascio
 
-Stato al 15 ottobre 2026: lint, tipi, build, 10 test unitari, 141 asserzioni pgTAP
-su tre file e 18 scenari Chromium su build di produzione e Supabase locale reale
+Stato al 15 ottobre 2026: lint, tipi, build, 10 test unitari, 176 asserzioni pgTAP
+su quattro file e 24 scenari Chromium su build di produzione e Supabase locale reale
 superati. Sono coperti Auth con email catturate localmente, agenda, isolamento,
 team/revoca, rete/PWA e file privati. Per i file: MIME/hash/limiti, accessi negati,
 normalizzazione, completamento concorrente, riuso di oggetto già scritto,
 pulizia dopo crash, lease e idempotenza. Il test dei token di upload firmato
 falliva prima della guardia operativa 006 e passa dopo la correzione.
 
-Provati reset locale da zero, sette migrazioni, ripetizione e checksum. Tutte e sette
-applicate al remoto: undici tabelle RLS, bucket privato, zero dati/oggetti di
+Provati reset locale da zero, undici migrazioni, ripetizione e checksum. Tutte e undici
+applicate al remoto: diciassette tabelle pubbliche RLS, bucket privato, zero dati/oggetti di
 prova. Comando di pulizia remoto verificato senza fixture (zero claim). Server
 ricompilato con configurazione ufficiale e risposte health/login/manifest/API
-senza sessione verificate. Revisione team `ship`, documenter senza modifiche.
+senza sessione verificate. Revisione team `ship`. Revisione clinica: otto catture, correzione delle schede
+mobili e conferma `ship` sul difetto valutato; documenter senza modifiche al sistema.
 
-Il workflow GitHub è definito; esito remoto da verificare. Dossier, consensi,
-foto per categoria, email reali, dispositivi fisici, installazione PWA HTTPS,
+Il workflow GitHub è definito; esito del nuovo commit da verificare dopo push.
+Sono inoltre coperti pubblicazione/versioni concorrenti, domande/risposte,
+immutabilità dei testi e snapshot dei lotti, scadenza rispetto all’appuntamento,
+scope etichetta, assegnazioni/revoca, audit obbligatorio e fallimento dell’audit.
+Due richieste HTTP cliniche vengono bloccate sul lock reale del tenant: la revoca
+commessa prima dello sblocco impedisce sia lettura sia scrittura, senza audit
+di lettura riuscita né modifica della bozza. Il test UI verifica le due righe
+di schede a 375 px e i touch target da almeno 44 px, oltre al flusso completo.
+I form mantengono l’input solo in memoria e non inviano al ritorno della rete.
+
+Link cliente, firme/PDF, foto per categoria, email reali, dispositivi fisici, installazione PWA HTTPS,
 scheduler file, backup/restore e gate R1 restano da completare. Questi risultati
 non equivalgono al collaudo completo del prodotto.
 

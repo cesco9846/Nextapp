@@ -1,9 +1,10 @@
 # Architettura di implementazione
 
 Stato al 15 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
-React Query, Monarch/shadcn, team e base Storage privata implementati. Sette
-migrazioni applicate al progetto ufficiale. Worker email, dossier e flussi clinici
-restano pianificati. La pulizia file ha un comando recuperabile, senza scheduler
+React Query, Monarch/shadcn, team, Storage privata e preparazione clinica non firmata
+implementati. Undici migrazioni applicate al progetto ufficiale. Worker email,
+compilazione cliente, firme/PDF e foto restano pianificati.
+La pulizia file ha un comando recuperabile, senza scheduler
 remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
 consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 
@@ -153,6 +154,38 @@ degli invii reali; modelli/retention prima dei dati clinici reali; Stripe e
 fatturazione prima della vendita automatizzata. Il backlog esplicita quali
 consegne dipendono da queste scelte. Le altre possono proseguire con fixture
 locali e integrazioni di prova chiaramente identificate.
+
+## Modelli e preparazione implementati (W11)
+
+Il catalogo clinico è leggibile da titolare e operatrici abilitate; solo la
+titolare pubblica modelli e modifica pigmenti/lotti. Le pubblicazioni sono
+immutabili anche per accessi SQL privilegiati ordinari. Ogni nuova pubblicazione
+richiede la versione attesa del modello; tipo e servizio restano stabili.
+Archiviare impedisce nuove scelte senza riscrivere preparazioni esistenti.
+
+La preparazione appartiene a un solo appuntamento/cliente. Per le operatrici
+occorrono abilitazione clinica e assegnazione attiva. Le risposte non sono
+esposte dalla Data API: `app_private.preparation_answers` non ha grant client.
+La lettura usa POST esplicito, registra `anamnesis.read` prima di restituire le
+risposte e fallisce se l’audit fallisce. Letture e scritture acquisiscono il lock
+del tenant usato dalle revoche; dopo l’attesa ricontrollano l’accesso. Il limite
+di lettura basato sull’audit è così serializzato. Il salvataggio controlla anche
+versione della preparazione e revisione dell’appuntamento, con chiave idempotente.
+
+Il browser conserva le risposte solo nello stato del form fino allo smontaggio,
+senza cache React Query o persistenza. Un errore mantiene l’input in memoria;
+nessun invio si accoda alla riconnessione. Il catalogo può usare React Query.
+Le selezioni conservano la versione del modello e uno snapshot del lotto con
+etichetta/hash; modificare il catalogo non li aggiorna automaticamente. Un lotto
+deve essere valido sia oggi sia alla data locale dell’appuntamento. Il massimo
+è 12 lotti e 30 domande; le risposte richieste potranno essere completate prima
+della firma. Lo stato corrente è sempre `draft`, senza firma o PDF.
+
+Le etichette usano lo stesso ciclo Storage delle immagini. Il loro ambito è il
+pigmento, senza cliente o appuntamento; preparazione upload riservata alla
+titolare, lettura consentita anche alle operatrici cliniche dello studio.
+I link brevi sono aperti direttamente, senza cache dell’ottimizzatore immagini.
+Le opzioni provider/mittente restano una proposta in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
 
 ## Archivio privato implementato (W10)
 

@@ -278,6 +278,130 @@ export type Database = {
           },
         ];
       };
+      clinical_template_versions: {
+        Row: {
+          body: string;
+          content_hash: string;
+          created_by: string;
+          id: string;
+          published_at: string;
+          questions: NonNullable<Json>;
+          revision: number;
+          template_id: string;
+          tenant_id: string;
+          title: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          body: string;
+          content_hash: string;
+          created_by: string;
+          id?: string;
+          published_at?: string;
+          questions?: NonNullable<Json>;
+          revision: number;
+          template_id: string;
+          tenant_id: string;
+          title: string;
+        };
+        Update: {
+          body?: string;
+          content_hash?: string;
+          created_by?: string;
+          id?: string;
+          published_at?: string;
+          questions?: NonNullable<Json>;
+          revision?: number;
+          template_id?: string;
+          tenant_id?: string;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "clinical_template_versions_tenant_id_created_by_fkey";
+            columns: ["tenant_id", "created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "clinical_template_versions_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "clinical_template_versions_tenant_id_template_id_fkey";
+            columns: ["tenant_id", "template_id"];
+            isOneToOne: false;
+            referencedRelation: "clinical_templates";
+            referencedColumns: ["tenant_id", "id"];
+          },
+        ];
+      };
+      clinical_templates: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          current_revision: number;
+          current_version_id: string;
+          id: string;
+          kind: string;
+          service_id: string | null;
+          tenant_id: string;
+          title: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          current_revision?: number;
+          current_version_id: string;
+          id?: string;
+          kind: string;
+          service_id?: string | null;
+          tenant_id: string;
+          title: string;
+          version?: number;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          current_revision?: number;
+          current_version_id?: string;
+          id?: string;
+          kind?: string;
+          service_id?: string | null;
+          tenant_id?: string;
+          title?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "clinical_templates_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "clinical_templates_tenant_id_id_current_version_id_fkey";
+            columns: ["tenant_id", "id", "current_version_id"];
+            isOneToOne: false;
+            referencedRelation: "clinical_template_versions";
+            referencedColumns: ["tenant_id", "template_id", "id"];
+          },
+          {
+            foreignKeyName: "clinical_templates_tenant_id_service_id_fkey";
+            columns: ["tenant_id", "service_id"];
+            isOneToOne: false;
+            referencedRelation: "services";
+            referencedColumns: ["tenant_id", "id"];
+          },
+        ];
+      };
       locations: {
         Row: {
           active: boolean;
@@ -371,6 +495,110 @@ export type Database = {
           },
         ];
       };
+      pigment_lots: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          expires_on: string;
+          id: string;
+          label_file_id: string;
+          label_text: string;
+          lot_number: string;
+          pigment_id: string;
+          tenant_id: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          expires_on: string;
+          id?: string;
+          label_file_id: string;
+          label_text?: string;
+          lot_number: string;
+          pigment_id: string;
+          tenant_id: string;
+          version?: number;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          expires_on?: string;
+          id?: string;
+          label_file_id?: string;
+          label_text?: string;
+          lot_number?: string;
+          pigment_id?: string;
+          tenant_id?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pigment_lots_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pigment_lots_tenant_id_label_file_id_fkey";
+            columns: ["tenant_id", "label_file_id"];
+            isOneToOne: false;
+            referencedRelation: "stored_files";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "pigment_lots_tenant_id_pigment_id_fkey";
+            columns: ["tenant_id", "pigment_id"];
+            isOneToOne: false;
+            referencedRelation: "pigments";
+            referencedColumns: ["tenant_id", "id"];
+          },
+        ];
+      };
+      pigments: {
+        Row: {
+          active: boolean;
+          brand: string;
+          code: string;
+          created_at: string;
+          id: string;
+          name: string;
+          tenant_id: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          active?: boolean;
+          brand: string;
+          code?: string;
+          created_at?: string;
+          id?: string;
+          name: string;
+          tenant_id: string;
+          version?: number;
+        };
+        Update: {
+          active?: boolean;
+          brand?: string;
+          code?: string;
+          created_at?: string;
+          id?: string;
+          name?: string;
+          tenant_id?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pigments_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       services: {
         Row: {
           active: boolean;
@@ -420,7 +648,7 @@ export type Database = {
           cleanup_completed_at: string | null;
           cleanup_lease_until: string | null;
           cleanup_token: string | null;
-          client_id: string;
+          client_id: string | null;
           created_at: string;
           created_by: string;
           expected_sha256: string;
@@ -432,6 +660,7 @@ export type Database = {
           kind: string;
           mime_type: string;
           object_path: string;
+          pigment_id: string | null;
           ready_at: string | null;
           request_id: string;
           sha256: string | null;
@@ -449,7 +678,7 @@ export type Database = {
           cleanup_completed_at?: string | null;
           cleanup_lease_until?: string | null;
           cleanup_token?: string | null;
-          client_id: string;
+          client_id?: string | null;
           created_at?: string;
           created_by: string;
           expected_sha256: string;
@@ -461,6 +690,7 @@ export type Database = {
           kind?: string;
           mime_type: string;
           object_path: string;
+          pigment_id?: string | null;
           ready_at?: string | null;
           request_id: string;
           sha256?: string | null;
@@ -477,7 +707,7 @@ export type Database = {
           cleanup_completed_at?: string | null;
           cleanup_lease_until?: string | null;
           cleanup_token?: string | null;
-          client_id?: string;
+          client_id?: string | null;
           created_at?: string;
           created_by?: string;
           expected_sha256?: string;
@@ -489,6 +719,7 @@ export type Database = {
           kind?: string;
           mime_type?: string;
           object_path?: string;
+          pigment_id?: string | null;
           ready_at?: string | null;
           request_id?: string;
           sha256?: string | null;
@@ -528,6 +759,13 @@ export type Database = {
             referencedRelation: "tenants";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "stored_files_tenant_id_pigment_id_fkey";
+            columns: ["tenant_id", "pigment_id"];
+            isOneToOne: false;
+            referencedRelation: "pigments";
+            referencedColumns: ["tenant_id", "id"];
+          },
         ];
       };
       tenants: {
@@ -557,6 +795,152 @@ export type Database = {
           timezone?: string;
         };
         Relationships: [];
+      };
+      treatment_lots: {
+        Row: {
+          id: string;
+          lot_id: string;
+          preparation_id: string;
+          snapshot: NonNullable<Json>;
+          tenant_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          id?: string;
+          lot_id: string;
+          preparation_id: string;
+          snapshot: NonNullable<Json>;
+          tenant_id: string;
+        };
+        Update: {
+          id?: string;
+          lot_id?: string;
+          preparation_id?: string;
+          snapshot?: NonNullable<Json>;
+          tenant_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "treatment_lots_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "treatment_lots_tenant_id_lot_id_fkey";
+            columns: ["tenant_id", "lot_id"];
+            isOneToOne: false;
+            referencedRelation: "pigment_lots";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "treatment_lots_tenant_id_preparation_id_fkey";
+            columns: ["tenant_id", "preparation_id"];
+            isOneToOne: false;
+            referencedRelation: "treatment_preparations";
+            referencedColumns: ["tenant_id", "id"];
+          },
+        ];
+      };
+      treatment_preparations: {
+        Row: {
+          anamnesis_version_id: string | null;
+          appointment_id: string;
+          appointment_version: number;
+          client_id: string;
+          consent_version_id: string;
+          created_at: string;
+          created_by: string;
+          id: string;
+          status: string;
+          tenant_id: string;
+          updated_at: string;
+          updated_by: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          anamnesis_version_id?: string | null;
+          appointment_id: string;
+          appointment_version: number;
+          client_id: string;
+          consent_version_id: string;
+          created_at?: string;
+          created_by: string;
+          id?: string;
+          status?: string;
+          tenant_id: string;
+          updated_at?: string;
+          updated_by: string;
+          version?: number;
+        };
+        Update: {
+          anamnesis_version_id?: string | null;
+          appointment_id?: string;
+          appointment_version?: number;
+          client_id?: string;
+          consent_version_id?: string;
+          created_at?: string;
+          created_by?: string;
+          id?: string;
+          status?: string;
+          tenant_id?: string;
+          updated_at?: string;
+          updated_by?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "treatment_preparations_tenant_id_anamnesis_version_id_fkey";
+            columns: ["tenant_id", "anamnesis_version_id"];
+            isOneToOne: false;
+            referencedRelation: "clinical_template_versions";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "treatment_preparations_tenant_id_appointment_id_fkey";
+            columns: ["tenant_id", "appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "treatment_preparations_tenant_id_client_id_fkey";
+            columns: ["tenant_id", "client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "treatment_preparations_tenant_id_consent_version_id_fkey";
+            columns: ["tenant_id", "consent_version_id"];
+            isOneToOne: false;
+            referencedRelation: "clinical_template_versions";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "treatment_preparations_tenant_id_created_by_fkey";
+            columns: ["tenant_id", "created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "treatment_preparations_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "treatment_preparations_tenant_id_updated_by_fkey";
+            columns: ["tenant_id", "updated_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["tenant_id", "id"];
+          },
+        ];
       };
       user_invitations: {
         Row: {
@@ -731,7 +1115,7 @@ export type Database = {
           cleanup_completed_at: string | null;
           cleanup_lease_until: string | null;
           cleanup_token: string | null;
-          client_id: string;
+          client_id: string | null;
           created_at: string;
           created_by: string;
           expected_sha256: string;
@@ -743,6 +1127,7 @@ export type Database = {
           kind: string;
           mime_type: string;
           object_path: string;
+          pigment_id: string | null;
           ready_at: string | null;
           request_id: string;
           sha256: string | null;
@@ -775,7 +1160,7 @@ export type Database = {
           cleanup_completed_at: string | null;
           cleanup_lease_until: string | null;
           cleanup_token: string | null;
-          client_id: string;
+          client_id: string | null;
           created_at: string;
           created_by: string;
           expected_sha256: string;
@@ -787,6 +1172,7 @@ export type Database = {
           kind: string;
           mime_type: string;
           object_path: string;
+          pigment_id: string | null;
           ready_at: string | null;
           request_id: string;
           sha256: string | null;
@@ -820,7 +1206,7 @@ export type Database = {
           cleanup_completed_at: string | null;
           cleanup_lease_until: string | null;
           cleanup_token: string | null;
-          client_id: string;
+          client_id: string | null;
           created_at: string;
           created_by: string;
           expected_sha256: string;
@@ -832,6 +1218,7 @@ export type Database = {
           kind: string;
           mime_type: string;
           object_path: string;
+          pigment_id: string | null;
           ready_at: string | null;
           request_id: string;
           sha256: string | null;
@@ -849,11 +1236,180 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      prepare_pigment_label: {
+        Args: {
+          p_mime: string;
+          p_pigment_id: string;
+          p_request_id: string;
+          p_sha256: string;
+          p_size: number;
+        };
+        Returns: {
+          appointment_id: string | null;
+          bucket: string;
+          cleanup_completed_at: string | null;
+          cleanup_lease_until: string | null;
+          cleanup_token: string | null;
+          client_id: string | null;
+          created_at: string;
+          created_by: string;
+          expected_sha256: string;
+          expected_size: number;
+          expires_at: string;
+          failure_code: string | null;
+          height: number | null;
+          id: string;
+          kind: string;
+          mime_type: string;
+          object_path: string;
+          pigment_id: string | null;
+          ready_at: string | null;
+          request_id: string;
+          sha256: string | null;
+          size_bytes: number | null;
+          staging_cleaned_at: string | null;
+          state: string;
+          tenant_id: string;
+          upload_path: string;
+          width: number | null;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "stored_files";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      publish_clinical_template: {
+        Args: {
+          p_body: string;
+          p_kind: string;
+          p_questions: Json;
+          p_request_id: string;
+          p_service_id?: string;
+          p_template_id: string;
+          p_title: string;
+          p_version: number;
+        };
+        Returns: {
+          body: string;
+          content_hash: string;
+          created_by: string;
+          id: string;
+          published_at: string;
+          questions: NonNullable<Json>;
+          revision: number;
+          template_id: string;
+          tenant_id: string;
+          title: string;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "clinical_template_versions";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      read_treatment_preparation: {
+        Args: { p_appointment_id: string };
+        Returns: Json;
+      };
       reject_client_file: {
         Args: { p_actor: string; p_id: string; p_reason: string };
         Returns: undefined;
       };
       revoke_team_invitation: { Args: { p_id: string }; Returns: undefined };
+      save_pigment: {
+        Args: {
+          p_active: boolean;
+          p_brand: string;
+          p_code: string;
+          p_id: string;
+          p_name: string;
+          p_request_id: string;
+          p_version: number;
+        };
+        Returns: {
+          active: boolean;
+          brand: string;
+          code: string;
+          created_at: string;
+          id: string;
+          name: string;
+          tenant_id: string;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "pigments";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      save_pigment_lot: {
+        Args: {
+          p_active: boolean;
+          p_expires_on: string;
+          p_id: string;
+          p_label_file_id: string;
+          p_label_text: string;
+          p_lot_number: string;
+          p_pigment_id: string;
+          p_request_id: string;
+          p_version: number;
+        };
+        Returns: {
+          active: boolean;
+          created_at: string;
+          expires_on: string;
+          id: string;
+          label_file_id: string;
+          label_text: string;
+          lot_number: string;
+          pigment_id: string;
+          tenant_id: string;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "pigment_lots";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      save_treatment_preparation: {
+        Args: {
+          p_anamnesis_version_id: string;
+          p_answers: Json;
+          p_appointment_id: string;
+          p_appointment_version: number;
+          p_consent_version_id: string;
+          p_lot_ids: string[];
+          p_request_id: string;
+          p_version: number;
+        };
+        Returns: {
+          anamnesis_version_id: string | null;
+          appointment_id: string;
+          appointment_version: number;
+          client_id: string;
+          consent_version_id: string;
+          created_at: string;
+          created_by: string;
+          id: string;
+          status: string;
+          tenant_id: string;
+          updated_at: string;
+          updated_by: string;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "treatment_preparations";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       set_client_assignment: {
         Args: {
           p_assigned: boolean;
@@ -874,6 +1430,27 @@ export type Database = {
         SetofOptions: {
           from: "*";
           to: "client_assignments";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      set_clinical_template_active: {
+        Args: { p_active: boolean; p_id: string; p_version: number };
+        Returns: {
+          active: boolean;
+          created_at: string;
+          current_revision: number;
+          current_version_id: string;
+          id: string;
+          kind: string;
+          service_id: string | null;
+          tenant_id: string;
+          title: string;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "clinical_templates";
           isOneToOne: true;
           isSetofReturn: false;
         };

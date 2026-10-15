@@ -17,11 +17,14 @@ Monarch ufficiale. Database e autenticazione: Supabase.
   e assegnazioni cliente. Schema applicato anche al progetto ufficiale.
 - API per file immagine privati, verifica/normalizzazione, URL brevi e pulizia
   recuperabile. La schermata foto arriverà con il relativo incremento.
+- Consensi/questionari con versioni pubblicate immutabili; catalogo pigmenti,
+  lotti, scadenze ed etichette private. Preparazione non firmata dell’appuntamento
+  con risposte anamnestiche auditate e snapshot dei lotti scelti.
 - Interfaccia responsive, manifest con icone e istruzioni di installazione PWA.
   Richiede Internet; nessuna coda di modifiche o consultazione offline.
 
-Sono ancora da realizzare dossier clinico, consensi,
-firma/PDF, foto, pigmenti, invio email e worker, link cliente,
+Sono ancora da realizzare compilazione cliente, firma/PDF, foto,
+invio email e worker, link cliente,
 export/retention, ICS e funzioni commerciali. I reminder email restano disattivati;
 aprire WhatsApp non registra un invio. Non è ancora il pilota R1.
 
@@ -80,13 +83,14 @@ Una seconda applicazione non modifica i dati; un checksum diverso viene respinto
 Non modificare migrazioni già applicate: aggiungere un nuovo file. Non utilizzare
 `supabase db push` come secondo percorso con un ledger divergente.
 
-Il 15 ottobre 2026 sono state applicate e ri-verificate le sette migrazioni
-`202610150001`–`202610150007` al progetto ufficiale dopo le prove locali.
-Undici tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
+Il 15 ottobre 2026 sono state applicate e ri-verificate le undici migrazioni
+`202610150001`–`202610150011` al progetto ufficiale dopo le prove locali.
+Diciassette tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
 oggetto sintetico creato nel remoto. Team e base Storage sono disponibili nello
-schema ufficiale. Contratti, limiti e pulizia in [STORAGE.md](STORAGE.md).
-Consensi, foto prima/dopo e pigmenti riceveranno i flussi e i permessi aggiuntivi
-nei rispettivi incrementi.
+schema ufficiale, insieme a modelli, pigmenti e preparazioni. Le risposte
+anamnestiche restano nello schema privato, leggibili solo con RPC auditata.
+Contratti, limiti e pulizia in [STORAGE.md](STORAGE.md).
+Firme, PDF e foto prima/dopo riceveranno i flussi specifici nei prossimi incrementi.
 
 ## Test isolati
 
@@ -146,8 +150,13 @@ in [DESIGN.md](DESIGN.md); icone prodotto in SVG originale, PNG derivati con Sha
 Gli screenshot con fixture locali si rigenerano, dopo `npm run test:e2e`, con:
 
 ```sh
-node --use-env-proxy node_modules/tsx/dist/cli.mjs scripts/capture-ui.ts
+node --use-env-proxy --import tsx scripts/capture-ui.ts
+node --use-env-proxy --import tsx scripts/capture-clinical-ui.ts
 ```
 
 Le catture e i risultati dei test sono ignorati da Git. Nessun servizio worker,
 invio email reale, hosting o abbonamento viene attivato da questi comandi.
+
+Le opzioni per mittente e risposte ai reminder sono documentate in
+[EMAIL_DELIVERY.md](EMAIL_DELIVERY.md): dominio Glow verificato e Reply-To dello
+studio è la proposta iniziale, ancora da confermare prima di attivare il provider.

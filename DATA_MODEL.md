@@ -2,18 +2,32 @@
 
 Stato: proposta progettuale derivata da T (`GlowTrace_Piano_Tecnico.pdf`, pp.
 10–18, 20) e adattata alle richieste dell'utente. Il modello descrive il perimetro
-completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–007:
+completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–011:
 tenants, users, locations, services, clients, appointments, messages, audit_log,
-user_invitations, client_assignments e stored_files, oltre a ledger/idempotenza
-privati. Tutte e sette sono applicate al progetto ufficiale; undici tabelle con RLS.
+user_invitations, client_assignments, stored_files, clinical_templates,
+clinical_template_versions, pigments, pigment_lots, treatment_preparations e
+treatment_lots, oltre a ledger/idempotenza e preparation_answers privati.
+Tutte e undici sono applicate al progetto ufficiale; diciassette tabelle pubbliche con RLS.
 Gli inviti conservano soltanto l’hash del token. I file usano staging, verifica
 server, oggetti immutabili, audit e pulizia con lease: vedere [STORAGE.md](STORAGE.md).
-L’accesso ai file richiede abilitazione clinica e assegnazione per le operatrici;
-la titolare resta circoscritta al proprio studio. Dossier, consensi, foto per
-categoria e pigmenti restano da collegare nei successivi incrementi.
+L’accesso ai file delle clienti richiede abilitazione clinica e assegnazione per
+le operatrici; le etichette di catalogo richiedono l’abilitazione clinica. La
+titolare resta circoscritta al proprio studio. Link cliente, firme/PDF e foto
+per categoria restano da collegare nei successivi incrementi.
 Requisiti: `SPEC.md`; architettura: `ARCHITECTURE.md`; consegne: `IMPLEMENTATION_PLAN.md`.
 
 ## Confine dei dati
+
+Il sottoinsieme clinico implementato usa un modello distinto dalle firme future:
+`clinical_templates` punta alla pubblicazione corrente, mentre
+`clinical_template_versions` conserva testi/domande e hash immutabili.
+`pigment_lots` richiede un file pronto dello stesso pigmento e tenant.
+`treatment_preparations` è una bozza univoca per appuntamento, con versioni dei
+modelli e versione attesa dell’appuntamento. `treatment_lots` conserva i valori
+selezionati e il riferimento/hash dell’etichetta senza aggiornarli agli edit del
+catalogo. Le risposte sono solo in `app_private.preparation_answers`: nessun
+SELECT diretto per authenticated; la RPC verificata e auditata è l’unico percorso
+utente. Non sono ancora snapshot di un consenso firmato.
 
 `tenant` è l'account professionale; `location` è una sede. Due sedi dello stesso
 tenant condividono i dati secondo i permessi; due tenant restano isolati.

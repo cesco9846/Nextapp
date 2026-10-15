@@ -1,13 +1,13 @@
-# Archivio privato — incremento W10
+# Archivio privato — incrementi W10–W11
 
-Questa consegna prepara le API e il ciclo di vita dei file. La schermata foto,
+Questa consegna implementa API, ciclo di vita e UI delle etichette dei pigmenti. La schermata foto,
 le categorie prima/dopo/guarito, i consensi d’uso e gli upload da fotocamera
-saranno collegati in W11–W14. Non è ancora il dossier clinico completo.
+saranno collegati in W14. Non è ancora il dossier clinico completo.
 
 ## Confini attuali
 
-- Bucket `glow-private`, privato, massimo 10 MiB per oggetto. Primo tipo supportato:
-  `client_photo`, immagini statiche JPEG, PNG e WebP fino a 20 megapixel.
+- Bucket `glow-private`, privato, massimo 10 MiB per oggetto. Tipi supportati:
+  `client_photo` e `pigment_label`, immagini statiche JPEG, PNG e WebP fino a 20 megapixel.
 - HEIC, SVG, immagini animate, PDF e firme non entrano in questo percorso.
   PDF/firma avranno contratti e permessi specifici nei rispettivi incrementi.
 - Metadati in `stored_files` con tenant, cliente, eventuale appuntamento della
@@ -16,6 +16,11 @@ saranno collegati in W11–W14. Non è ancora il dossier clinico completo.
 - Una titolare accede solo alle proprie clienti. Per un’operatrice servono
   membership attiva, abilitazione clinica e assegnazione attiva alla cliente.
   La sola disponibilità della chiave pubblica o del percorso non dà accesso.
+- Un’etichetta appartiene invece al pigmento del tenant, con cliente e
+  appuntamento nulli. Solo la titolare prepara l’upload; titolare e operatrici
+  cliniche attive possono leggerla. Associarla a un lotto richiede stesso pigmento,
+  tenant e stato ready. Le etichette pronte restano risorse di catalogo anche se
+  il salvataggio del lotto viene interrotto; la retention dei ready rientra in W19.
 - Limite persistente iniziale: 100 preparazioni e 200 MiB dichiarati per studio
   nell’ultima ora; le cancellazioni non azzerano il conteggio. Massimo 60 richieste
   di lettura per persona al minuto. Sono limiti tecnici, non piani commerciali.
@@ -66,6 +71,13 @@ Un URL già emesso rimane valido per i suoi 30 secondi anche dopo revoca: non
 promettere invalidazione anticipata. Le nuove letture, preparazioni e upload
 vengono invece negati dai permessi correnti. Non conservare link o immagini per
 la consultazione offline.
+
+Per le etichette il punto 2 usa `POST /api/clinical/pigments/:id/labels` con gli
+stessi campi escluso `appointment_id`; completamento, lettura e annullamento
+restano le API comuni. La UI del lotto calcola hash, carica con la sessione e
+attende la verifica prima di associarlo. Il retry esplicito riusa richiesta e
+risorsa in memoria. L’anteprima usa un URL breve senza ottimizzazione/cache
+immagini condivisa e lo elimina dallo stato alla chiusura.
 
 ## Stato e recupero
 

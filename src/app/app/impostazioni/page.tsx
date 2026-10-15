@@ -92,6 +92,18 @@ export default function SettingsPage() {
           </div>
         </section>
       )}
+      {(profile.role === "owner" || profile.clinical_access) && (
+        <section className="mt-6 border-t pt-6">
+          <h2 className="text-xl">Prima del trattamento</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Modelli di consenso e anamnesi, pigmenti e lotti con etichette
+            private.
+          </p>
+          <Button variant="outline" asChild className="mt-4">
+            <Link href="/app/documenti">Consensi e pigmenti</Link>
+          </Button>
+        </section>
+      )}
       <InstallApp />
     </div>
   );
