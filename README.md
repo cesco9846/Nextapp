@@ -14,7 +14,9 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 - Pulsante WhatsApp con numero internazionale e messaggio predisposto.
 - Riepilogo mensile del valore delle sedute completate, riservato al titolare.
 - Team: inviti tramite link, accettazione con email verificata, sospensione/riattivazione
-  e assegnazioni cliente. Verificato localmente; migrazioni remote ancora da applicare.
+  e assegnazioni cliente. Schema applicato anche al progetto ufficiale.
+- API per file immagine privati, verifica/normalizzazione, URL brevi e pulizia
+  recuperabile. La schermata foto arriverà con il relativo incremento.
 - Interfaccia responsive, manifest con icone e istruzioni di installazione PWA.
   Richiede Internet; nessuna coda di modifiche o consultazione offline.
 
@@ -58,8 +60,9 @@ Prima di usare un dominio distribuito, impostare la sua origine canonica e
 autorizzare i redirect Supabase Auth verso `/auth/conferma` e il recupero password.
 SMTP, consegna email e redirect sul dominio finale richiedono verifica reale.
 Sul progetto ufficiale sono già autorizzati i callback di sviluppo verso
-`http://localhost:3000/auth/conferma` e il recupero password. La conferma email
-rimane obbligatoria; SMTP personalizzato non è ancora configurato.
+`http://localhost:3000/auth/conferma`, il recupero password e l’accettazione
+degli inviti. Conferma email obbligatoria, password minima dieci caratteri;
+SMTP personalizzato non ancora configurato.
 
 ## Database ufficiale
 
@@ -77,14 +80,13 @@ Una seconda applicazione non modifica i dati; un checksum diverso viene respinto
 Non modificare migrazioni già applicate: aggiungere un nuovo file. Non utilizzare
 `supabase db push` come secondo percorso con un ledger divergente.
 
-Il 15 ottobre 2026 sono state applicate le migrazioni `202610150001` e
-`202610150002` al progetto ufficiale, dopo la prova locale. Otto tabelle pubbliche
-con RLS; nessun account, cliente o appuntamento di test creato sul progetto remoto.
-Le migrazioni `202610150003` (team/accessi) e `202610150004` (concorrenza)
-sono incluse nel repository e provate localmente, ma **non ancora applicate al
-progetto ufficiale**. Per usare il nuovo flusso team nel remoto occorre completare
-questo passaggio e autorizzare anche il callback `/auth/conferma?next=/invito`.
-Consensi, foto e pigmenti riceveranno schema e permessi nei rispettivi incrementi.
+Il 15 ottobre 2026 sono state applicate e ri-verificate le sette migrazioni
+`202610150001`–`202610150007` al progetto ufficiale dopo le prove locali.
+Undici tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
+oggetto sintetico creato nel remoto. Team e base Storage sono disponibili nello
+schema ufficiale. Contratti, limiti e pulizia in [STORAGE.md](STORAGE.md).
+Consensi, foto prima/dopo e pigmenti riceveranno i flussi e i permessi aggiuntivi
+nei rispettivi incrementi.
 
 ## Test isolati
 

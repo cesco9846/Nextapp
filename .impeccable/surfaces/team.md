@@ -36,5 +36,8 @@ Detector sui componenti modificati eseguito una volta: nessun rilievo.
 
 La prima revisione ha richiesto navigazione attiva per Team e rimozione
 dell’introduzione duplicata nel login incorporato dell’invito. Entrambe le
-correzioni sono nel codice; ricattura delle cinque viste e verdetto finale
-ancora da completare. Non dichiarare questa estensione conclusa graficamente.
+correzioni sono state confermate nelle cinque catture aggiornate: verdetto
+`ship` del 15 ottobre 2026, nessuna regressione osservata. Il documenter ha
+confrontato sorgenti e sistema visivo: nessuna modifica necessaria a DESIGN.md
+o al sidecar. La deriva preesistente degli snippet focus nel sidecar rimane
+segnalata, senza introdurre nuovi token per questa estensione.

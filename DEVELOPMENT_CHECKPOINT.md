@@ -1,104 +1,100 @@
 # Glow — punto di ripresa dello sviluppo
 
-Checkpoint del 15 ottobre 2026. Questo file accompagna il primo salvataggio del
-codice su GitHub e va aggiornato a ogni incremento. Non è un rilascio del pilota.
+Aggiornato il 15 ottobre 2026: **team migrato e base Storage privata verificata**.
+La riconciliazione recupera anche scritture terminate dopo un primo cleanup.
+Il primo checkpoint resta nel tag `checkpoint-2026-10-15`; questo documento su
+`main` descrive lo stato più recente. Non è ancora il pilota R1.
 
 ## Scelte confermate
 
-- Nome prodotto: **Glow**. I nomi dei PDF originali e gli identificatori stabili
-  delle migrazioni già applicate mantengono l’origine storica.
-- Next.js 16, React 19, TypeScript, componenti shadcn/ui; calendario FullCalendar
-  7.1.2 con tema Monarch ufficiale.
-- Supabase ufficiale: `mexokvvvxdyekauupwvt`. Richieste applicative con sessione
-  utente e RLS; nessuna chiave privilegiata nel browser.
-- PWA installabile, **connessione necessaria**. Nessuna agenda offline, coda di
-  scritture, sincronizzazione in background o snapshot persistente dei dossier.
-- WhatsApp manuale: pulsante per aprire la chat con testo pronto. Nessun invio
-  automatico né indicazione di consegna basata sulla sola apertura della chat.
-- Skill frontend-design, impeccable e copywriting incluse in `.agents/skills`.
+Nome Glow; Next.js/React/TypeScript; shadcn/ui originale; FullCalendar 7.1.2
+Monarch; Supabase ufficiale `mexokvvvxdyekauupwvt`. PWA installabile con
+**connessione necessaria**, senza agenda offline, snapshot persistenti o coda di
+scritture. WhatsApp manuale con chat/testo pronti, senza consegna dichiarata.
+Skill frontend-design, impeccable e copywriting conservate in `.agents/skills`.
 
 ## Funzioni implementate
 
-Accesso, registrazione, conferma email, recupero password, onboarding studio;
-clienti con ricerca, scheda, modifica e archivio; sedi e servizi; agenda in quattro
-viste con creazione/modifica/stati, conflitti e controllo versioni; WhatsApp;
-report mensile delle sedute completate riservato alla titolare.
+Auth SSR, registrazione/conferma/recupero, onboarding studio; clienti con ricerca,
+modifica e archivio; sedi/servizi; agenda giorno/settimana/mese/lista, stati,
+conflitti, versioni e idempotenza; WhatsApp; report sedute completate per titolare.
 
-Il secondo incremento aggiunge inviti alle operatrici con link condiviso
-manualmente (72 ore, token casuale conservato nel database solo come hash),
-accettazione con email verificata, revoca degli inviti, sospensione/riattivazione
-dei membri e assegnazioni cliente. Nessuna email di invito viene spedita dall’app.
-Un account appartiene a un solo studio; il titolare non è sospendibile tramite
-questo flusso. L’accesso clinico richiederà sia abilitazione sia assegnazione
-attiva; le schermate cliniche non sono ancora implementate.
+Team: inviti manuali tramite link di 72 ore, email verificata, revoca inviti,
+sospensione/riattivazione, assegnazioni cliente. Un account per studio, nessuna
+promozione autonoma o sospensione della titolare. Per accesso clinico delle
+operatrici servono abilitazione e assegnazione attive; la riattivazione non
+ripristina assegnazioni revocate. UI senza duplicazione del titolo nell’invito,
+navigazione Team corretta; cinque catture confermate, verdetto `ship` e
+confronto documenter senza modifica del sistema visivo.
 
-La sospensione blocca le richieste successive; l’interfaccia aggiorna lo stato
-accessi periodicamente e rimuove la cache in memoria quando riceve la revoca.
-La riattivazione non ripristina le vecchie assegnazioni. Gli errori temporanei
-nell’aggiornamento dello studio conservano i moduli già aperti. Una risposta di
-prenotazione persa viene dichiarata incerta: il retry esplicito usa la stessa
-chiave per evitare duplicazioni. Le scritture offline falliscono senza accodarsi.
+Nuovo W10: API file immagine con bucket privato, upload temporaneo, controllo
+hash/dimensione/formato, limite 20 MP, ricodifica senza EXIF/GPS, oggetto finale
+immutabile, lettura auditata con URL di 30 secondi, job di pulizia con lease e
+retry. La creazione di token di upload firmato è vietata: sopravviverebbero alle
+verifiche successive di revoca/pulizia. Contratti completi in [STORAGE.md](STORAGE.md).
+**La schermata foto, le categorie e i consensi d’uso non sono ancora implementati.**
 
-## Verifiche eseguite su questo checkpoint
+## Database ufficiale e runtime
 
-- Lint, controllo TypeScript e build di produzione con configurazione ufficiale superati.
-- 10 test unitari superati.
-- 112 asserzioni pgTAP su due file superate con Supabase locale.
-- 14 scenari Chromium superati su una build di produzione isolata `.next-e2e`.
-  Comprendono isolamento tra tenant, concorrenza, autenticazione con vere email
-  catturate dal server SMTP locale, flusso team, sospensione, perdita di rete e
-  retry dopo perdita della risposta di prenotazione.
-- Migrazioni locali 001–004 riapplicate tramite runner senza divergenza checksum.
-- Ledger remoto controllato in sola lettura: contiene **soltanto 001 e 002**.
+Tutte e sette le migrazioni `202610150001`–`202610150007` sono applicate e
+ri-verificate con checksum; undici tabelle pubbliche con RLS. Bucket
+`glow-private` privato; inventario ufficiale senza clienti, appuntamenti, file o
+oggetti di prova. Nessuna suite sintetica è stata eseguita sul progetto remoto.
 
-Le fixture rimangono locali. I test non dimostrano consegna email in produzione,
-installazione fisica iOS/Android, comportamento su tutti i browser o correttezza
-di funzioni ancora pianificate. Il workflow GitHub Actions è incluso; il suo
-esito remoto va controllato dopo il push, senza dedurlo dai risultati locali.
+Auth autorizza callback di sviluppo, recupero password e
+`/auth/conferma?next=/invito`; conferma email obbligatoria, password minima dieci
+caratteri. SMTP personalizzato e dominio definitivo ancora da configurare.
+Server dell’ambiente ricompilato con configurazione ufficiale e avviato; health,
+login, invito, manifest Glow e risposte 401 senza sessione verificate.
+I processi non sopravvivono necessariamente al ripristino dell’ambiente.
 
-## Differenza tra repository e database ufficiale
+## Verifiche dell’incremento
 
-| Migrazione                            | Codice salvato | Database locale     | Supabase ufficiale |
-| ------------------------------------- | -------------- | ------------------- | ------------------ |
-| 202610150001 — schema base            | Sì             | Applicata           | Applicata          |
-| 202610150002 — report completati      | Sì             | Applicata           | Applicata          |
-| 202610150003 — team e accessi         | Sì             | Applicata e testata | **Da applicare**   |
-| 202610150004 — guardie di concorrenza | Sì             | Applicata e testata | **Da applicare**   |
+- Lint, controllo TypeScript e build di produzione superati; Sharp spostato fra
+  le dipendenze runtime perché usato dal server.
+- 10 test unitari e 141 asserzioni pgTAP su tre file superati.
+- 18 scenari Chromium superati su build di produzione locale isolata. I quattro
+  scenari Storage usano il servizio reale locale e sono ripetuti dopo il reset.
+- Reset locale da zero con sette migrazioni e riapplicazione idempotente superati.
+- Test token di upload firmato prima fallito, poi superato dopo la guardia 006.
+- Migrazioni remote applicate e ripetute senza divergenza. Comando di pulizia
+  remoto riuscito senza fixture, con zero claim.
 
-Il database ufficiale ha quindi ancora otto tabelle pubbliche con RLS. Il flusso
-team richiede il rollout delle due nuove migrazioni. Non modificare i file già
-applicati; usare il runner con ledger, checksum, lock e transazione.
+Un problema del launcher CLI TSX nel cloud è stato isolato: non mantiene il flag
+proxy nel processo figlio. Il comando verificato usa `node --use-env-proxy
+--import tsx ...`, senza cambiare proxy, CA, TLS o credenziali. Non chiedere altri
+segreti: entrambi i binding server esistenti funzionano.
 
-## Riprendere da qui, nell’ordine
+GitHub Actions è definito; l’esito del run remoto va verificato separatamente.
+I test locali non equivalgono a consegna SMTP reale, installazione fisica PWA,
+backup/restore o collaudo completo dei flussi clinici.
 
-1. Completare la revisione grafica del team: la prima revisione ha richiesto
-   selezione attiva di “Il tuo studio”/breadcrumb “Team” e rimozione del titolo
-   duplicato nel login incorporato dell’invito. Le due correzioni sono già nel
-   codice. Ricatturare le cinque viste con `scripts/capture-team-ui.ts` dopo la
-   build E2E e ottenere il verdetto finale. Contratto in
-   `.impeccable/surfaces/team.md`; sistema visivo in `DESIGN.md`.
-2. Ricreare il database **locale** da zero e verificare tutte le migrazioni e i
-   test sul reset, per chiudere anche questa prova del secondo incremento.
-3. Applicare 003/004 al progetto ufficiale con il runner sotto; verificare ledger,
-   RLS e assenza di fixture remote. Non eseguire reset o test sintetici sul remoto.
-4. Aggiungere ai redirect Auth autorizzati il callback canonico
-   `/auth/conferma?next=/invito`, preservando quelli esistenti. Conferma email
-   obbligatoria; SMTP personalizzato ancora da configurare e collaudare.
-5. Ricompilare e riavviare il server dell’ambiente con configurazione ufficiale;
-   verificare health, login, manifest, invito e risposte API senza sessione.
-   I processi esistenti potrebbero eseguire una build precedente al checkpoint.
-6. Proseguire W10: Storage privato e ciclo upload/finalizzazione/pulizia. Poi
-   modelli consenso, anamnesi, lotti pigmenti, link cliente, firma/PDF e foto
-   (W11–W14). Il worker email W15 può avanzare in parallelo secondo il piano.
+## Prossime attività, nell’ordine
 
-Restano inoltre da completare i collaudi browser estesi di archivio/omonime,
-drag/resize e stati, installazione HTTPS su dispositivi reali, provider email,
-export/retention, backup/ripristino, ICS, push e funzioni commerciali. Il dettaglio
-con dipendenze e criteri di accettazione è in `IMPLEMENTATION_PLAN.md`.
+1. W11: modelli consenso/anamnesi versionati, pigmenti/lotti/etichette; usare la
+   base Storage senza aprire un generico upload non autorizzato. Le firme e i PDF
+   avranno un contratto specifico, distinto dagli upload fotografici.
+2. W12: link cliente con scopo limitato, consumo POST atomico, scadenza/revoca e
+   modalità tablet isolata. GET/scanner non devono cambiare dati.
+3. W13: firma e snapshot immutabile, job PDF recuperabile senza rifirma.
+4. W14: fotocamera/compressione, prima/dopo/guarito e consensi d’uso; dispositivi
+   fisici, HEIC e qualità visiva da verificare prima di raccogliere immagini reali.
+5. Configurare scheduler del job file sull’hosting scelto, con allarme sui ritardi.
+   Al momento è eseguibile manualmente: nessun cron remoto attivo.
+
+Restano W04 su dominio/SMTP reale, collaudi UI estesi di archivio/omonime e
+agenda drag/resize/stati, email worker/provider W15–W17, installazione PWA HTTPS
+su iOS/Android, export/retention, staging, backup/ripristino, ICS, push e funzioni
+commerciali. Dipendenze e criteri sono in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
+Nessun dato clinico reale prima dei relativi flussi, permessi e conservazione.
 
 ## Comandi di ripresa
 
-Dalla radice del repository, con Node 24, npm, Python 3 e Docker per i test locali:
+Usare il checkout esistente; non creare un worktree senza richiesta. Node 24,
+npm, Python 3; Docker per l’integrazione locale. Nel cloud impostare
+`npm_config_cache=/workspace/.cache/npm`,
+`PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright`,
+`IMPECCABLE_HOME=/workspace/.cache/impeccable`. Mantenere proxy e CA ereditati.
 
 ```sh
 npm ci
@@ -110,33 +106,24 @@ npm run test:e2e
 npm run lint
 npm run typecheck
 npm run test:unit
+npm run build
+npm run start
 ```
 
-Nel cloud impostare `npm_config_cache=/workspace/.cache/npm` e
-`PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright`. Per usare Impeccable:
-`IMPECCABLE_HOME=/workspace/.cache/impeccable`. Non creare un worktree aggiuntivo
-senza richiesta: usare il checkout esistente. Per il reset delle sole fixture
-locali: `npm run db:reset`.
-
-Applicazione remota, dopo i controlli indicati:
+Il configuratore preserva `.env.local` e recupera solo configurazione pubblica.
+I test rifiutano Supabase non loopback. `npm run db:reset` distrugge soltanto le
+fixture locali: non eseguire reset/seed sul progetto ufficiale. Mai modificare
+migrazioni applicate; usare nuovi file e il runner unico:
 
 ```sh
 python3 scripts/migrate.py --project-ref mexokvvvxdyekauupwvt
 python3 scripts/migrate.py --project-ref mexokvvvxdyekauupwvt --apply
+node --use-env-proxy --import tsx scripts/cleanup-files.ts --local
+node --use-env-proxy --import tsx scripts/cleanup-files.ts --project-ref mexokvvvxdyekauupwvt
 ```
 
-Per il server: `npm run dev`, oppure `npm run build` seguito da `npm run start`.
-Non dare per persistenti i processi dopo il ripristino dell’ambiente cloud.
-
-## Cosa viene conservato e cosa resta esterno
-
-GitHub conserva codice, quattro migrazioni, test, lockfile, skill, specifiche,
-sistema visivo e questo checkpoint. `.env.local`, credenziali, database locale,
-dipendenze installate, build, log e screenshot di test sono esclusi da Git.
-Le credenziali restano nelle variabili sicure dell’ambiente: non copiarle nel
-repository. Un nuovo ambiente deve ricevere gli stessi binding in modo sicuro.
-
-La pubblicazione GitHub non distribuisce automaticamente l’app su un dominio e
-non applica le migrazioni a Supabase. Hosting, dominio e configurazione SMTP
-rimangono attività distinte. Non considerare questo checkpoint pronto per dati
-clinici reali o per il pilota R1.
+GitHub conserva codice, migrazioni, test, lockfile, skill, specifiche e checkpoint.
+Credenziali, `.env.local`, database locale, build, dipendenze, log e screenshot
+restano esclusi. Le credenziali vanno fornite tramite i binding sicuri dell’ambiente.
+La pubblicazione del codice non distribuisce l’app su un dominio: hosting e
+SMTP rimangono attività distinte. Non dichiarare completati R1 o il prodotto.

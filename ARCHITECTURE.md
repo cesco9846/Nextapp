@@ -1,8 +1,10 @@
 # Architettura di implementazione
 
-Stato: baseline tecnica del 15 ottobre 2026. Primo incremento realizzato:
-Next.js/SSR Auth, API con sessione utente, RLS/RPC, React Query, Monarch/shadcn.
-Worker, clinica e Storage restano progettati e non implementati. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
+Stato al 15 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
+React Query, Monarch/shadcn, team e base Storage privata implementati. Sette
+migrazioni applicate al progetto ufficiale. Worker email, dossier e flussi clinici
+restano pianificati. La pulizia file ha un comando recuperabile, senza scheduler
+remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
 consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 
 ## Componenti e confini
@@ -17,7 +19,7 @@ consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 | Lavori asincroni | Outbox in Postgres; pg_cron invoca worker Supabase Edge Functions autenticati. Batch limitati, lease, idempotenza e heartbeat. Nessun timer in memoria del server web.                                    |
 | PDF              | Worker con renderer e font versionati, verificati con firma, etichette, accenti e documenti lunghi; non dipende dal browser della cliente. Scegliere una libreria compatibile con il runtime durante W13. |
 | Email            | Adapter server minimo per invio con chiave idempotente ed esiti; provider da selezionare prima dell'invio reale. Auth SMTP e reminder sono due configurazioni distinte.                                   |
-| PWA | Manifest installabile e istruzioni, connessione necessaria. Nessun service worker con dati riservati e nessuno snapshot IndexedDB. React Query mantiene soltanto memoria temporanea della sessione. |
+| PWA              | Manifest installabile e istruzioni, connessione necessaria. Nessun service worker con dati riservati e nessuno snapshot IndexedDB. React Query mantiene soltanto memoria temporanea della sessione.       |
 
 ## Calendario: integrazione verificata
 
@@ -151,3 +153,21 @@ degli invii reali; modelli/retention prima dei dati clinici reali; Stripe e
 fatturazione prima della vendita automatizzata. Il backlog esplicita quali
 consegne dipendono da queste scelte. Le altre possono proseguire con fixture
 locali e integrazioni di prova chiaramente identificate.
+
+## Archivio privato implementato (W10)
+
+`src/server/private-storage.ts` è marcato server-only. Le API preparano e
+autorizzano con la sessione dell’utente; solo verifica, normalizzazione, firma
+degli URL e pulizia usano la credenziale server. Nessun percorso finale o ruolo
+è deciso dal client. Accesso aggiornato anche durante la finalizzazione e
+audit dell’attore prima di emettere un link.
+
+Bucket privato, INSERT limitato all’operazione Storage `object.upload`, oggetti
+finali senza scritture dirette/overwrite da utenti. Nessun token di upload firmato
+che possa sopravvivere alla revoca. URL di lettura 30 secondi; quelli già emessi
+scadono naturalmente. Verifica hash/dimensione/contenuto, decodifica massima
+20 MP, ricodifica e rimozione EXIF/GPS. Dettagli in [STORAGE.md](STORAGE.md).
+
+Il comando Node di pulizia usa claim con lease e token, cancella solo oggetti
+temporanei o non finalizzati e preserva i ready. Il deployment dello scheduler
+è ancora una dipendenza operativa dell’hosting; nessun timer nel processo web.

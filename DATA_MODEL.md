@@ -2,14 +2,16 @@
 
 Stato: proposta progettuale derivata da T (`GlowTrace_Piano_Tecnico.pdf`, pp.
 10–18, 20) e adattata alle richieste dell'utente. Il modello descrive il perimetro
-completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–004:
+completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–007:
 tenants, users, locations, services, clients, appointments, messages, audit_log,
-user_invitations e client_assignments, oltre a ledger/idempotenza privati.
-Le prime due migrazioni sono applicate al progetto ufficiale; 003/004 sono
-verificate sul database locale e attendono applicazione remota. Gli inviti
-conservano soltanto l’hash del token; accesso clinico subordinato ad abilitazione
-e assegnazione attiva, senza anticipare l’implementazione dei dossier. Le entità cliniche/Storage restano pianificate. Riferimenti ai requisiti: `SPEC.md`. Architettura e applicazione delle
-migrazioni: `ARCHITECTURE.md`; ordine delle consegne: `IMPLEMENTATION_PLAN.md`.
+user_invitations, client_assignments e stored_files, oltre a ledger/idempotenza
+privati. Tutte e sette sono applicate al progetto ufficiale; undici tabelle con RLS.
+Gli inviti conservano soltanto l’hash del token. I file usano staging, verifica
+server, oggetti immutabili, audit e pulizia con lease: vedere [STORAGE.md](STORAGE.md).
+L’accesso ai file richiede abilitazione clinica e assegnazione per le operatrici;
+la titolare resta circoscritta al proprio studio. Dossier, consensi, foto per
+categoria e pigmenti restano da collegare nei successivi incrementi.
+Requisiti: `SPEC.md`; architettura: `ARCHITECTURE.md`; consegne: `IMPLEMENTATION_PLAN.md`.
 
 ## Confine dei dati
 

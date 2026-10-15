@@ -143,3 +143,17 @@ export const statusLabels: Record<AppointmentStatus, string> = {
   no_show: "Non presentata",
   cancelled: "Annullato",
 };
+
+export const filePreparationSchema = z
+  .object({
+    request_id: z.uuid(),
+    size_bytes: z
+      .number()
+      .int()
+      .min(1)
+      .max(10 * 1024 * 1024),
+    sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    mime_type: z.enum(["image/jpeg", "image/png", "image/webp"]),
+    appointment_id: z.uuid().optional(),
+  })
+  .strict();

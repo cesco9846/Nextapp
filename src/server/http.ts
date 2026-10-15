@@ -13,7 +13,10 @@ export class ApiError extends Error {
 }
 
 const dbErrors: Record<string, [number, string]> = {
-  "54000": [429, "Hai creato molti inviti. Attendi un’ora prima di riprovare."],
+  "54000": [
+    429,
+    "Hai effettuato molte operazioni. Attendi prima di riprovare.",
+  ],
   "23P01": [409, "Questo orario è già occupato. Scegli un altro orario."],
   "40001": [
     409,
@@ -32,6 +35,12 @@ const dbErrors: Record<string, [number, string]> = {
   P0002: [404, "L'elemento non è stato trovato."],
 };
 const reasons: Record<string, string> = {
+  INVALID_FILE: "Seleziona un’immagine JPEG, PNG o WebP, fino a 10 MB.",
+  FILE_EXPIRED:
+    "Il caricamento è scaduto o è stato annullato. Avviane uno nuovo.",
+  FILE_NOT_UPLOADED: "Attendi la fine del caricamento e riprova.",
+  FILE_ALREADY_READY:
+    "Il file è già confermato e non può essere annullato come caricamento.",
   INVALID_INVITATION:
     "L’invito è scaduto, revocato o già utilizzato. Chiedi alla titolare un nuovo collegamento.",
   INVITATION_EMAIL_MISMATCH:

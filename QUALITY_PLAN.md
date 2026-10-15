@@ -1,17 +1,23 @@
 # Piano di verifica e rilascio
 
-Stato al 15 ottobre 2026: primo incremento verificato con lint/typecheck/build,
-10 test unitari, 55 pgTAP e 7 scenari Playwright su build di produzione e
-Supabase locale reale. Verificato anche il server di sviluppo: accesso, rendering
-Monarch e API autenticata, senza ciclo di ricaricamento. Il flusso browser include tutte e quattro le viste
-Monarch, CRUD cliente/appuntamento, WhatsApp, concorrenza, isolamento e logout.
-Runner migrazioni provato con reset locale e doppia applicazione locale/remota.
-La revisione Impeccable ha richiesto aree touch da 44px e documentazione della
-direzione; correzioni applicate e valutate risolte dal reviewer (`ship` sulle correzioni),
-con evidenze e misure reali in `.impeccable/review`.
-Pipeline GitHub definita, run remoto non ancora eseguito. I contratti clinici,
-email reali, dispositivi fisici, installazione PWA, backup/restore e gate R1 qui sotto
-restano da verificare; questi risultati non equivalgono al collaudo completo.
+Stato al 15 ottobre 2026: lint, tipi, build, 10 test unitari, 141 asserzioni pgTAP
+su tre file e 18 scenari Chromium su build di produzione e Supabase locale reale
+superati. Sono coperti Auth con email catturate localmente, agenda, isolamento,
+team/revoca, rete/PWA e file privati. Per i file: MIME/hash/limiti, accessi negati,
+normalizzazione, completamento concorrente, riuso di oggetto già scritto,
+pulizia dopo crash, lease e idempotenza. Il test dei token di upload firmato
+falliva prima della guardia operativa 006 e passa dopo la correzione.
+
+Provati reset locale da zero, sette migrazioni, ripetizione e checksum. Tutte e sette
+applicate al remoto: undici tabelle RLS, bucket privato, zero dati/oggetti di
+prova. Comando di pulizia remoto verificato senza fixture (zero claim). Server
+ricompilato con configurazione ufficiale e risposte health/login/manifest/API
+senza sessione verificate. Revisione team `ship`, documenter senza modifiche.
+
+Il workflow GitHub è definito; esito remoto da verificare. Dossier, consensi,
+foto per categoria, email reali, dispositivi fisici, installazione PWA HTTPS,
+scheduler file, backup/restore e gate R1 restano da completare. Questi risultati
+non equivalgono al collaudo completo del prodotto.
 
 ## Livelli di verifica
 
@@ -21,7 +27,7 @@ restano da verificare; questi risultati non equivalgono al collaudo completo.
 | Dominio         | Vitest                                                         | Stati, date/fusi, validazione, messaggi e regole: input e output osservabili, non copie dell'implementazione.           |
 | Database        | Supabase locale + pgTAP                                        | RLS, FK tenant, vincoli, transazioni, ruoli e migrazioni ricreate da zero.                                              |
 | Integrazione    | Client HTTP e DB sullo stack test                              | Sessione reale, RPC, concorrenza, Storage, token e failure injection.                                                   |
-| Browser         | Playwright su Chromium/WebKit, Firefox per percorsi principali | Login, agenda, firma, upload, isolamento cache, responsive, tastiera e interruzioni di rete.                                         |
+| Browser         | Playwright su Chromium/WebKit, Firefox per percorsi principali | Login, agenda, firma, upload, isolamento cache, responsive, tastiera e interruzioni di rete.                            |
 | Servizi esterni | Sandbox/inbox e staging                                        | Email/SMTP, cron, webhook, URL firmati, Stripe/fatture; fakes non equivalgono a verifica esterna.                       |
 | Dispositivi     | iPhone, Android, tablet e PC                                   | Installazione PWA, fotocamera, firma col dito, tastiera software, pinch/scroll e sospensione/ripresa.                   |
 
@@ -31,23 +37,23 @@ generati. Sono nomi di contratti futuri, non comandi già esistenti nel reposito
 
 ## Scenari che devono poter fallire
 
-| Area             | Prove necessarie                                                                                                                                  | Evidenza richiesta                                                                                                                                               |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Identità/ruoli   | Sessione assente/scaduta/manomessa, utente disattivato, ruolo alterato nel payload, invito scaduto, ultimo owner, bootstrap ripetuto.             | HTTP corretti e stato DB invariato per richieste respinte.                                                                                                       |
-| Tenant           | Due tenant A/B, owner e operatrici con/senza abilitazione; ogni CRUD e FK, RPC, Storage e URL firmata.                                            | Matrice tabella/operazione/ruolo completa. Eseguire come utenti autenticati reali o ruolo SQL corrispondente; mai solo come postgres/service_role.               |
-| Anamnesi         | Richiesta consentita e negata, SELECT diretta, revoca assegnazione, audit non scrivibile.                                                         | Nessun accesso clinico senza permesso e audit; nessun dato sanitario nei log o nel JSON di agenda/clienti ordinari.                                              |
-| Appuntamenti     | Creazioni concorrenti sovrapposte, intervalli adiacenti, sedi diverse stessa operatrice, modifiche con versione vecchia, rete interrotta e retry. | Una sola creazione per chiave; 409 per conflitto; outbox e appuntamento coerenti dopo rollback.                                                                  |
-| Date             | Europe/Rome 29 marzo e 25 ottobre 2026, ora inesistente/ambigua, browser con altro fuso, cambio giorno/mese/anno.                                 | Timestamp e reminder attesi espliciti; input ambiguo richiede offset/scelta, non normalizzazione silenziosa.                                                     |
-| Link             | Scadenza limite, hash sconosciuto, revoca, riuso e doppio POST concorrente; GET da scanner; scopo o revisione errati.                             | Una sola mutazione autorizzata; GET senza effetti; nessun token o dettaglio studio divulgato.                                                                    |
-| Documenti        | Cambio modello dopo firma; modifica lotti; crash renderer; upload riuscito ma finalizzazione fallita; retry PDF.                                  | Snapshot/checksum invariati, un documento logico, PDF recuperabile senza rifirma, stato pending/failed corretto.                                                 |
-| Foto/file        | MIME e magic bytes discordanti, file grande, SVG attivo, file troncato, orientamento/HEIC, cambio tenant, upload abbandonato.                     | Rifiuto sicuro o conversione prevista; nessun file pronto senza validazione; pulizia orfani non elimina file referenziati.                                       |
-| Messaggi         | Due worker, lease scaduto, crash prima/dopo accettazione provider, 429/5xx, bounce definitivo, evento duplicato/fuori ordine.                     | Unicità di coda e claim; idempotenza esterna verificata o stato incerto riconciliabile; nessuna promessa di exactly-once non dimostrata.                         |
-| Scheduling       | Sposta/annulla prima del claim, durante il claim e dopo accettazione; crea appuntamento entro 24h; modifica destinatario.                         | Solo revisione corrente inviata ove ancora annullabile; limite dell'invio già accettato esplicito e visibile; niente reminder scaduti generati retroattivamente. |
-| WhatsApp         | Telefono nazionale senza prefisso, internazionale valido, testo con accenti/&/newline, nessun numero, desktop senza app nativa.                   | URL corretto e fallback comprensibile; nessun invio/consegna fittizi in UI.                                                                                      |
-| PWA/rete | Rete spenta durante un modulo, riconnessione, risposta persa dopo POST, cambio account e revoca, prompt installazione presente/assente. | Avviso chiaro, input conservati, nessun invio accodato o falso successo. Idempotenza preservata, letture aggiornate dopo riconnessione, nessuna persistenza offline dei dati. |
-| UI/accessibilità | Viewport 375/820/1280, tastiera, screen reader, errori form, rete lenta, liste vuote, touch e stato insoluto.                                     | Flussi eseguibili senza drag; focus preservato; nessun overflow principale; controlli tattili ≥44px.                                                             |
-| Billing/fatture  | Trial/attivo/insoluto/cessato, grace period, webhook falsi/duplicati/fuori ordine, errore SdI.                                                    | Entitlement server coerente, export disponibile, dati preservati; esiti fiscali distinti dal pagamento.                                                          |
-| ICS/push         | Revoca token, cambio evento, dati minimizzati, push negata/scaduta, iOS installata/non installata.                                                | Feed valido e accesso revocato; fallback reale; nessuna informazione clinica nei payload.                                                                        |
+| Area             | Prove necessarie                                                                                                                                  | Evidenza richiesta                                                                                                                                                            |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Identità/ruoli   | Sessione assente/scaduta/manomessa, utente disattivato, ruolo alterato nel payload, invito scaduto, ultimo owner, bootstrap ripetuto.             | HTTP corretti e stato DB invariato per richieste respinte.                                                                                                                    |
+| Tenant           | Due tenant A/B, owner e operatrici con/senza abilitazione; ogni CRUD e FK, RPC, Storage e URL firmata.                                            | Matrice tabella/operazione/ruolo completa. Eseguire come utenti autenticati reali o ruolo SQL corrispondente; mai solo come postgres/service_role.                            |
+| Anamnesi         | Richiesta consentita e negata, SELECT diretta, revoca assegnazione, audit non scrivibile.                                                         | Nessun accesso clinico senza permesso e audit; nessun dato sanitario nei log o nel JSON di agenda/clienti ordinari.                                                           |
+| Appuntamenti     | Creazioni concorrenti sovrapposte, intervalli adiacenti, sedi diverse stessa operatrice, modifiche con versione vecchia, rete interrotta e retry. | Una sola creazione per chiave; 409 per conflitto; outbox e appuntamento coerenti dopo rollback.                                                                               |
+| Date             | Europe/Rome 29 marzo e 25 ottobre 2026, ora inesistente/ambigua, browser con altro fuso, cambio giorno/mese/anno.                                 | Timestamp e reminder attesi espliciti; input ambiguo richiede offset/scelta, non normalizzazione silenziosa.                                                                  |
+| Link             | Scadenza limite, hash sconosciuto, revoca, riuso e doppio POST concorrente; GET da scanner; scopo o revisione errati.                             | Una sola mutazione autorizzata; GET senza effetti; nessun token o dettaglio studio divulgato.                                                                                 |
+| Documenti        | Cambio modello dopo firma; modifica lotti; crash renderer; upload riuscito ma finalizzazione fallita; retry PDF.                                  | Snapshot/checksum invariati, un documento logico, PDF recuperabile senza rifirma, stato pending/failed corretto.                                                              |
+| Foto/file        | MIME e magic bytes discordanti, file grande, SVG attivo, file troncato, orientamento/HEIC, cambio tenant, upload abbandonato.                     | Rifiuto sicuro o conversione prevista; nessun file pronto senza validazione; pulizia orfani non elimina file referenziati.                                                    |
+| Messaggi         | Due worker, lease scaduto, crash prima/dopo accettazione provider, 429/5xx, bounce definitivo, evento duplicato/fuori ordine.                     | Unicità di coda e claim; idempotenza esterna verificata o stato incerto riconciliabile; nessuna promessa di exactly-once non dimostrata.                                      |
+| Scheduling       | Sposta/annulla prima del claim, durante il claim e dopo accettazione; crea appuntamento entro 24h; modifica destinatario.                         | Solo revisione corrente inviata ove ancora annullabile; limite dell'invio già accettato esplicito e visibile; niente reminder scaduti generati retroattivamente.              |
+| WhatsApp         | Telefono nazionale senza prefisso, internazionale valido, testo con accenti/&/newline, nessun numero, desktop senza app nativa.                   | URL corretto e fallback comprensibile; nessun invio/consegna fittizi in UI.                                                                                                   |
+| PWA/rete         | Rete spenta durante un modulo, riconnessione, risposta persa dopo POST, cambio account e revoca, prompt installazione presente/assente.           | Avviso chiaro, input conservati, nessun invio accodato o falso successo. Idempotenza preservata, letture aggiornate dopo riconnessione, nessuna persistenza offline dei dati. |
+| UI/accessibilità | Viewport 375/820/1280, tastiera, screen reader, errori form, rete lenta, liste vuote, touch e stato insoluto.                                     | Flussi eseguibili senza drag; focus preservato; nessun overflow principale; controlli tattili ≥44px.                                                                          |
+| Billing/fatture  | Trial/attivo/insoluto/cessato, grace period, webhook falsi/duplicati/fuori ordine, errore SdI.                                                    | Entitlement server coerente, export disponibile, dati preservati; esiti fiscali distinti dal pagamento.                                                                       |
+| ICS/push         | Revoca token, cambio evento, dati minimizzati, push negata/scaduta, iOS installata/non installata.                                                | Feed valido e accesso revocato; fallback reale; nessuna informazione clinica nei payload.                                                                                     |
 
 ## Fixture e failure injection
 

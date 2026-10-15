@@ -413,6 +413,123 @@ export type Database = {
           },
         ];
       };
+      stored_files: {
+        Row: {
+          appointment_id: string | null;
+          bucket: string;
+          cleanup_completed_at: string | null;
+          cleanup_lease_until: string | null;
+          cleanup_token: string | null;
+          client_id: string;
+          created_at: string;
+          created_by: string;
+          expected_sha256: string;
+          expected_size: number;
+          expires_at: string;
+          failure_code: string | null;
+          height: number | null;
+          id: string;
+          kind: string;
+          mime_type: string;
+          object_path: string;
+          ready_at: string | null;
+          request_id: string;
+          sha256: string | null;
+          size_bytes: number | null;
+          staging_cleaned_at: string | null;
+          state: string;
+          tenant_id: string;
+          upload_path: string;
+          width: number | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          appointment_id?: string | null;
+          bucket?: string;
+          cleanup_completed_at?: string | null;
+          cleanup_lease_until?: string | null;
+          cleanup_token?: string | null;
+          client_id: string;
+          created_at?: string;
+          created_by: string;
+          expected_sha256: string;
+          expected_size: number;
+          expires_at?: string;
+          failure_code?: string | null;
+          height?: number | null;
+          id?: string;
+          kind?: string;
+          mime_type: string;
+          object_path: string;
+          ready_at?: string | null;
+          request_id: string;
+          sha256?: string | null;
+          size_bytes?: number | null;
+          staging_cleaned_at?: string | null;
+          state?: string;
+          tenant_id: string;
+          upload_path: string;
+          width?: number | null;
+        };
+        Update: {
+          appointment_id?: string | null;
+          bucket?: string;
+          cleanup_completed_at?: string | null;
+          cleanup_lease_until?: string | null;
+          cleanup_token?: string | null;
+          client_id?: string;
+          created_at?: string;
+          created_by?: string;
+          expected_sha256?: string;
+          expected_size?: number;
+          expires_at?: string;
+          failure_code?: string | null;
+          height?: number | null;
+          id?: string;
+          kind?: string;
+          mime_type?: string;
+          object_path?: string;
+          ready_at?: string | null;
+          request_id?: string;
+          sha256?: string | null;
+          size_bytes?: number | null;
+          staging_cleaned_at?: string | null;
+          state?: string;
+          tenant_id?: string;
+          upload_path?: string;
+          width?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "stored_files_tenant_id_appointment_id_fkey";
+            columns: ["tenant_id", "appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "stored_files_tenant_id_client_id_fkey";
+            columns: ["tenant_id", "client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "stored_files_tenant_id_created_by_fkey";
+            columns: ["tenant_id", "created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "stored_files_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       tenants: {
         Row: {
           created_at: string;
@@ -553,6 +670,7 @@ export type Database = {
         Args: { p_display_name: string; p_token: string };
         Returns: string;
       };
+      authorize_file_read: { Args: { p_id: string }; Returns: string };
       bootstrap_workspace: {
         Args: {
           p_display_name: string;
@@ -567,6 +685,12 @@ export type Database = {
       can_access_client_clinical: {
         Args: { p_client_id: string };
         Returns: boolean;
+      };
+      cancel_client_file: { Args: { p_id: string }; Returns: undefined };
+      claim_file_cleanup: { Args: { p_limit?: number }; Returns: Json[] };
+      complete_file_cleanup: {
+        Args: { p_claim: string; p_id: string };
+        Returns: undefined;
       };
       completed_report: { Args: { p_year?: number }; Returns: Json };
       create_appointment: {
@@ -599,7 +723,136 @@ export type Database = {
         Args: { p_clinical_access?: boolean; p_email: string };
         Returns: Json;
       };
+      file_for_completion: {
+        Args: { p_id: string };
+        Returns: {
+          appointment_id: string | null;
+          bucket: string;
+          cleanup_completed_at: string | null;
+          cleanup_lease_until: string | null;
+          cleanup_token: string | null;
+          client_id: string;
+          created_at: string;
+          created_by: string;
+          expected_sha256: string;
+          expected_size: number;
+          expires_at: string;
+          failure_code: string | null;
+          height: number | null;
+          id: string;
+          kind: string;
+          mime_type: string;
+          object_path: string;
+          ready_at: string | null;
+          request_id: string;
+          sha256: string | null;
+          size_bytes: number | null;
+          staging_cleaned_at: string | null;
+          state: string;
+          tenant_id: string;
+          upload_path: string;
+          width: number | null;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "stored_files";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      finish_client_file: {
+        Args: {
+          p_actor: string;
+          p_height: number;
+          p_id: string;
+          p_sha256: string;
+          p_size: number;
+          p_width: number;
+        };
+        Returns: {
+          appointment_id: string | null;
+          bucket: string;
+          cleanup_completed_at: string | null;
+          cleanup_lease_until: string | null;
+          cleanup_token: string | null;
+          client_id: string;
+          created_at: string;
+          created_by: string;
+          expected_sha256: string;
+          expected_size: number;
+          expires_at: string;
+          failure_code: string | null;
+          height: number | null;
+          id: string;
+          kind: string;
+          mime_type: string;
+          object_path: string;
+          ready_at: string | null;
+          request_id: string;
+          sha256: string | null;
+          size_bytes: number | null;
+          staging_cleaned_at: string | null;
+          state: string;
+          tenant_id: string;
+          upload_path: string;
+          width: number | null;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "stored_files";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       membership_state: { Args: Record<PropertyKey, never>; Returns: string };
+      prepare_client_file: {
+        Args: {
+          p_appointment_id?: string;
+          p_client_id: string;
+          p_mime: string;
+          p_request_id: string;
+          p_sha256: string;
+          p_size: number;
+        };
+        Returns: {
+          appointment_id: string | null;
+          bucket: string;
+          cleanup_completed_at: string | null;
+          cleanup_lease_until: string | null;
+          cleanup_token: string | null;
+          client_id: string;
+          created_at: string;
+          created_by: string;
+          expected_sha256: string;
+          expected_size: number;
+          expires_at: string;
+          failure_code: string | null;
+          height: number | null;
+          id: string;
+          kind: string;
+          mime_type: string;
+          object_path: string;
+          ready_at: string | null;
+          request_id: string;
+          sha256: string | null;
+          size_bytes: number | null;
+          staging_cleaned_at: string | null;
+          state: string;
+          tenant_id: string;
+          upload_path: string;
+          width: number | null;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "stored_files";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      reject_client_file: {
+        Args: { p_actor: string; p_id: string; p_reason: string };
+        Returns: undefined;
+      };
       revoke_team_invitation: { Args: { p_id: string }; Returns: undefined };
       set_client_assignment: {
         Args: {

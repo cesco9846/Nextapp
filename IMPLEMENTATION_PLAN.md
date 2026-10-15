@@ -1,6 +1,6 @@
 # Piano di implementazione — Glow / Nextapp
 
-Revisione: 15 ottobre 2026. Stato: **secondo incremento salvato; team/PWA verificati localmente, rollout remoto ancora aperto; R1 da completare**.
+Revisione: 15 ottobre 2026. Stato: **terzo incremento: team e Storage privato implementati e migrati; R1 da completare**.
 Questo file è il backlog operativo: aggiornarlo a ogni consegna con commit,
 verifiche eseguite e decisioni. Requisiti: [SPEC.md](SPEC.md); modello dati:
 [DATA_MODEL.md](DATA_MODEL.md); architettura: [ARCHITECTURE.md](ARCHITECTURE.md);
@@ -80,19 +80,20 @@ dopo l'agenda, senza aspettare tutta M5.
 Lo stato corrente è nella tabella seguente e nel registro finale. Gli item
 non avviati restano **pianificati**.
 
-| Item             | Stato corrente                        | Limite residuo                                                                                                                                  |
-| ---------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| W01              | Verificato localmente                 | Workflow CI definito, run GitHub da verificare dopo push.                                                                                       |
-| W02              | Verificato nell’incremento            | Monarch reale, quattro viste, viewport desktop/telefono e revisione grafica. Dispositivi fisici in W20.                                         |
-| W03              | Verificato nell’incremento            | Reset locale, ledger/checksum/lock e RLS provati; schema base applicato al remoto.                                                              |
-| W04              | In corso                              | Registrazione, conferma e recupero provati con SMTP locale; SMTP e dominio finale da collaudare.                                                |
-| W05              | Implementato, verifiche core superate | Ampliare accettazione su omonime e archivio via UI prima di R1.                                                                                 |
-| W06              | Verificato nell’incremento            | Concorrenza, idempotenza, sovrapposizioni, versioni e outbox; worker separato in W15.                                                           |
-| W07              | In corso                              | Agenda/report implementati; drag/resize e stati da ampliare nel collaudo browser. Team verificato localmente; rollout remoto W09 ancora aperto. |
-| W08              | Verificato nel browser                | Link/chat/testo corretti; apertura sulle app di dispositivi fisici prima di R1.                                                                 |
-| W09              | Verificato localmente; rollout aperto | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; applicare 003/004 al remoto e chiudere revisione grafica.                        |
-| W18              | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                                    |
-| W10–W17, W19–W25 | Pianificato                           | Prossimo incremento: completare rollout team e iniziare Storage privato/dossier.                                                                |
+| Item             | Stato corrente                        | Limite residuo                                                                                                                       |
+| ---------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| W01              | Verificato localmente                 | Workflow CI definito, run GitHub da verificare dopo push.                                                                            |
+| W02              | Verificato nell’incremento            | Monarch reale, quattro viste, viewport desktop/telefono e revisione grafica. Dispositivi fisici in W20.                              |
+| W03              | Verificato nell’incremento            | Reset locale, ledger/checksum/lock e RLS provati; schema base applicato al remoto.                                                   |
+| W04              | In corso                              | Registrazione, conferma e recupero provati con SMTP locale; SMTP e dominio finale da collaudare.                                     |
+| W05              | Implementato, verifiche core superate | Ampliare accettazione su omonime e archivio via UI prima di R1.                                                                      |
+| W06              | Verificato nell’incremento            | Concorrenza, idempotenza, sovrapposizioni, versioni e outbox; worker separato in W15.                                                |
+| W07              | In corso                              | Agenda/report implementati; drag/resize e stati da ampliare nel collaudo browser. Team migrato e verificato; collaudi fisici in W20. |
+| W08              | Verificato nel browser                | Link/chat/testo corretti; apertura sulle app di dispositivi fisici prima di R1.                                                      |
+| W09              | Implementato e migrato                | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; migrazioni remote applicate e revisione grafica ship.                 |
+| W18              | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                         |
+| W10              | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                       |
+| W11–W17, W19–W25 | Pianificato                           | Prossimo incremento: modelli consenso, questionari e lotti; poi flusso cliente e firma.                                              |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -170,14 +171,14 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-Chiudere il rollout remoto W09 e la revisione grafica delle ultime correzioni;
-completare W04 sul dominio reale/SMTP e W05/W07 nei percorsi browser residui.
-Inviti, revoca e assegnazioni sono già implementati e verificati localmente.
-Seguire prima [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md). Poi W10–W14 in porzioni verticali:
-Storage privato → modelli/lotti → link cliente → firma/PDF → foto. W15 può
-avanzare con la coda già transazionale, mantenendo disabilitato l'invio finché
-provider e osservabilità non sono verificati. Nessun dato clinico reale prima
-del completamento dei relativi permessi e criteri di conservazione.
+Proseguire W11 con modelli consenso/anamnesi versionati e pigmenti/lotti,
+riusando la base Storage W10. Poi W12–W14: link cliente, firma/PDF e foto.
+Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
+[STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
+W05/W07 nei collaudi browser residui e scheduler file restano aperti. W15 può
+avanzare sulla coda transazionale; nessun invio reale finché provider e
+osservabilità non sono verificati. Nessun dato clinico reale prima dei relativi
+permessi, flussi e criteri di conservazione.
 
 ## Registro di avanzamento
 
@@ -193,12 +194,21 @@ Aggiornare questo registro con evidenze brevi; gli item non elencati restano
 pianificati secondo il backlog. Un cambio di perimetro aggiorna SPEC, decisione,
 backlog e test nello stesso incremento.
 
-### Secondo incremento — checkpoint GitHub, 15 ottobre 2026
+### Storico: secondo incremento — primo checkpoint GitHub, 15 ottobre 2026
 
 Team, inviti manuali tramite link, accesso sospeso, assegnazioni e guardie di
 concorrenza implementati. PWA installabile con rete necessaria: nessuna coda
 locale e nessun service worker. Ciclo Auth con email locale e 14 scenari browser
-verificati; stato finale delle verifiche in DEVELOPMENT_CHECKPOINT.md. Migrazioni
-003/004 ancora da applicare al progetto ufficiale. Revisione grafica finale e
-prove di installazione fisica restano aperte. La pubblicazione del codice su
+verificati. In quel checkpoint 003/004 e revisione grafica erano ancora aperte;
+sono state chiuse nel terzo incremento. Le prove di installazione fisica
+restano aperte. Stato corrente in DEVELOPMENT_CHECKPOINT.md. La pubblicazione del codice su
 GitHub non costituisce distribuzione dell’app né completamento di R1.
+
+### Terzo incremento — team remoto e base Storage privata, 15 ottobre 2026
+
+Chiusi revisione team (ship/documenter), reset e rollout remoto 003/004, callback
+Auth invito e password minima 10. Implementate 005–007: file pending/ready,
+verifica/normalizzazione, lettura auditata con URL 30s, pulizia con lease e
+controllo del tipo di operazione Storage e riconciliazione degli upload tardivi. Tutte e tre migrate e ripetute sul remoto,
+senza fixture. 10 unit, 141 pgTAP e 18 E2E passati, build/lint/tipi superati.
+Scheduler remoto, UI foto e dossier non ancora consegnati: prossimi W11–W14.
