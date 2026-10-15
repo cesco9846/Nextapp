@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-15T13:38:43.091Z",
+  "title": "Design System: Glow",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Giada operativa",
+        "canonical": "#28664f",
+        "tonalRamp": [
+          "oklch(15% 0.07469 165.88)",
+          "oklch(27% 0.07469 165.88)",
+          "oklch(39% 0.07469 165.88)",
+          "oklch(51% 0.07469 165.88)",
+          "oklch(63% 0.07469 165.88)",
+          "oklch(75% 0.07469 165.88)",
+          "oklch(87% 0.07469 165.88)",
+          "oklch(95% 0.07469 165.88)"
+        ]
+      },
+      "primary-foreground": {
+        "role": "primary",
+        "displayName": "Bianco su giada",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.00000 89.88)",
+          "oklch(27% 0.00000 89.88)",
+          "oklch(39% 0.00000 89.88)",
+          "oklch(51% 0.00000 89.88)",
+          "oklch(63% 0.00000 89.88)",
+          "oklch(75% 0.00000 89.88)",
+          "oklch(87% 0.00000 89.88)",
+          "oklch(95% 0.00000 89.88)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Carta fredda",
+        "canonical": "#f5f7f8",
+        "tonalRamp": [
+          "oklch(15% 0.00252 228.78)",
+          "oklch(27% 0.00252 228.78)",
+          "oklch(39% 0.00252 228.78)",
+          "oklch(51% 0.00252 228.78)",
+          "oklch(63% 0.00252 228.78)",
+          "oklch(75% 0.00252 228.78)",
+          "oklch(87% 0.00252 228.78)",
+          "oklch(95% 0.00252 228.78)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Inchiostro verde",
+        "canonical": "#263e36",
+        "tonalRamp": [
+          "oklch(15% 0.03323 171.30)",
+          "oklch(27% 0.03323 171.30)",
+          "oklch(39% 0.03323 171.30)",
+          "oklch(51% 0.03323 171.30)",
+          "oklch(63% 0.03323 171.30)",
+          "oklch(75% 0.03323 171.30)",
+          "oklch(87% 0.03323 171.30)",
+          "oklch(95% 0.03323 171.30)"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Bianco di lavoro",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.00000 89.88)",
+          "oklch(27% 0.00000 89.88)",
+          "oklch(39% 0.00000 89.88)",
+          "oklch(51% 0.00000 89.88)",
+          "oklch(63% 0.00000 89.88)",
+          "oklch(75% 0.00000 89.88)",
+          "oklch(87% 0.00000 89.88)",
+          "oklch(95% 0.00000 89.88)"
+        ]
+      },
+      "navigation": {
+        "role": "neutral",
+        "displayName": "Verde d'ambiente",
+        "canonical": "#edf3ef",
+        "tonalRamp": [
+          "oklch(15% 0.00827 157.09)",
+          "oklch(27% 0.00827 157.09)",
+          "oklch(39% 0.00827 157.09)",
+          "oklch(51% 0.00827 157.09)",
+          "oklch(63% 0.00827 157.09)",
+          "oklch(75% 0.00827 157.09)",
+          "oklch(87% 0.00827 157.09)",
+          "oklch(95% 0.00827 157.09)"
+        ]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Verde di supporto",
+        "canonical": "#eaf1ec",
+        "tonalRamp": [
+          "oklch(15% 0.00995 155.09)",
+          "oklch(27% 0.00995 155.09)",
+          "oklch(39% 0.00995 155.09)",
+          "oklch(51% 0.00995 155.09)",
+          "oklch(63% 0.00995 155.09)",
+          "oklch(75% 0.00995 155.09)",
+          "oklch(87% 0.00995 155.09)",
+          "oklch(95% 0.00995 155.09)"
+        ]
+      },
+      "secondary-foreground": {
+        "role": "secondary",
+        "displayName": "Inchiostro di supporto",
+        "canonical": "#315743",
+        "tonalRamp": [
+          "oklch(15% 0.05531 159.80)",
+          "oklch(27% 0.05531 159.80)",
+          "oklch(39% 0.05531 159.80)",
+          "oklch(51% 0.05531 159.80)",
+          "oklch(63% 0.05531 159.80)",
+          "oklch(75% 0.05531 159.80)",
+          "oklch(87% 0.05531 159.80)",
+          "oklch(95% 0.05531 159.80)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Tono di riposo",
+        "canonical": "#f0f4f2",
+        "tonalRamp": [
+          "oklch(15% 0.00500 165.01)",
+          "oklch(27% 0.00500 165.01)",
+          "oklch(39% 0.00500 165.01)",
+          "oklch(51% 0.00500 165.01)",
+          "oklch(63% 0.00500 165.01)",
+          "oklch(75% 0.00500 165.01)",
+          "oklch(87% 0.00500 165.01)",
+          "oklch(95% 0.00500 165.01)"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Inchiostro attenuato",
+        "canonical": "#5b6e65",
+        "tonalRamp": [
+          "oklch(15% 0.02674 165.06)",
+          "oklch(27% 0.02674 165.06)",
+          "oklch(39% 0.02674 165.06)",
+          "oklch(51% 0.02674 165.06)",
+          "oklch(63% 0.02674 165.06)",
+          "oklch(75% 0.02674 165.06)",
+          "oklch(87% 0.02674 165.06)",
+          "oklch(95% 0.02674 165.06)"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Verde di interazione",
+        "canonical": "#e2eee6",
+        "tonalRamp": [
+          "oklch(15% 0.01660 156.90)",
+          "oklch(27% 0.01660 156.90)",
+          "oklch(39% 0.01660 156.90)",
+          "oklch(51% 0.01660 156.90)",
+          "oklch(63% 0.01660 156.90)",
+          "oklch(75% 0.01660 156.90)",
+          "oklch(87% 0.01660 156.90)",
+          "oklch(95% 0.01660 156.90)"
+        ]
+      },
+      "accent-foreground": {
+        "role": "secondary",
+        "displayName": "Inchiostro di interazione",
+        "canonical": "#244f3b",
+        "tonalRamp": [
+          "oklch(15% 0.05950 161.67)",
+          "oklch(27% 0.05950 161.67)",
+          "oklch(39% 0.05950 161.67)",
+          "oklch(51% 0.05950 161.67)",
+          "oklch(63% 0.05950 161.67)",
+          "oklch(75% 0.05950 161.67)",
+          "oklch(87% 0.05950 161.67)",
+          "oklch(95% 0.05950 161.67)"
+        ]
+      },
+      "destructive": {
+        "role": "secondary",
+        "displayName": "Rosso di recupero",
+        "canonical": "#b34242",
+        "tonalRamp": [
+          "oklch(15% 0.14755 23.51)",
+          "oklch(27% 0.14755 23.51)",
+          "oklch(39% 0.14755 23.51)",
+          "oklch(51% 0.14755 23.51)",
+          "oklch(63% 0.14755 23.51)",
+          "oklch(75% 0.14755 23.51)",
+          "oklch(87% 0.14755 23.51)",
+          "oklch(95% 0.14755 23.51)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Linea strutturale",
+        "canonical": "#dce5df",
+        "tonalRamp": [
+          "oklch(15% 0.01254 156.98)",
+          "oklch(27% 0.01254 156.98)",
+          "oklch(39% 0.01254 156.98)",
+          "oklch(51% 0.01254 156.98)",
+          "oklch(63% 0.01254 156.98)",
+          "oklch(75% 0.01254 156.98)",
+          "oklch(87% 0.01254 156.98)",
+          "oklch(95% 0.01254 156.98)"
+        ]
+      },
+      "input": {
+        "role": "neutral",
+        "displayName": "Linea del campo",
+        "canonical": "#d5dfd8",
+        "tonalRamp": [
+          "oklch(15% 0.01430 155.56)",
+          "oklch(27% 0.01430 155.56)",
+          "oklch(39% 0.01430 155.56)",
+          "oklch(51% 0.01430 155.56)",
+          "oklch(63% 0.01430 155.56)",
+          "oklch(75% 0.01430 155.56)",
+          "oklch(87% 0.01430 155.56)",
+          "oklch(95% 0.01430 155.56)"
+        ]
+      },
+      "ring": {
+        "role": "neutral",
+        "displayName": "Verde di focus",
+        "canonical": "#4a8062",
+        "tonalRamp": [
+          "oklch(15% 0.07485 158.38)",
+          "oklch(27% 0.07485 158.38)",
+          "oklch(39% 0.07485 158.38)",
+          "oklch(51% 0.07485 158.38)",
+          "oklch(63% 0.07485 158.38)",
+          "oklch(75% 0.07485 158.38)",
+          "oklch(87% 0.07485 158.38)",
+          "oklch(95% 0.07485 158.38)"
+        ]
+      },
+      "calendar-border": {
+        "role": "neutral",
+        "displayName": "Linea Monarch",
+        "canonical": "#e6ece8",
+        "tonalRamp": [
+          "oklch(15% 0.00832 157.08)",
+          "oklch(27% 0.00832 157.08)",
+          "oklch(39% 0.00832 157.08)",
+          "oklch(51% 0.00832 157.08)",
+          "oklch(63% 0.00832 157.08)",
+          "oklch(75% 0.00832 157.08)",
+          "oklch(87% 0.00832 157.08)",
+          "oklch(95% 0.00832 157.08)"
+        ]
+      },
+      "calendar-highlight": {
+        "role": "neutral",
+        "displayName": "Intervallo Monarch",
+        "canonical": "#e0eee6",
+        "tonalRamp": [
+          "oklch(15% 0.01827 161.10)",
+          "oklch(27% 0.01827 161.10)",
+          "oklch(39% 0.01827 161.10)",
+          "oklch(51% 0.01827 161.10)",
+          "oklch(63% 0.01827 161.10)",
+          "oklch(75% 0.01827 161.10)",
+          "oklch(87% 0.01827 161.10)",
+          "oklch(95% 0.01827 161.10)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "display",
+        "purpose": "Introduzione accesso."
+      },
+      "headline": {
+        "displayName": "headline",
+        "purpose": "Titoli di pagina."
+      },
+      "title": {
+        "displayName": "title",
+        "purpose": "Titoli di sezione."
+      },
+      "body": {
+        "displayName": "body",
+        "purpose": "Testo di base."
+      },
+      "label": {
+        "displayName": "label",
+        "purpose": "Comandi e campi."
+      },
+      "caption": {
+        "displayName": "caption",
+        "purpose": "Metadati e legende."
+      }
+    },
+    "shadows": [
+      {
+        "name": "navigation-active",
+        "value": "0 2px 5px #294e3510",
+        "purpose": "Destinazione desktop attiva."
+      },
+      {
+        "name": "control-xs",
+        "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        "purpose": "Campi e pulsanti outline."
+      },
+      {
+        "name": "tab-sm",
+        "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        "purpose": "Tab selezionata."
+      },
+      {
+        "name": "menu-md",
+        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        "purpose": "Select e popover."
+      },
+      {
+        "name": "overlay-lg",
+        "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "purpose": "Dialog e sheet."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-transition",
+        "value": "150ms cubic-bezier(0.4,0,0.2,1)",
+        "purpose": "Default transition-all e transition-colors Tailwind."
+      },
+      {
+        "name": "dialog-duration",
+        "value": "200ms",
+        "purpose": "Durata dichiarata dal dialog."
+      },
+      {
+        "name": "sheet-open",
+        "value": "500ms ease-in-out",
+        "purpose": "Transizione dichiarata per apertura sheet."
+      },
+      {
+        "name": "sheet-close",
+        "value": "300ms ease-in-out",
+        "purpose": "Transizione dichiarata per chiusura sheet."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "Override globale per prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "2xl",
+        "value": "1536px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Pulsante Primario",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Variante del pulsante shadcn nella misura predefinita.",
+      "html": "<button class=\"ds-button-primary\" type=\"button\">Nuovo appuntamento</button>",
+      "css": ".ds-button-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:8px 16px;border-radius:var(--radius-md,9px);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;background:var(--primary,#28664f);color:#fff;border:1px solid transparent;cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1)}.ds-button-primary:hover{background:color-mix(in srgb,var(--primary,#28664f) 90%,transparent);}.ds-button-primary:focus-visible{outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-button-primary:disabled{opacity:.5;pointer-events:none}"
+    },
+    {
+      "name": "Pulsante Outline",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Variante del pulsante shadcn nella misura predefinita.",
+      "html": "<button class=\"ds-button-outline\" type=\"button\">Oggi</button>",
+      "css": ".ds-button-outline{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:8px 16px;border-radius:var(--radius-md,9px);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;background:var(--background,#f5f7f8);color:var(--foreground,#263e36);border:1px solid var(--color-border,#dce5df);box-shadow:0 1px 2px rgb(0 0 0 / .05);cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1)}.ds-button-outline:hover{background:var(--color-accent,#e2eee6);color:var(--color-accent-foreground,#244f3b);}.ds-button-outline:focus-visible{outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-button-outline:disabled{opacity:.5;pointer-events:none}"
+    },
+    {
+      "name": "Pulsante Ghost",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Variante del pulsante shadcn nella misura predefinita.",
+      "html": "<button class=\"ds-button-ghost\" type=\"button\">Modifica</button>",
+      "css": ".ds-button-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:8px 16px;border-radius:var(--radius-md,9px);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;background:transparent;color:var(--foreground,#263e36);border:1px solid transparent;cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1)}.ds-button-ghost:hover{background:var(--color-accent,#e2eee6);color:var(--color-accent-foreground,#244f3b);}.ds-button-ghost:focus-visible{outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-button-ghost:disabled{opacity:.5;pointer-events:none}"
+    },
+    {
+      "name": "Pulsante Secondario",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Variante del pulsante shadcn nella misura predefinita.",
+      "html": "<button class=\"ds-button-secondary\" type=\"button\">Indietro</button>",
+      "css": ".ds-button-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:8px 16px;border-radius:var(--radius-md,9px);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;background:var(--color-secondary,#eaf1ec);color:var(--color-secondary-foreground,#315743);border:1px solid transparent;cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1)}.ds-button-secondary:hover{background:color-mix(in srgb,var(--color-secondary,#eaf1ec) 80%,transparent);}.ds-button-secondary:focus-visible{outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-button-secondary:disabled{opacity:.5;pointer-events:none}"
+    },
+    {
+      "name": "Pulsante Distruttivo",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Variante del pulsante shadcn nella misura predefinita.",
+      "html": "<button class=\"ds-button-destructive\" type=\"button\">Conferma annullamento</button>",
+      "css": ".ds-button-destructive{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:8px 16px;border-radius:var(--radius-md,9px);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;background:var(--color-destructive,#b34242);color:#fff;border:1px solid transparent;cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1)}.ds-button-destructive:hover{background:color-mix(in srgb,var(--color-destructive,#b34242) 90%,transparent);}.ds-button-destructive:focus-visible{outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-button-destructive:disabled{opacity:.5;pointer-events:none}"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo con etichetta, bordo discreto e focus verde.",
+      "html": "<label class=\"ds-field\">Nome<input class=\"ds-input\" placeholder=\"Nome cliente\" /></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:8px;color:var(--foreground,#263e36);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;}.ds-input{height:44px;min-width:0;width:100%;padding:4px 12px;border:1px solid var(--color-input,#d5dfd8);border-radius:var(--radius-md,9px);background:transparent;color:var(--foreground,#263e36);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:16px;box-shadow:0 1px 2px rgb(0 0 0 / .05);transition:color .15s,box-shadow .15s}.ds-input::placeholder{color:var(--color-muted-foreground,#5b6e65)}.ds-input:focus-visible{border-color:var(--color-ring,#4a8062);outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-input:disabled{opacity:.5;cursor:not-allowed}@media(min-width:768px){.ds-input{font-size:14px}}"
+    },
+    {
+      "name": "Navigazione attiva",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Destinazione desktop attiva nello spazio verde della navigazione.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Studio\"><a class=\"ds-nav-link\" href=\"#agenda\" aria-current=\"page\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v4m8-4v4M3 10h18\"/><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/></svg>Agenda</a></nav>",
+      "css": ".ds-nav{background:var(--color-navigation,#edf3ef);padding:12px}.ds-nav-link{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:var(--radius-lg,12px);background:#fff;color:#24563e;text-decoration:none;box-shadow:0 2px 5px #294e3510;font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;transition:color .15s,background-color .15s}.ds-nav-link:hover{background:#e2ebe4;color:#244f3b}.ds-nav-link:focus-visible{outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}"
+    },
+    {
+      "name": "Badge secondario",
+      "kind": "chip",
+      "refersTo": "badge-secondary",
+      "description": "Etichetta di stato compatta, non interattiva.",
+      "html": "<span class=\"ds-badge\">Non attivo</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;gap:4px;width:fit-content;padding:2px 8px;border:1px solid transparent;border-radius:9999px;background:var(--color-secondary,#eaf1ec);color:var(--color-secondary-foreground,#315743);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:12px;font-weight:500;line-height:16px;white-space:nowrap}"
+    },
+    {
+      "name": "Pannello di lavoro",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Contenitore piatto con righe separate e titolo di sezione.",
+      "html": "<section class=\"ds-panel\"><h2 class=\"ds-panel-title\">La giornata</h2><p class=\"ds-panel-body\">Gli appuntamenti di questo giorno compariranno qui.</p></section>",
+      "css": ".ds-panel{background:var(--card,#fff);color:var(--foreground,#263e36);border:1px solid var(--color-border,#dce5df);border-radius:var(--radius-xl,16px);overflow:hidden;max-width:360px}.ds-panel-title{margin:0;padding:20px;border-bottom:1px solid var(--color-border,#dce5df);font-family:var(--font-display,\"Bricolage Grotesque Variable\",sans-serif);font-size:18px;line-height:28px;font-weight:550;letter-spacing:-.025em}.ds-panel-body{margin:0;padding:20px;color:var(--color-muted-foreground,#5b6e65);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:12px;line-height:19.5px}"
+    },
+    {
+      "name": "Legenda pigmento",
+      "kind": "custom",
+      "description": "Segno servizio con nome, come sotto il calendario; il verde è un valore esemplificativo configurabile.",
+      "html": "<span class=\"ds-pigment\"><span class=\"ds-pigment-dot\" aria-hidden=\"true\"></span>Servizio</span>",
+      "css": ".ds-pigment{display:inline-flex;align-items:center;gap:8px;color:var(--color-muted-foreground,#5b6e65);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:12px;line-height:16px}.ds-pigment-dot{height:8px;width:8px;border-radius:9999px;background:var(--primary,#28664f)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Lo studio luminoso",
+    "overview": "Uno spazio operativo chiaro e raccolto, con superfici fredde, giada profonda e titoli leggermente espressivi. La densità resta quella di uno strumento usato tra appuntamenti: persone, orari e azioni hanno precedenza sulla decorazione.\n\nQuesta è la registrazione della prima implementazione guidata dal codice. FullCalendar Monarch e componenti originali shadcn/ui sono vincoli espliciti dell'utente; palette, metafora e accostamento tipografico descrivono la proposta implementata, senza attribuirle un'approvazione separata. Il riferimento originale del concept-seed non è stato conservato: non viene ricostruito né sostituito da un nuovo roll.",
+    "keyCharacteristics": [
+      "Superfici luminose e bordi discreti.",
+      "Giada per azioni, selezione e orientamento.",
+      "Titoli Bricolage e testo operativo Instrument Sans.",
+      "Dati in righe, calendario e pannelli contestuali.",
+      "Segni pigmento associati a nomi e stati leggibili."
+    ],
+    "rules": [
+      {
+        "name": "The Pigment With Meaning Rule",
+        "body": "Ogni segno di categoria accompagna un nome; il colore non sostituisce un'etichetta o uno stato scritto.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Bricolage guida titoli e marchio; Instrument Sans sostiene dati e controlli. Orari e importi usano cifre tabulari.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Surface Rule",
+        "body": "Pannelli di lavoro separati da tono e bordo; l'elevazione più forte appartiene ai contenuti sovrapposti.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usare Monarch ufficiale e i componenti shadcn già presenti come base delle nuove superfici.",
+      "Do mantenere nomi, stati scritti, focus visibile e cifre tabulari nei dati temporali.",
+      "Do comporre contenuti in righe, campi e pannelli con il ritmo e la scala di angoli documentati.",
+      "Do usare controlli primari da almeno 44 px e verificare le varianti compatte nel loro contesto touch.",
+      "Do mostrare lo stato reale di caricamento, errore, conflitto e successo."
+    ],
+    "donts": [
+      "Don't sostituire il tema Monarch con una griglia calendario disegnata a imitazione.",
+      "Don't usare solo colore per distinguere un servizio, una sede o uno stato.",
+      "Don't presentare la palette implementata come identità approvata dall'utente.",
+      "Don't propagare la decorazione dell'accesso o le ombre degli overlay a tutti i pannelli."
+    ]
+  }
+}
