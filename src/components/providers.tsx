@@ -26,6 +26,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     window.addEventListener("glow:access-revoked", revoked);
     const expired = () => {
       client.clear();
+      if (document.documentElement.dataset.glowHandoff === "true") return;
       if (window.location.pathname === "/invito") window.location.reload();
       else
         window.location.replace(
@@ -39,7 +40,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       if (event === "SIGNED_OUT") {
         client.clear();
         // Full navigation also discards the authenticated RSC/navigation memory.
-        if (window.location.pathname.startsWith("/app"))
+        if (
+          window.location.pathname.startsWith("/app") &&
+          document.documentElement.dataset.glowHandoff !== "true"
+        )
           window.location.replace(
             new URL("/accedi", window.location.origin).href,
           );

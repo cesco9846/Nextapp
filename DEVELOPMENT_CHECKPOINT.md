@@ -1,9 +1,10 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 15 ottobre 2026: **modelli clinici, pigmenti/lotti e preparazione non firmata implementati**.
-Il catalogo e le risposte seguono permessi e audit distinti.
+Aggiornato il 15 ottobre 2026: **compilazione cliente e passaggio tablet implementati e verificati**.
+Resend è confermato; configurazione email rinviata come richiesto.
 Il primo checkpoint resta nel tag `checkpoint-2026-10-15`; questo incremento
-è conservato in `checkpoint-clinical-2026-10-15` e su `main`. Non è ancora il pilota R1.
+è conservato in `checkpoint-intake-2026-10-15` e su `main`. Il precedente
+checkpoint clinico resta in `checkpoint-clinical-2026-10-15`. Non è ancora il pilota R1.
 
 ## Scelte confermate
 
@@ -46,19 +47,34 @@ Le risposte rimangono nello schema privato, senza SELECT client; ogni lettura
 registra prima un audit, anche se eseguita direttamente tramite RPC. Accessi
 clinici e revoche condividono il lock tenant e ricontrollano i permessi dopo
 l’attesa. Nel browser le risposte restano solo nello stato del form, senza cache
-persistente o invio alla riconnessione. Lo stato è sempre bozza: firma, PDF e
-compilazione della cliente sono i prossimi incrementi.
+persistente o invio alla riconnessione. Lo stato è sempre bozza: firma e PDF restano W13. La compilazione della cliente è ora implementata in W12.
 
-Email: [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md) documenta la proposta di un mittente
-Glow su dominio verificato, nome studio e Reply-To verificato della professionista.
-Noreply non è obbligatorio; Gmail/Outlook personale richiederebbe collegamenti
-specifici per ogni account. Provider e modello dei mittenti non sono ancora
-confermati; nessun account, dominio a pagamento o invio attivato.
+Nuovo W12: dalla preparazione salvata si genera un link personale valido 24 ore
+oppure si passa il tablet per 30 minuti, sempre entro la fine dell’appuntamento.
+La cliente vede testi/domande fissati e contesto minimo, mai risposte precedenti,
+altre clienti o file. Token casuale da 256 bit, hash-only privato; il frammento
+viene eliminato dalla barra e mantenuto in memoria. GET/HEAD non consumano.
+Un POST esplicito salva risposte, ricevuta, audit e consumo atomicamente. Retry
+identico → stessa ricevuta; altri usi dopo consumo/scadenza/revoca → 410.
+Nuova preparazione o revisione appuntamento invalidano il link. Anche la revoca
+dell’accesso dell’autrice lo rende inutilizzabile, dopo controllo sotto lock.
+
+Il tablet disconnette la sessione professionale locale prima di aprire il form.
+Cronologia e URL protetti richiedono un nuovo accesso; risposta di avvio ambigua
+porta all’accesso svuotando la memoria professionale. Nessun PIN sostituisce
+l’autorizzazione server. Non è un kiosk del sistema operativo. Il modulo resta
+una compilazione non firmata; contratti completi in [INTAKE.md](INTAKE.md).
+
+Email: **Resend scelto**, dominio acquistato dall’utente. DNS, caselle e
+integrazione saranno configurati più avanti. Il modello mittente Glow/Reply-To
+studio resta la proposta descritta in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md);
+nessun DNS/account modificato e nessun invio reale attivato. Non chiedere ora
+credenziali Resend o il dominio: non servono a completare i moduli clinici.
 
 ## Database ufficiale e runtime
 
-Tutte e undici le migrazioni `202610150001`–`202610150011` sono applicate e
-ri-verificate con checksum; diciassette tabelle pubbliche con RLS; risposte anamnestiche private. Bucket
+Tutte e dodici le migrazioni `202610150001`–`202610150012` sono applicate e
+ri-verificate con checksum; diciotto tabelle pubbliche con RLS; risposte anamnestiche private. Bucket
 `glow-private` privato; inventario ufficiale senza clienti, appuntamenti, file o
 oggetti di prova. Nessuna suite sintetica è stata eseguita sul progetto remoto.
 
@@ -72,45 +88,40 @@ I processi non sopravvivono necessariamente al ripristino dell’ambiente.
 ## Verifiche dell’incremento
 
 - Lint, controllo TypeScript e build di produzione superati; 10 test unitari.
-- 176 asserzioni pgTAP su quattro file: nuovi controlli per pubblicazioni,
-  snapshot, permessi, risposte e fallimento dell’audit prima della lettura.
-- 24 scenari Chromium superati su build di produzione e Supabase locale reale.
-  Due test bloccano richieste cliniche sul lock reale del tenant, revocano
-  l’assegnazione e provano che letture/scritture in attesa vengano negate.
-- Il percorso UI pubblica testi/domande, carica e legge un’etichetta, salva una
-  preparazione. Il test a 375 px controlla due righe di schede, touch target
-  almeno 44 px e ricerca senza sovrapposizione. Input offline mantenuto solo in
-  memoria; nessun POST accodato, retry esplicito dopo riconnessione.
-- Reset locale da zero con undici migrazioni, riapplicazione e checksum superati.
-- Rollout ufficiale senza fixture; ledger e inventario verificati separatamente.
-- Revisione Impeccable: otto catture desktop/telefono, una correzione dell’ingombro
-  delle schede mobili e conferma finale. Evidenze in `.impeccable/surfaces/clinical.md`.
-  Disposizione finale `ship` sulla correzione valutata; documenter senza modifiche
-  a DESIGN.md/sidecar. Icone originali invariate, tre raster con provenienza verificata.
+- 225 asserzioni pgTAP su cinque file. W12 ne aggiunge 49: RLS/grant, token e
+  scopo, DTO minimo, risposte, consumo, ricevuta e rollback se l’audit fallisce.
+  Tentativi respinti conteggiati; limiti per token/globali e pulizia verificati.
+- 31 scenari Chromium su build di produzione e Supabase locale reale.
+  Sette nuovi casi: percorso professionista/cliente, testi fissati, invii
+  concorrenti/retry, scadenza/revoca/versioni, revoca durante invio pubblico
+  bloccato, tablet con nuovo accesso/cronologia, rete assente/esito perso e
+  risposta incompleta di avvio dopo logout. Nessun POST accodato alla riconnessione.
+- Reset locale da zero con dodici migrazioni e riapplicazione idempotente superati.
+- Migrazioni/checksum e inventario ufficiale verificati senza fixture remote.
+- Otto catture iniziali, nove di conferma a 375/820/1280; un solo batch per avviso prima della
+  sostituzione di link e recupero tablet ambiguo. Reviewer `ship` sui due rilievi;
+  documenter senza modifiche al sistema. Evidenze in
+  `.impeccable/surfaces/intake.md`. Nessun nuovo asset, tre raster con provenienza.
 
-Il launcher CLI TSX non mantiene il flag proxy nel processo figlio. Usare
-`node --use-env-proxy --import tsx ...`, senza cambiare proxy, CA, TLS o
-credenziali. Entrambi i binding server esistenti funzionano.
+Usare `node --use-env-proxy --import tsx ...`: il launcher CLI TSX non mantiene
+il flag proxy nel processo figlio. Entrambi i binding server esistenti funzionano.
 
-GitHub Actions è definito; verificare il run del commit corrente dopo ogni push.
-Il checkpoint precedente `388eadc` aveva entrambi i run remoti verdi. I test locali
-non equivalgono a consegna SMTP reale, installazione fisica PWA, backup/restore o
-collaudo completo dei flussi clinici.
+GitHub Actions va verificato sul commit corrente dopo ogni push. Il precedente
+`ee8f74b` ha completato con successo i run 38793387403 e 38793387643. Non confondere
+le verifiche browser con consegna SMTP, installazione fisica PWA o backup/restore.
 
 ## Prossime attività, nell’ordine
 
-1. W12: link cliente con scopo limitato, consumo POST atomico, scadenza/revoca e
-   modalità tablet isolata. GET/scanner non devono cambiare dati. Riutilizzare
-   modelli pubblicati e preparazione; non esporre endpoint di anamnesi senza
-   scopo, sessione o token limitato esplicito.
-2. W13: firma e snapshot immutabile, job PDF recuperabile senza rifirma.
-3. W14: fotocamera/compressione, prima/dopo/guarito e consensi d’uso; dispositivi
-   fisici, HEIC e qualità visiva da verificare prima di raccogliere immagini reali.
-4. W15–W17: worker outbox, provider e reminder, conferma/disdetta. W15 può
-   procedere con adapter simulato; mittente/provider/DNS vanno confermati e
-   provati entro W16, separatamente da Supabase Auth SMTP.
-5. Configurare scheduler del job file sull’hosting scelto, con allarme sui ritardi.
-   Al momento è eseguibile manualmente: nessun cron remoto attivo.
+1. W13: firma della cliente, snapshot immutabile e job PDF recuperabile senza
+   rifirma. Prima definire contratto di acquisizione firma e renderer compatibile
+   con il worker; non riusare gli upload fotografici come documenti firmati.
+   Il PDF deve conservare versione letta, risposte, firma e informazioni dei lotti.
+2. W14: fotocamera/compressione, prima/dopo/guarito e consensi d’uso; prove fisiche,
+   HEIC e qualità da verificare prima di raccogliere immagini reali.
+3. W15–W17: worker, Resend e reminder, conferma/disdetta. Adapter simulato in W15;
+   DNS/mittenti/caselle e credenziali in W16, separati da Supabase Auth SMTP.
+4. Configurare scheduler file sull’hosting scelto, allarme sui ritardi e limiti
+   HTTP degli endpoint pubblici. Job attualmente manuale, nessun cron remoto.
 
 Restano W04 su dominio/SMTP reale, collaudi UI estesi di archivio/omonime e
 agenda drag/resize/stati, installazione PWA HTTPS su iOS/Android, export/retention,

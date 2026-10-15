@@ -1,15 +1,15 @@
 # Piano di verifica e rilascio
 
-Stato al 15 ottobre 2026: lint, tipi, build, 10 test unitari, 176 asserzioni pgTAP
-su quattro file e 24 scenari Chromium su build di produzione e Supabase locale reale
+Stato al 15 ottobre 2026: lint, tipi, build, 10 test unitari, 225 asserzioni pgTAP
+su cinque file e 31 scenari Chromium su build di produzione e Supabase locale reale
 superati. Sono coperti Auth con email catturate localmente, agenda, isolamento,
 team/revoca, rete/PWA e file privati. Per i file: MIME/hash/limiti, accessi negati,
 normalizzazione, completamento concorrente, riuso di oggetto già scritto,
 pulizia dopo crash, lease e idempotenza. Il test dei token di upload firmato
 falliva prima della guardia operativa 006 e passa dopo la correzione.
 
-Provati reset locale da zero, undici migrazioni, ripetizione e checksum. Tutte e undici
-applicate al remoto: diciassette tabelle pubbliche RLS, bucket privato, zero dati/oggetti di
+Provati reset locale da zero, dodici migrazioni, ripetizione e checksum. Tutte e dodici
+applicate al remoto: diciotto tabelle pubbliche RLS, bucket privato, zero dati/oggetti di
 prova. Comando di pulizia remoto verificato senza fixture (zero claim). Server
 ricompilato con configurazione ufficiale e risposte health/login/manifest/API
 senza sessione verificate. Revisione team `ship`. Revisione clinica: otto catture, correzione delle schede
@@ -25,7 +25,16 @@ di lettura riuscita né modifica della bozza. Il test UI verifica le due righe
 di schede a 375 px e i touch target da almeno 44 px, oltre al flusso completo.
 I form mantengono l’input solo in memoria e non inviano al ritorno della rete.
 
-Link cliente, firme/PDF, foto per categoria, email reali, dispositivi fisici, installazione PWA HTTPS,
+W12 aggiunge 49 controlli SQL e sette scenari browser: grant privati e RLS,
+GET/HEAD non consumanti, versioni fissate, risposte tipizzate/richieste, rollback
+su audit fallito, uso concorrente e retry, scadenza/revoca/cambio preparazione,
+limiti per token e globali con pulizia finestre. Il test di contesa revoca
+l’assegnazione durante un invio pubblico bloccato e verifica 410 senza modifiche.
+Tablet: cookie professionali eliminati, API 401, cronologia/URL senza dossier,
+nuovo accesso e risposta incompleta dopo logout. Input e token restano in memoria,
+nessuna coda alla riconnessione. Catture a 375/820/1280; collaudo fisico separato.
+
+Firme/PDF, foto per categoria, email reali, dispositivi fisici, installazione PWA HTTPS,
 scheduler file, backup/restore e gate R1 restano da completare. Questi risultati
 non equivalgono al collaudo completo del prodotto.
 

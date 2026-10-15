@@ -94,7 +94,8 @@ non avviati restano **pianificati**.
 | W18              | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                         |
 | W10              | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                       |
 | W11              | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                 |
-| W12–W17, W19–W25 | Pianificato                           | Prossimo incremento: compilazione cliente con link limitato e modalità tablet, poi firma/PDF e foto.                             |
+| W12              | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota. |
+| W13–W17, W19–W25 | Pianificato                           | Prossimo incremento: firma, snapshot immutabile e generazione PDF recuperabile; poi foto.                             |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -172,8 +173,9 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-Proseguire W12 con link cliente a scopo limitato e modalità tablet isolata,
-riusando le versioni pubblicate e la preparazione W11. Poi W13–W14: firma/PDF e foto.
+Proseguire W13 con firma della cliente, snapshot immutabile e job PDF
+recuperabile, riusando preparazione W11 e capability W12. Poi W14: foto.
+Contratto W12 in [INTAKE.md](INTAKE.md).
 Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
 [STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
 W05/W07 nei collaudi browser residui e scheduler file restano aperti. W15 può
@@ -183,8 +185,9 @@ permessi, flussi e criteri di conservazione.
 
 Per i reminder, [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md) confronta mittente Glow
 con Reply-To dello studio, domini dedicati e collegamenti Gmail/Outlook. Il primo
-è la proposta iniziale, ancora da confermare; Resend è un’opzione e `noreply` non
-è un requisito. Nessun account, dominio a pagamento o invio reale è stato attivato.
+resta la proposta iniziale dei mittenti; **Resend è confermato** e il dominio è
+stato acquistato dall’utente. Configurazione DNS/caselle e integrazione rinviate
+esplicitamente. `noreply` non è un requisito; nessun invio reale è attivo.
 
 ## Registro di avanzamento
 
@@ -230,3 +233,16 @@ dopo eventuale attesa. Test di contesa reali verificano che una revoca prevalga
 su letture e scritture già in attesa. Corretto l’ingombro delle schede su telefono.
 Stato ed evidenze definitive in DEVELOPMENT_CHECKPOINT.md. Prossimo W12;
 nessuna firma, PDF o email reale dichiarata completata da questa consegna.
+
+
+### Quinto incremento — compilazione cliente e tablet, 15 ottobre 2026
+
+W12 implementato: capability casuali hash-only, scadenza e revoca, DTO minimo
+senza risposte precedenti, consumo atomico con ricevuta idempotente e limiti
+persistenti anche sui rifiuti. La revoca dell’assegnazione prevale su un invio
+pubblico già in attesa. Tablet con logout, nuovo login e protezione del ripristino
+delle pagine; esito ambiguo di avvio recuperato dalla schermata di accesso.
+Rete assente non accoda scritture; risposta di invio persa ritenta la stessa chiave.
+Una sola migrazione espansiva 012, senza edit di SQL applicato. Resend scelto e
+dominio acquistato, integrazione rinviata come richiesto. Evidenze e punto di
+ripresa in DEVELOPMENT_CHECKPOINT.md; prossimo W13, senza firme/PDF già promessi.

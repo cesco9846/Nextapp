@@ -2,19 +2,37 @@
 
 Stato: proposta progettuale derivata da T (`GlowTrace_Piano_Tecnico.pdf`, pp.
 10–18, 20) e adattata alle richieste dell'utente. Il modello descrive il perimetro
-completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–011:
+completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–012:
 tenants, users, locations, services, clients, appointments, messages, audit_log,
 user_invitations, client_assignments, stored_files, clinical_templates,
 clinical_template_versions, pigments, pigment_lots, treatment_preparations e
-treatment_lots, oltre a ledger/idempotenza e preparation_answers privati.
-Tutte e undici sono applicate al progetto ufficiale; diciassette tabelle pubbliche con RLS.
+treatment_lots e intake_links, oltre a ledger/idempotenza, preparation_answers,
+intake_capabilities, intake_receipts e intake_rate_limits privati.
+Tutte e dodici sono applicate al progetto ufficiale; diciotto tabelle pubbliche con RLS.
 Gli inviti conservano soltanto l’hash del token. I file usano staging, verifica
 server, oggetti immutabili, audit e pulizia con lease: vedere [STORAGE.md](STORAGE.md).
 L’accesso ai file delle clienti richiede abilitazione clinica e assegnazione per
 le operatrici; le etichette di catalogo richiedono l’abilitazione clinica. La
-titolare resta circoscritta al proprio studio. Link cliente, firme/PDF e foto
+titolare resta circoscritta al proprio studio. Firme/PDF e foto
 per categoria restano da collegare nei successivi incrementi.
 Requisiti: `SPEC.md`; architettura: `ARCHITECTURE.md`; consegne: `IMPLEMENTATION_PLAN.md`.
+
+## Collegamenti cliente implementati
+
+`intake_links` espone metadati solo alle professioniste autorizzate alla cliente;
+FK composta lega tenant, preparazione e appuntamento. Ogni link fissa le revisioni
+attese, tipo link/tablet, scopo intake, autrice, scadenza e consumo/revoca.
+Il token casuale non è persistito: `intake_capabilities` conserva SHA-256.
+`intake_receipts` vincola link, richiesta e hash del payload alla sola ricevuta;
+`intake_rate_limits` conserva tentativi per finestre, incluse richieste respinte.
+Le tre tabelle private hanno RLS e nessun grant anon/authenticated. Il gateway
+server-only ha una RPC dedicata, non un accesso generico alle risposte.
+
+La compilazione accettata aggiorna risposte/versione della bozza e consuma il link
+in un commit con audit. `updated_by` diventa null per distinguere la cliente da
+una modifica della professionista; `intake.submitted` ne registra la provenienza.
+Il modulo pubblico non legge mai le precedenti risposte. Non è ancora lo snapshot
+firmato W13. Contratti di revoca, retry e limiti in [INTAKE.md](INTAKE.md).
 
 ## Confine dei dati
 

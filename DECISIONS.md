@@ -17,6 +17,8 @@ Revisione del 15 ottobre 2026: baseline di implementazione, con dettagli in
 | D06 | Foto, consensi e pigmenti sono funzionalità del nuovo progetto. | U e T pp. 12, 16. Non vengono ridotti a sole proposte di marketing. |
 | D07 | Next.js, React e shadcn/ui originale. | Scelta esplicita dell'utente dopo il confronto con Nuxt 4. Le raccomandazioni di dominio e database del PDF restano valide; gli esempi Nuxt vanno adattati al nuovo stack. |
 
+| D08 | Resend per i reminder; dominio acquistato dall’utente. | U, 15 ottobre 2026. DNS, caselle e integrazione rinviati; nessun invio in W12. EMAIL_DELIVERY.md conserva la proposta dei mittenti. |
+
 ## Baseline tecnica affinata, da implementare e verificare
 
 Queste scelte ingegneristiche rendono il lavoro eseguibile e sono reversibili con
@@ -27,7 +29,7 @@ una decisione motivata; non sono nuove istruzioni attribuite all'utente.
 | E01 | Un tenant per login, più sedi, un servizio e un'operatrice per appuntamento. | Evita cardinalità implicite e sostiene i flussi del PDF; eventuali team trasversali o servizi multipli richiedono una modifica esplicita prima dello schema interessato. |
 | E02 | Matrice owner/operatrice e abilitazione clinica separata con assegnazioni cliente. | Definisce chi può vedere dati ordinari e clinici, aggiornare appuntamenti e amministrare; test server/DB/Storage con gli stessi casi. |
 | E03 | RPC transazionali, idempotenza delle creazioni e versioni sugli update. | Evita duplicati, scritture parziali e aggiornamenti persi; versioni di riga e revisione del calendario hanno scopi diversi. |
-| E04 | Outbox email + worker cron/Edge Functions; provider ancora da scegliere. | Il reminder non dipende dal telefono o dalla durata della richiesta web. Esito incerto riconciliato, non reinviato automaticamente. |
+| E04 | Outbox email + worker cron/Edge Functions; provider Resend scelto, integrazione futura. | Il reminder non dipende dal telefono o dalla durata della richiesta web. Esito incerto riconciliato, non reinviato automaticamente. |
 | E05 | Firma/snapshot immutabili e PDF asincrono con stato recuperabile. | DB e Storage non condividono una transazione; staging, job univoci e finalizzazione evitano richieste di rifirma e documenti alterati. |
 | E06 | PWA installabile con connessione necessaria. Scelta utente del 15 ottobre 2026. | Sostituisce la proposta offline dei PDF: nessuno snapshot, IndexedDB o coda di modifiche. Avviso rete assente, retry esplicito e successo solo dopo conferma server. |
 | E07 | Reporting iniziale del valore delle sedute completate. | Corregge la terminologia «incassi» del PDF: stato completato e prezzo non dimostrano un pagamento. Un futuro registro pagamenti abiliterà gli incassi effettivi. |

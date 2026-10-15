@@ -35,6 +35,10 @@ const dbErrors: Record<string, [number, string]> = {
   P0002: [404, "L'elemento non è stato trovato."],
 };
 const reasons: Record<string, string> = {
+  INVALID_INTAKE:
+    "Controlla la preparazione prima di generare un collegamento.",
+  PREPARATION_REQUIRED:
+    "Salva prima una preparazione con il modello di consenso.",
   INVALID_TEMPLATE: "Controlla tipo, testo e servizio del modello selezionato.",
   INVALID_QUESTIONS:
     "Controlla le domande: massimo 30, con etichetta e tipo di risposta.",

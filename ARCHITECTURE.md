@@ -2,8 +2,8 @@
 
 Stato al 15 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
 React Query, Monarch/shadcn, team, Storage privata e preparazione clinica non firmata
-implementati. Undici migrazioni applicate al progetto ufficiale. Worker email,
-compilazione cliente, firme/PDF e foto restano pianificati.
+implementati, insieme a link cliente e passaggio tablet isolato. Dodici migrazioni
+applicate al progetto ufficiale. Worker email, firme/PDF e foto restano pianificati.
 La pulizia file ha un comando recuperabile, senza scheduler
 remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
 consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
@@ -19,7 +19,7 @@ consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 | File             | Supabase Storage privato; metadati autorizzativi, staging/finalizzazione, URL firmati brevi e documenti immutabili.                                                                                       |
 | Lavori asincroni | Outbox in Postgres; pg_cron invoca worker Supabase Edge Functions autenticati. Batch limitati, lease, idempotenza e heartbeat. Nessun timer in memoria del server web.                                    |
 | PDF              | Worker con renderer e font versionati, verificati con firma, etichette, accenti e documenti lunghi; non dipende dal browser della cliente. Scegliere una libreria compatibile con il runtime durante W13. |
-| Email            | Adapter server minimo per invio con chiave idempotente ed esiti; provider da selezionare prima dell'invio reale. Auth SMTP e reminder sono due configurazioni distinte.                                   |
+| Email            | Adapter server minimo per invio con chiave idempotente ed esiti; provider Resend scelto; integrazione rinviata. Auth SMTP e reminder sono due configurazioni distinte.                                   |
 | PWA              | Manifest installabile e istruzioni, connessione necessaria. Nessun service worker con dati riservati e nessuno snapshot IndexedDB. React Query mantiene soltanto memoria temporanea della sessione.       |
 
 ## Calendario: integrazione verificata
@@ -185,7 +185,7 @@ Le etichette usano lo stesso ciclo Storage delle immagini. Il loro ambito è il
 pigmento, senza cliente o appuntamento; preparazione upload riservata alla
 titolare, lettura consentita anche alle operatrici cliniche dello studio.
 I link brevi sono aperti direttamente, senza cache dell’ottimizzatore immagini.
-Le opzioni provider/mittente restano una proposta in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
+Resend è scelto; il modello dei mittenti resta una proposta in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
 
 ## Archivio privato implementato (W10)
 
@@ -204,3 +204,30 @@ scadono naturalmente. Verifica hash/dimensione/contenuto, decodifica massima
 Il comando Node di pulizia usa claim con lease e token, cancella solo oggetti
 temporanei o non finalizzati e preserva i ready. Il deployment dello scheduler
 è ancora una dipendenza operativa dell’hosting; nessun timer nel processo web.
+
+
+## Compilazione cliente e tablet implementati (W12)
+
+Il normale browser pubblico non usa la sessione professionale. Token in frammento
+URL, eliminato dopo apertura e mantenuto solo in memoria; richieste a percorsi
+fissi tramite POST con credentials omit. GET/HEAD non consumano il link. Il proxy
+ignora i cookie professionali per `/api/intake/*`; ogni risposta è no-store.
+`src/server/intake.ts`, server-only, possiede un client privilegiato non esportato
+che può chiamare soltanto `use_intake_link`. La RPC non è eseguibile da anon o
+utenti autenticati, neppure direttamente tramite Supabase.
+
+La capability autorizza un solo form su versioni fissate. Risponde con testi,
+domande e contesto minimo, mai con risposte pregresse o file. Ricontrolla scadenza,
+versioni, stato/archivio e accesso attuale dell’autrice dopo il lock tenant.
+Risposte, revisione, audit, ricevuta e consumo sono atomici. Un retry identico
+ritorna soltanto la ricevuta; altri usi danno 410. I fallimenti ordinari sono
+risultati tipizzati perché i contatori dei tentativi rimangano persistiti.
+Limiti e ordine dei lock sono in INTAKE.md; limiti HTTP dell’hosting in W20.
+
+Il passaggio tablet revoca la sessione locale tramite Auth, elimina i cookie di
+sessione e naviga a un nuovo documento privo della shell dello studio. Si torna
+alla professionista tramite login, senza PIN cosmetici. Risposta ambigua dopo
+avvio: cache professionale svuotata e navigazione all’accesso. Pagine private e
+form cliente nascondono il documento prima della cattura della cronologia e
+ricaricano quando ripristinate, per un nuovo controllo server. Non è una gestione
+kiosk del dispositivo. Prove browser distinte dal collaudo fisico del tablet.

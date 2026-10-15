@@ -402,6 +402,83 @@ export type Database = {
           },
         ];
       };
+      intake_links: {
+        Row: {
+          appointment_id: string;
+          appointment_version: number;
+          created_at: string;
+          created_by: string;
+          expires_at: string;
+          id: string;
+          mode: string;
+          preparation_id: string;
+          preparation_version: number;
+          purpose: string;
+          request_id: string;
+          revoked_at: string | null;
+          tenant_id: string;
+          used_at: string | null;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          appointment_id: string;
+          appointment_version: number;
+          created_at?: string;
+          created_by: string;
+          expires_at: string;
+          id?: string;
+          mode: string;
+          preparation_id: string;
+          preparation_version: number;
+          purpose?: string;
+          request_id: string;
+          revoked_at?: string | null;
+          tenant_id: string;
+          used_at?: string | null;
+          version?: number;
+        };
+        Update: {
+          appointment_id?: string;
+          appointment_version?: number;
+          created_at?: string;
+          created_by?: string;
+          expires_at?: string;
+          id?: string;
+          mode?: string;
+          preparation_id?: string;
+          preparation_version?: number;
+          purpose?: string;
+          request_id?: string;
+          revoked_at?: string | null;
+          tenant_id?: string;
+          used_at?: string | null;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "intake_links_tenant_id_created_by_fkey";
+            columns: ["tenant_id", "created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "intake_links_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "intake_links_tenant_id_preparation_id_appointment_id_fkey";
+            columns: ["tenant_id", "preparation_id", "appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "treatment_preparations";
+            referencedColumns: ["tenant_id", "id", "appointment_id"];
+          },
+        ];
+      };
       locations: {
         Row: {
           active: boolean;
@@ -856,7 +933,7 @@ export type Database = {
           status: string;
           tenant_id: string;
           updated_at: string;
-          updated_by: string;
+          updated_by: string | null;
           version: number;
         };
         ComputedFields: never;
@@ -872,7 +949,7 @@ export type Database = {
           status?: string;
           tenant_id: string;
           updated_at?: string;
-          updated_by: string;
+          updated_by?: string | null;
           version?: number;
         };
         Update: {
@@ -887,7 +964,7 @@ export type Database = {
           status?: string;
           tenant_id?: string;
           updated_at?: string;
-          updated_by?: string;
+          updated_by?: string | null;
           version?: number;
         };
         Relationships: [
@@ -1102,6 +1179,16 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      create_intake_link: {
+        Args: {
+          p_appointment_id: string;
+          p_appointment_version: number;
+          p_mode: string;
+          p_preparation_version: number;
+          p_request_id: string;
+        };
+        Returns: Json;
       };
       create_team_invitation: {
         Args: { p_clinical_access?: boolean; p_email: string };
@@ -1318,6 +1405,32 @@ export type Database = {
         Args: { p_actor: string; p_id: string; p_reason: string };
         Returns: undefined;
       };
+      revoke_intake_link: {
+        Args: { p_id: string; p_version: number };
+        Returns: {
+          appointment_id: string;
+          appointment_version: number;
+          created_at: string;
+          created_by: string;
+          expires_at: string;
+          id: string;
+          mode: string;
+          preparation_id: string;
+          preparation_version: number;
+          purpose: string;
+          request_id: string;
+          revoked_at: string | null;
+          tenant_id: string;
+          used_at: string | null;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "intake_links";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       revoke_team_invitation: { Args: { p_id: string }; Returns: undefined };
       save_pigment: {
         Args: {
@@ -1400,7 +1513,7 @@ export type Database = {
           status: string;
           tenant_id: string;
           updated_at: string;
-          updated_by: string;
+          updated_by: string | null;
           version: number;
         };
         SetofOptions: {
@@ -1526,6 +1639,16 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      use_intake_link: {
+        Args: {
+          p_action: string;
+          p_answers: Json;
+          p_confirm_read: boolean;
+          p_request_id: string;
+          p_token_hash: string;
+        };
+        Returns: Json;
       };
     };
     Enums: {

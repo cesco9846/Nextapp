@@ -11,6 +11,7 @@ import {
   Settings2,
   UsersRound,
 } from "lucide-react";
+import { usePrivateDocument } from "@/lib/private-document";
 import { api, RequestError } from "@/lib/api";
 import type { Workspace } from "@/lib/types";
 import { initials } from "@/lib/dates";
@@ -56,6 +57,7 @@ export function AppShell({
         ? "/app/agenda"
         : path;
   const queryClient = useQueryClient();
+  usePrivateDocument();
   const { data, error, refetch } = useQuery({
     queryKey: ["workspace"],
     queryFn: () => api<Workspace>("/api/workspace"),

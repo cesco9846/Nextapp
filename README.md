@@ -20,11 +20,14 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 - Consensi/questionari con versioni pubblicate immutabili; catalogo pigmenti,
   lotti, scadenze ed etichette private. Preparazione non firmata dell’appuntamento
   con risposte anamnestiche auditate e snapshot dei lotti scelti.
+- Link personali per leggere i testi e inviare le risposte; scadenza, revoca e
+  consumo singolo. Modalità tablet con logout dello studio e nuovo accesso
+  della professionista. Nessuna firma raccolta in questo passaggio.
 - Interfaccia responsive, manifest con icone e istruzioni di installazione PWA.
   Richiede Internet; nessuna coda di modifiche o consultazione offline.
 
-Sono ancora da realizzare compilazione cliente, firma/PDF, foto,
-invio email e worker, link cliente,
+Sono ancora da realizzare firma/PDF, foto,
+invio email e worker, conferma/disdetta tramite link,
 export/retention, ICS e funzioni commerciali. I reminder email restano disattivati;
 aprire WhatsApp non registra un invio. Non è ancora il pilota R1.
 
@@ -83,9 +86,9 @@ Una seconda applicazione non modifica i dati; un checksum diverso viene respinto
 Non modificare migrazioni già applicate: aggiungere un nuovo file. Non utilizzare
 `supabase db push` come secondo percorso con un ledger divergente.
 
-Il 15 ottobre 2026 sono state applicate e ri-verificate le undici migrazioni
-`202610150001`–`202610150011` al progetto ufficiale dopo le prove locali.
-Diciassette tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
+Il 15 ottobre 2026 sono state applicate e ri-verificate le dodici migrazioni
+`202610150001`–`202610150012` al progetto ufficiale dopo le prove locali.
+Diciotto tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
 oggetto sintetico creato nel remoto. Team e base Storage sono disponibili nello
 schema ufficiale, insieme a modelli, pigmenti e preparazioni. Le risposte
 anamnestiche restano nello schema privato, leggibili solo con RPC auditata.
@@ -152,6 +155,7 @@ Gli screenshot con fixture locali si rigenerano, dopo `npm run test:e2e`, con:
 ```sh
 node --use-env-proxy --import tsx scripts/capture-ui.ts
 node --use-env-proxy --import tsx scripts/capture-clinical-ui.ts
+node --use-env-proxy --import tsx scripts/capture-intake-ui.ts
 ```
 
 Le catture e i risultati dei test sono ignorati da Git. Nessun servizio worker,
@@ -159,4 +163,6 @@ invio email reale, hosting o abbonamento viene attivato da questi comandi.
 
 Le opzioni per mittente e risposte ai reminder sono documentate in
 [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md): dominio Glow verificato e Reply-To dello
-studio è la proposta iniziale, ancora da confermare prima di attivare il provider.
+studio resta la proposta iniziale dei mittenti. Resend è stato scelto e il dominio
+è stato acquistato dall’utente; configurazione e integrazione sono rinviate.
+Il flusso cliente implementato è descritto in [INTAKE.md](INTAKE.md).

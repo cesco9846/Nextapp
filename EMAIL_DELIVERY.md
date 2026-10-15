@@ -1,10 +1,12 @@
-# Mittente dei promemoria — proposta, non scelta definitiva
+# Promemoria email — Resend scelto, configurazione rinviata
 
 Domanda dell’utente del 15 ottobre 2026: ogni professionista può usare la propria
 email oppure serve un account Resend, un dominio e un indirizzo noreply?
 
-Entrambe le strade sono possibili. Resend è un provider possibile, non un vincolo
-tecnico del prodotto. Non è stato creato alcun account o attivato un invio reale.
+Il 15 ottobre 2026 l’utente ha scelto **Resend** e comunicato di avere acquistato
+il dominio. Nome del dominio, caselle, DNS e integrazione verranno configurati più
+avanti, come richiesto. Non sono stati attivati invii o modificati DNS/account.
+Non servono nuove credenziali per proseguire W12.
 
 ## Proposta per la prima versione
 
@@ -21,7 +23,8 @@ rimane distinta dalla consegna.
 
 Questa opzione evita collegamenti OAuth e la gestione iniziale di numerose
 caselle, lasciando la migrazione verso mittenti dedicati possibile per tenant.
-La proposta non autorizza acquisto del dominio o attivazione di servizi a pagamento.
+Il dominio è già stato acquistato dall’utente. La scelta di Resend non anticipa
+la configurazione richiesta per un incremento successivo né altri acquisti.
 
 ## Alternative
 
@@ -38,7 +41,8 @@ integrazioni distinte, implementate mediante le rispettive API o SMTP supportato
 
 ## Prima dell’attivazione (W15–W17)
 
-- Confermare modello dei mittenti, provider, dominio e casella che riceve le risposte.
+- Provider confermato: Resend. Definire dominio effettivo, modello dei mittenti
+  e casella che riceve le risposte prima della configurazione.
 - Configurare DNS/autenticazione del dominio secondo il provider e verificare
   una consegna reale verso destinatari di prova autorizzati.
 - Implementare adapter del provider e worker con lease, retry, idempotenza,

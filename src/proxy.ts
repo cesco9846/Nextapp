@@ -4,6 +4,8 @@ import type { Database } from "@/lib/database.types";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
+  // Capability-only endpoints deliberately ignore professional cookies.
+  if (request.nextUrl.pathname.startsWith("/api/intake/")) return response;
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY

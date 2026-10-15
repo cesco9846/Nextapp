@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LabelPreview } from "./label-preview";
 import { useRequestKey } from "./use-request-key";
+import { IntakePanel } from "@/features/intake/intake-panel";
 
 // Sensitive answers stay only in this mounted view, never in a query cache or
 // browser persistence. Every opening/refetch goes through the audited RPC.
@@ -539,6 +540,25 @@ function PreparationForm({
           </span>
         </div>
       </form>
+      {c.preparation && editable && (
+        <IntakePanel
+          id={c.appointment.id}
+          appointmentVersion={c.appointment.version}
+          preparationVersion={c.preparation.version}
+          timezone={tenant.timezone}
+          reload={onSaved}
+          dirty={
+            consentId !== c.consent?.id ||
+            anamId !== (c.anamnesis?.id ?? "none") ||
+            JSON.stringify(answers) !== JSON.stringify(c.answers) ||
+            [...lotIds].sort().join() !==
+              c.lots
+                .map((l) => l.lot_id)
+                .sort()
+                .join()
+          }
+        />
+      )}
     </div>
   );
 }
