@@ -6,7 +6,7 @@ email oppure serve un account Resend, un dominio e un indirizzo noreply?
 Il 15 ottobre 2026 l’utente ha scelto **Resend** e comunicato di avere acquistato
 il dominio. Nome del dominio, caselle, DNS e integrazione verranno configurati più
 avanti, come richiesto. Non sono stati attivati invii o modificati DNS/account.
-Non servono nuove credenziali per proseguire W12.
+Non servono nuove credenziali per il worker W15 con provider locale.
 
 ## Proposta per la prima versione
 
@@ -59,3 +59,11 @@ in tabelle inutilizzate prima dell’incremento che le rende operative.
 Fonti ufficiali consultate:
 [verifica domini Resend](https://resend.com/docs/dashboard/domains/introduction),
 [parametri From e Reply-To](https://resend.com/docs/api-reference/emails/send-email).
+
+## W15 implementato, invii reali ancora rinviati
+
+Motore outbox, lease/fencing, snapshot/chiave stabili, esiti incerti e monitor
+sono implementati e provati con trasporto di prova locale. [REMINDER_WORKER.md](REMINDER_WORKER.md)
+definisce limiti, runbook e comandi. Master switch ufficiale disabled, nessun
+provider reale o cron attivato. W16 deve verificare le effettive capacità Resend
+di idempotenza/riconciliazione e webhook, senza assumere lookup per chiave.

@@ -122,3 +122,15 @@ Browser comprime JPEG/PNG/WebP e tratta l’orientamento; HEIC riceve un errore
 utilizzabile. Il server verifica nuovamente. Letture binarie auditate e no-store
 evitano URL Storage nella UI. I PDF con scelte usano renderer v2; v1 resta
 immutato. Limiti e verifiche: [PHOTOS.md](PHOTOS.md).
+
+## Scelta W15 — Confine di invio ed esiti incerti (16 ottobre 2026)
+
+Ultimo controllo SQL serializzato con calendario/recapiti prima del trasporto;
+oltre il confine l’email non è richiamabile. Snapshot/chiave stabili, lease e
+fencing; lease scaduto in volo o ack perso impongono riconciliazione. Timeout
+non è un rifiuto certo. Nessuna assenza dedotta da una cache del processo vuota.
+Resend rimane scelto ma rinviato: CLI/gateway di prova solo locali, master
+switch ufficiale disabled; adapter reale e Edge/cron continui saranno collegati
+con W16 e collaudati prima del pilota. Allarmi persistiti e segnale operativo
+CLI implementati, notifica esterna ancora da configurare. Nessuna nuova UI: il
+sistema grafico e le skill di stile rimangono invariati.

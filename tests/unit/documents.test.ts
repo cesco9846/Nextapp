@@ -60,6 +60,8 @@ export const signedFixture: SignedPayload = {
   statement: "Ho letto e acconsento al trattamento.",
   signature_kind: "drawn-v1",
 };
+// Real multi-page PDFs run font subsetting and Poppler; their two heavy
+// cases allow 20s on shared runners. All content/determinism assertions remain.
 describe("Signed document invariants", () => {
   it("keeps optional photo choices independent from treatment and validates dependencies", () => {
     expect(
@@ -129,7 +131,7 @@ describe("Signed document invariants", () => {
         "glow-pdf-v2",
       ),
     ).rejects.toThrow("Missing photo choices");
-  });
+  }, 20_000);
   it("rejects point-only, out-of-bounds and excessive handwriting", () => {
     expect(
       handwritingSchema.safeParse([
@@ -190,7 +192,7 @@ describe("Signed document invariants", () => {
     expect(confirmation).toContain("Firma acquisita il");
     expect(confirmation).toContain("Firma disegnata acquisita");
     expect(Buffer.from(first.bytes).subarray(0, 5).toString()).toBe("%PDF-");
-  });
+  }, 20_000);
   it("refuses missing historical labels rather than generating incomplete evidence", async () => {
     const payload = structuredClone(signedFixture);
     payload.snapshot.lots = [

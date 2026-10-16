@@ -1,8 +1,9 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 16 ottobre 2026: **W14 foto e autorizzazioni implementati e verificati nel browser**.
-Checkpoint di questo incremento: `checkpoint-photos-2026-10-16` sul ramo `main`.
-Precedenti: `checkpoint-signature-2026-10-16` (commit `0f41cdc`),
+Aggiornato il 16 ottobre 2026: **W15 motore outbox e monitor implementati e verificati**.
+Checkpoint di questo incremento: `checkpoint-reminders-2026-10-16` sul ramo `main`.
+Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
+`checkpoint-signature-2026-10-16` (commit `0f41cdc`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
@@ -67,7 +68,8 @@ Crash dopo upload → riuso dell’oggetto, nessuna rifirma.
 
 `after()` avvia il lavoro in background su Vercel (max 60s). Se non parte o
 fallisce, **Riprova generazione PDF** lo riprende con autorizzazione corrente.
-Scheduler continuo di retry ancora W15/pilota. Download POST auditato, checksum
+Il runner continuo dei PDF resta da collegare prima del pilota;
+il worker W15 consegnato qui riguarda i reminder. Download POST auditato, checksum
 e no-store; bucket PDF senza grant Storage alle sessioni ordinarie.
 Contratti e limiti: [DOCUMENTS.md](DOCUMENTS.md).
 
@@ -93,13 +95,34 @@ la validità della firma del trattamento, ultime 200 sedute nel selettore,
 retention e allegati pronti senza galleria in W19. Collaudo fisico e testi reali
 restano prima del pilota.
 
+## W15 consegnato
+
+Motore batch separato dal server web, con provider di prova locale. Lease 60s,
+fencing, chiave/snapshot stabili e controllo finale serializzato con calendario
+e recapiti. Una modifica commessa prima del confine impedisce l’invio; dopo
+il confine l’email potrebbe essere in volo e non viene dichiarata richiamata.
+Timeout/ack perso/lease scaduta in volo impongono lookup, mai retry cieco.
+Massimo cinque dispatch certi e sei lookup, backoff/jitter e finestra di recupero
+di due ore; accettato distinto da consegnato.
+
+Quattro tabelle private/RLS per configurazione, run, dispatch e allarmi. Monitor
+con heartbeat, ritardo coda, incerti, fallimenti e run fallito; CLI exit2 se
+degradato e allarmi persistibili. GET health riservato alla titolare, conteggi
+solo del proprio studio, no-store. Nessun dato destinatario/testo nei report.
+
+`REMINDER_WORKER.md` documenta comandi, contratti provider e runbook. Master
+switch ufficiale disabled, adapter reale assente, nessun cron o notifica esterna
+attivato. I comandi ufficiali sono stati eseguiti: disabled, zero claim/invii,
+salute ok. Resend/From/Reply-To/DNS/webhook e runner Edge/cron continuo devono
+ancora essere collegati e collaudati prima di abilitare email reali.
+
 ## Database e deploy
 
-Quindici migrazioni `202610150001`–`202610160015` applicate e ri-verificate
+Diciannove migrazioni `202610150001`–`202610160019` applicate e ri-verificate
 con checksum sul progetto ufficiale; riapplicazione idempotente. Ventidue tabelle
-pubbliche con RLS; quattro nuove tabelle documentali private con RLS e senza
+pubbliche con RLS; tabelle documentali e quattro nuove tabelle outbox private con RLS e senza
 grant anon/authenticated. Bucket `glow-private` e `glow-documents` privati.
-Nessuna fixture remota creata: nuove tabelle foto/autorizzazioni vuote al controllo W14. Non azzerare o seminare il database ufficiale.
+Nessuna fixture remota creata: nuove tabelle operative senza fixture al controllo W15. Non azzerare o seminare il database ufficiale.
 
 Vercel: nuovo progetto `glow`, repository GitHub `cesco9846/Nextapp`, branch
 `main`, Node24/dub1, deploy automatico. URL https://glow-phi-eosin.vercel.app.
@@ -109,21 +132,20 @@ GitHub Actions. Configurazione e procedura in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Evidenze
 
-- Lint e TypeScript, build di produzione, 16 test unitari.
-- 322 asserzioni pgTAP su sette file, con 31 nuove sulle foto. Nessun grant
-  implicito o DML diretto, categorie/idempotenza, file verificato, scope/ruoli,
-  revoca durante upload e lettura, archivio e audit.
-- 43 scenari Chromium completi su database locale ripristinato da zero; quattro
-  nuovi sulle foto, ripassati sulla build finale. Compressione/orientamento EXIF,
-  firma con scelte distinte, esito perso senza duplicati, confronto, HEIC,
-  offline senza coda e revoca dell’assegnazione mentre una lettura attende il lock.
-- PDF v1/v2 deterministici e testo estratto da Poppler, incluso sì/no delle foto;
-  lo storico conserva il renderer precedente. Coda e recupero W13 restano provati.
-- Quindici migrazioni ricreate localmente e riapplicate con checksum al remoto;
-  22 tabelle pubbliche RLS e due bucket privati, nessuna fixture remota.
-- Quindici catture foto/scelte valide a 375/820/1280; pulsanti rilevanti da 44px,
-  nessun overflow orizzontale. Detector una volta: zero rilievi. Tre raster
-  pubblici preesistenti, provenienza completa; nessun nuovo raster distribuito.
+- Lint, TypeScript, build di produzione e 24 unit passati (otto nuovi worker).
+- 381 pgTAP su otto file, con 59 nuovi su outbox, gate/permessi, lease/fencing,
+  snapshot e chiave, retry/lookup, finestre, DST, heartbeat e allarmi.
+- 49 scenari Playwright completi su reset locale pulito; sei nuovi per worker.
+  Sei ripassati con annullamento commesso mentre il gate aspetta il lock,
+  modifica durante provider in volo, CLI idle e monitor CLI exit2.
+- Due worker concorrenti: una sola submission. Timeout dopo accettazione,
+  SIGKILL reale del processo e ack SQL perso: lookup senza seconda submission.
+- Due fixture PDF multipagina hanno ora timeout20s per font/Poppler su runner
+  condivisi; contenuto e determinismo continuano a essere verificati, nessuna
+  asserzione rimossa. I default5s erano insufficienti sotto contesa CPU.
+- Diciannove migrazioni ricreate localmente e ri-verificate al remoto con
+  checksum/idempotenza; 22 tabelle pubbliche RLS e due bucket privati.
+- Incremento backend: nessuna modifica ai componenti visivi o al sistema Glow.
 
 Revisione grafica W14: `ship` sull’implementazione e sulle quindici catture
 fornite, nessun fix materiale. Documenter senza modifiche al sistema: palette,
@@ -149,10 +171,11 @@ fixture pulite, come la CI.
 
 ## Prossime attività
 
-1. **W15**: worker outbox, lease/fencing, retry, esiti incerti e monitoraggio.
-   Sviluppare contro adattatore di prova; nessun invio reale ora.
-2. W16–W17: Resend reale, mittente/Reply-To, webhook e conferma/disdetta.
-   Configurazione dominio quando l’utente riprende il punto.
+1. **W16**: adattatore Resend, snapshot mittente/Reply-To, template, impostazioni
+   e webhook firmati/correlati. Sviluppabili localmente; attivazione/inbox reale
+   soltanto quando l’utente riprende DNS/dominio, senza richiedere ora credenziali.
+2. W17: conferma/disdetta sicura. Collegare runner continuo e monitor operativo
+   con notifica esterna, insieme al retry PDF e scheduler pulizia, prima del pilota.
 3. Export/retention/privacy, pulizia schedulata e alert, backup DB+Storage/restore,
    performance, dispositivi fisici, installazione PWA e gate R1.
 4. ICS, billing/fatture e funzioni commerciali del piano nelle rispettive fasi.

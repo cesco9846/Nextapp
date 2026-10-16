@@ -84,7 +84,8 @@ Se `after()` non parte o il processo termina, la firma e il job restano salvati.
 Da **Documenti firmati → Riprova generazione PDF**, una professionista ancora
 autorizzata può riprendere il lavoro senza rifirma. Il lease attivo impedisce un
 doppio lavoro; un lease scaduto è recuperabile. Non c’è ancora uno scheduler di
-retry continuo: rientra nel lavoro worker W15 e nel runbook prima del pilota.
+retry continuo: resta da collegare al runner prima del pilota. Il motore W15
+consegnato in REMINDER_WORKER.md riguarda l’outbox dei reminder.
 
 ## Lettura, limiti e prove
 

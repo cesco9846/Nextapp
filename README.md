@@ -31,7 +31,10 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 - Foto Prima/Dopo/Guarito per seduta, acquisizione/compressione, confronto
   privato e scelte firmate distinte per documentazione e uso dimostrativo.
 
-Sono ancora da realizzare invio email e worker, conferma/disdetta tramite link,
+- Worker outbox con lease, fencing, retry/riconciliazione, heartbeat e allarmi;
+  invii reali disattivati e trasporto di prova solo locale.
+
+Sono ancora da realizzare invio email reale e scheduler continuo, conferma/disdetta tramite link,
 export/retention, ICS e funzioni commerciali. I reminder email restano disattivati;
 aprire WhatsApp non registra un invio. Non è ancora il pilota R1.
 
@@ -91,8 +94,8 @@ Una seconda applicazione non modifica i dati; un checksum diverso viene respinto
 Non modificare migrazioni già applicate: aggiungere un nuovo file. Non utilizzare
 `supabase db push` come secondo percorso con un ledger divergente.
 
-Il 16 ottobre 2026 sono state applicate e ri-verificate le quindici migrazioni
-`202610150001`–`202610160015` al progetto ufficiale dopo le prove locali.
+Il 16 ottobre 2026 sono state applicate e ri-verificate le diciannove migrazioni
+`202610150001`–`202610160019` al progetto ufficiale dopo le prove locali.
 Ventidue tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
 oggetto sintetico creato nel remoto. Team e base Storage sono disponibili nello
 schema ufficiale, insieme a modelli, pigmenti e preparazioni. Le risposte
@@ -175,3 +178,6 @@ Le opzioni per mittente e risposte ai reminder sono documentate in
 studio resta la proposta iniziale dei mittenti. Resend è stato scelto e il dominio
 è stato acquistato dall’utente; configurazione e integrazione sono rinviate.
 Il flusso cliente implementato è descritto in [INTAKE.md](INTAKE.md).
+
+Worker e monitor dei reminder: [REMINDER_WORKER.md](REMINDER_WORKER.md).
+La configurazione ufficiale nasce disabled; i comandi non attivano email o cron.

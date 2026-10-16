@@ -3,8 +3,8 @@
 Stato al 16 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
 React Query, Monarch/shadcn, team, Storage privata e preparazione clinica non firmata
 implementati, insieme a link cliente e passaggio tablet isolato. Firma, snapshot immutabile e PDF privati recuperabili W13 sono
-implementati; W14 estende con foto e scelte firmate separate. Worker email
-ancora pianificato (W15).
+implementati; W14 estende con foto e scelte firmate separate. Motore worker email W15 implementato con trasporto locale;
+adattatore Resend e scheduler continuo restano da configurare.
 La pulizia file ha un comando recuperabile, senza scheduler
 remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
 consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
@@ -251,3 +251,13 @@ scelte firmate e galleria RLS. Endpoint binario auditato no-store con ricontroll
 permessi, nessuna URL Storage nella UI. Scelte nel payload immutabile e PDF v2,
 renderer v1 mantenuto per lo storico. Blob soltanto in memoria con scadenza;
 nessun recupero offline né pubblicazione dimostrativa automatica.
+
+## Worker outbox (W15)
+
+Il motore TypeScript è separato dal server web ed eseguibile in batch da CLI.
+La destinazione prevista Edge/pg_cron resta da collegare prima degli invii reali;
+nessun timer web in memoria. Contratto [REMINDER_WORKER.md](REMINDER_WORKER.md):
+claim SQL con lease e fencing, ultimo controllo serializzato, snapshot privato
+e chiave stabili, riconciliazione senza retry ciechi, heartbeat e allarmi.
+Modifiche di appuntamenti/recapiti e worker seguono tenant → risorsa; nessun
+lock DB durante richieste al provider. Stato disabled ufficiale, nessun cron live.

@@ -675,7 +675,9 @@ export type Database = {
         Row: {
           appointment_id: string;
           attempts: number;
+          cancellation_requested_at: string | null;
           channel: string;
+          failure_code: string | null;
           id: string;
           kind: string;
           next_attempt_at: string | null;
@@ -690,7 +692,9 @@ export type Database = {
         Insert: {
           appointment_id: string;
           attempts?: number;
+          cancellation_requested_at?: string | null;
           channel?: string;
+          failure_code?: string | null;
           id?: string;
           kind: string;
           next_attempt_at?: string | null;
@@ -704,7 +708,9 @@ export type Database = {
         Update: {
           appointment_id?: string;
           attempts?: number;
+          cancellation_requested_at?: string | null;
           channel?: string;
+          failure_code?: string | null;
           id?: string;
           kind?: string;
           next_attempt_at?: string | null;
@@ -1450,6 +1456,10 @@ export type Database = {
         Returns: undefined;
       };
       authorize_file_read: { Args: { p_id: string }; Returns: string };
+      begin_reminder_dispatch: {
+        Args: { p_claim: string; p_id: string };
+        Returns: Json;
+      };
       bootstrap_workspace: {
         Args: {
           p_display_name: string;
@@ -1468,6 +1478,7 @@ export type Database = {
       cancel_client_file: { Args: { p_id: string }; Returns: undefined };
       claim_document_job: { Args: { p_id: string }; Returns: Json };
       claim_file_cleanup: { Args: { p_limit?: number }; Returns: Json[] };
+      claim_reminder: { Args: { p_run: string }; Returns: Json };
       complete_document_job: {
         Args: {
           p_claim: string;
@@ -1620,6 +1631,19 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      finish_reminder: {
+        Args: {
+          p_claim: string;
+          p_id: string;
+          p_provider_id?: string;
+          p_result: string;
+        };
+        Returns: undefined;
+      };
+      finish_reminder_run: {
+        Args: { p_id: string; p_ok: boolean };
+        Returns: undefined;
+      };
       membership_state: { Args: Record<PropertyKey, never>; Returns: string };
       prepare_client_file: {
         Args: {
@@ -1762,6 +1786,11 @@ export type Database = {
         Args: { p_actor: string; p_id: string; p_reason: string };
         Returns: undefined;
       };
+      reminder_tenant_health: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
+      reminder_worker_health: { Args: { p_persist?: boolean }; Returns: Json };
       request_document_retry: { Args: { p_id: string }; Returns: undefined };
       revoke_intake_link: {
         Args: { p_id: string; p_version: number };
@@ -1933,6 +1962,10 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      start_reminder_run: {
+        Args: { p_id: string; p_provider: string };
+        Returns: boolean;
       };
       update_appointment: {
         Args: { p_data: Json; p_id: string; p_version: number };

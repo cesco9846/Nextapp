@@ -97,7 +97,8 @@ non avviati restano **pianificati**.
 | W12              | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota. |
 | W13              | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma. |
 | W14 | Implementato, verificato nel browser | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota. |
-| W15–W17, W19–W25 | Pianificato | Prossimo incremento: worker outbox affidabile, senza attivare invii reali. |
+| W15 | Motore implementato e verificato | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione. |
+| W16–W17, W19–W25 | Pianificato | Prossimo incremento: adapter/template/webhook Resend; invii disattivati finché DNS/dominio restano rinviati. |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -175,15 +176,16 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-Proseguire W15 con worker outbox: lease, retry/idempotenza, esito incerto,
-fencing, heartbeat e segnalazione guasti, senza invii reali finché Resend/DNS
-restano rinviati. Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
+Proseguire W16 con adapter Resend, template, identità mittente/Reply-To e
+webhook firmati/correlati, sviluppabili contro fixture locali. DNS/dominio e
+attivazione reale restano rinviati: non chiedere ora credenziali né abilitare invii.
+Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
 [DOCUMENTS.md](DOCUMENTS.md).
 Contratto W12 in [INTAKE.md](INTAKE.md).
 Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
 [STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
-W05/W07 nei collaudi browser residui e scheduler file restano aperti. W15 può
-avanzare sulla coda transazionale; nessun invio reale finché provider e
+W05/W07 nei collaudi browser residui e runner continui di file/PDF/reminder
+restano aperti; nessun invio reale finché provider e
 osservabilità non sono verificati. Nessun dato clinico reale prima dei relativi
 permessi, flussi e criteri di conservazione.
 
@@ -280,3 +282,23 @@ la raccolta delle nuove scelte entro la validità della firma del trattamento.
 Collaudo con fotocamera iPhone/Android e testi privacy restano gate prima del
 pilota. Resend/DNS non attivati. Checkpoint `checkpoint-photos-2026-10-16`.
 Prossimo incremento: W15.
+
+## Consegna W15 — 16 ottobre 2026
+
+Motore batch outbox con claim/lease/fencing, gate prima dell’invio, snapshot
+privato/chiave stabili, retry per rifiuti certi e riconciliazione degli esiti
+incerti. Heartbeat, monitor e allarmi persistiti/CLI exit2; API health della
+titolare isolata per tenant. Lock condivisi con calendario/recapiti, nessun
+lock DB durante la rete. Finestra di recupero due ore, cinque dispatch massimi
+e sei lookup. Nessuna etichetta delivered per una sola accettazione.
+
+24 unit, 381 SQL/8 file e 49 scenari completi passati. Concorrenza reale,
+cancellazione mentre il gate attende il lock, annullamento in volo, timeout
+dopo accettazione, SIGKILL e ack perso verificati. CLI worker idle e monitor
+exit2 provati. Dettagli/limiti in REMINDER_WORKER.md.
+
+Migrazioni 016–019 additive: motore, serializzazione e correzioni versionate.
+Master switch ufficiale disabled e comandi remoti verificati senza invii o
+fixture. Resend/DNS, runner remoto continuo e canale allarmi non attivati; sono
+prerequisiti prima dell’abilitazione, non consegne dichiarate complete. Prossimo
+W16; checkpoint `checkpoint-reminders-2026-10-16`.

@@ -1,14 +1,14 @@
 # Piano di verifica e rilascio
 
-Stato al 16 ottobre 2026: lint, tipi, build, 16 test unitari, 322 asserzioni pgTAP
-su sette file e 43 scenari Chromium su build di produzione e Supabase locale reale
+Stato al 16 ottobre 2026: lint, tipi, build, 24 test unitari, 381 asserzioni pgTAP
+su otto file e 49 scenari Playwright su build di produzione e Supabase locale reale
 superati. Sono coperti Auth con email catturate localmente, agenda, isolamento,
 team/revoca, rete/PWA e file privati. Per i file: MIME/hash/limiti, accessi negati,
 normalizzazione, completamento concorrente, riuso di oggetto già scritto,
 pulizia dopo crash, lease e idempotenza. Il test dei token di upload firmato
 falliva prima della guardia operativa 006 e passa dopo la correzione.
 
-Provati reset locale da zero, quindici migrazioni, ripetizione e checksum. Tutte e quindici
+Provati reset locale da zero, diciannove migrazioni, ripetizione e checksum. Tutte e diciannove
 applicate al remoto: ventidue tabelle pubbliche RLS e due bucket privati; nessuna
 fixture o suite sintetica eseguita sul progetto ufficiale. Comando di pulizia remoto verificato senza fixture (zero claim). Server
 ricompilato con configurazione ufficiale e risposte health/login/manifest/API
@@ -173,3 +173,21 @@ Revisione grafica W14: disposizione `ship` sull’implementazione e sulle 15
 catture valide, senza correzioni materiali. Nessun overflow a 375/820/1280,
 azioni foto/confronto 44px. Detector una volta, zero rilievi; documenter senza
 modifiche al sistema. Provenienza public: tre raster esistenti, zero mancanti.
+
+## Evidenze W15 — 16 ottobre 2026
+
+59 controlli SQL, otto unit e sei scenari integrazione nuovi. Due worker
+concorrenti una sola submission; cancellazione prima del gate e durante
+l’attesa del lock, richiesta già in volo, timeout dopo accettazione, SIGKILL
+reale del worker e ack perso. Nessun reinvio cieco; snapshot/chiave e fencing
+verificati. API owner health scoped, CLI idle e exit2 per monitor degradato.
+24 unit, 381 SQL/8 file e 49 scenari completi superati su reset pulito; sei
+scenari worker ripassati con interleaving reali e comandi CLI sulla build finale.
+
+Due test PDF multipagina consentono20s al font subsetting/Poppler su runner
+condivisi dopo timeout5s sotto contesa CPU. Tutte le asserzioni di contenuto e
+determinismo restano attive. Nessuna modifica al renderer o alle UI.
+
+Invii ufficiali disabled, nessun provider reale/cron/canale allarmi attivato.
+Comandi ufficiali worker/health verificati a zero claim e salute disabled/ok.
+Consegna inbox, webhook reali e runner continuo restano gate W16/pilota.
