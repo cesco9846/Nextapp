@@ -2,7 +2,7 @@
 
 Stato: proposta progettuale derivata da T (`GlowTrace_Piano_Tecnico.pdf`, pp.
 10–18, 20) e adattata alle richieste dell'utente. Il modello descrive il perimetro
-completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–202610160014:
+completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–202610160015:
 tenants, users, locations, services, clients, appointments, messages, audit_log,
 user_invitations, client_assignments, stored_files, clinical_templates,
 clinical_template_versions, pigments, pigment_lots, treatment_preparations e
@@ -10,13 +10,14 @@ treatment_lots e intake_links, oltre a ledger/idempotenza, preparation_answers,
 intake_capabilities, intake_receipts e intake_rate_limits privati. W13 aggiunge
 consent_requests e consents; signature_payloads, signed_payloads, document_jobs
 e signature_rate_limits rimangono privati e senza grant ordinari.
-Tutte e quattordici sono applicate al progetto ufficiale; venti tabelle pubbliche con RLS.
+Le quindici migrazioni sono applicate e ri-verificate sul progetto ufficiale;
+ventidue tabelle pubbliche con RLS, comprese `photos` e `photo_permissions`.
 Gli inviti conservano soltanto l’hash del token. I file usano staging, verifica
 server, oggetti immutabili, audit e pulizia con lease: vedere [STORAGE.md](STORAGE.md).
 L’accesso ai file delle clienti richiede abilitazione clinica e assegnazione per
 le operatrici; le etichette di catalogo richiedono l’abilitazione clinica. La
 titolare resta circoscritta al proprio studio. Firma e PDF recuperabile sono
-implementati: contratti in [DOCUMENTS.md](DOCUMENTS.md). Le foto per categoria restano W14.
+implementati: contratti in [DOCUMENTS.md](DOCUMENTS.md). Foto per categoria e autorizzazioni separate: [PHOTOS.md](PHOTOS.md).
 Requisiti: `SPEC.md`; architettura: `ARCHITECTURE.md`; consegne: `IMPLEMENTATION_PLAN.md`.
 
 ## Collegamenti cliente implementati
@@ -228,3 +229,15 @@ usare Supabase locale/CI e, prima dei piloti, un ambiente remoto separato. Prepa
 migrazioni versionate, seed sintetici, pgTAP e generazione dei tipi. Eseguire su
 istanza vuota e testare FK/RLS/Storage prima dell'applicazione remota. Backup e
 restore devono comprendere anche i file Storage, non soltanto le righe SQL.
+
+## Foto e scelte d’uso implementate (W14)
+
+`photos`: FK composta tenant/cliente/appuntamento/file privato, categoria,
+stato pending/ready, autrice, data caricamento e archiviazione/versione.
+`photo_permissions`: scopo documentation/demonstration, grant o rifiuto,
+documento firmato, data firma, sostituzione e revoca/versione; indice univoco
+sulla scelta corrente per appuntamento/scopo. Nessun grant DML ordinario.
+Le RPC condividono il lock tenant con revoche/team; soltanto un file verificato
+e una scelta firmata attiva consentono l’inserimento in galleria.
+Il modello logico generale `client_permissions` resta per altri scopi futuri;
+le scelte foto eseguibili sono in questa tabella dedicata.

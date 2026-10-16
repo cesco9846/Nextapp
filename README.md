@@ -16,7 +16,7 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 - Team: inviti tramite link, accettazione con email verificata, sospensione/riattivazione
   e assegnazioni cliente. Schema applicato anche al progetto ufficiale.
 - API per file immagine privati, verifica/normalizzazione, URL brevi e pulizia
-  recuperabile. La schermata foto arriverà con il relativo incremento.
+  recuperabile.
 - Consensi/questionari con versioni pubblicate immutabili; catalogo pigmenti,
   lotti, scadenze ed etichette private. Preparazione non firmata dell’appuntamento
   con risposte anamnestiche auditate e snapshot dei lotti scelti.
@@ -28,8 +28,10 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 - Firma tramite link dedicato o tablet, copia immutabile di testi/risposte/lotti,
   PDF privato e recupero della generazione senza rifirma.
 
-Sono ancora da realizzare foto,
-invio email e worker, conferma/disdetta tramite link,
+- Foto Prima/Dopo/Guarito per seduta, acquisizione/compressione, confronto
+  privato e scelte firmate distinte per documentazione e uso dimostrativo.
+
+Sono ancora da realizzare invio email e worker, conferma/disdetta tramite link,
 export/retention, ICS e funzioni commerciali. I reminder email restano disattivati;
 aprire WhatsApp non registra un invio. Non è ancora il pilota R1.
 
@@ -89,21 +91,23 @@ Una seconda applicazione non modifica i dati; un checksum diverso viene respinto
 Non modificare migrazioni già applicate: aggiungere un nuovo file. Non utilizzare
 `supabase db push` come secondo percorso con un ledger divergente.
 
-Il 16 ottobre 2026 sono state applicate e ri-verificate le quattordici migrazioni
-`202610150001`–`202610160014` al progetto ufficiale dopo le prove locali.
-Venti tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
+Il 16 ottobre 2026 sono state applicate e ri-verificate le quindici migrazioni
+`202610150001`–`202610160015` al progetto ufficiale dopo le prove locali.
+Ventidue tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
 oggetto sintetico creato nel remoto. Team e base Storage sono disponibili nello
 schema ufficiale, insieme a modelli, pigmenti e preparazioni. Le risposte
 anamnestiche restano nello schema privato, leggibili solo con RPC auditata.
 Contratti, limiti e pulizia in [STORAGE.md](STORAGE.md).
 Firma e PDF hanno il loro flusso in [DOCUMENTS.md](DOCUMENTS.md).
-Le foto prima/dopo riceveranno l’interfaccia W14.
+Galleria, acquisizione e scelte sulle foto: [PHOTOS.md](PHOTOS.md).
 Deploy GitHub/Vercel e variabili: [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Test isolati
 
 I test d'integrazione usano esclusivamente Supabase locale: il runner rifiuta
-URL non loopback. La chiave amministrativa locale serve solo a predisporre
+URL non loopback. Prima di ripetere tutta la suite dopo altre prove/catture,
+`npm run db:reset` ripristina soltanto le fixture locali; SQL e pulizia richiedono
+questo punto di partenza pulito. La chiave amministrativa locale serve solo a predisporre
 identità sintetiche; le operazioni testate usano sessioni normali.
 
 ```sh

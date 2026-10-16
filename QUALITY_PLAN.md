@@ -1,15 +1,15 @@
 # Piano di verifica e rilascio
 
-Stato al 16 ottobre 2026: lint, tipi, build, 14 test unitari, 291 asserzioni pgTAP
-su sei file e 39 scenari Chromium su build di produzione e Supabase locale reale
+Stato al 16 ottobre 2026: lint, tipi, build, 16 test unitari, 322 asserzioni pgTAP
+su sette file e 43 scenari Chromium su build di produzione e Supabase locale reale
 superati. Sono coperti Auth con email catturate localmente, agenda, isolamento,
 team/revoca, rete/PWA e file privati. Per i file: MIME/hash/limiti, accessi negati,
 normalizzazione, completamento concorrente, riuso di oggetto già scritto,
 pulizia dopo crash, lease e idempotenza. Il test dei token di upload firmato
 falliva prima della guardia operativa 006 e passa dopo la correzione.
 
-Provati reset locale da zero, quattordici migrazioni, ripetizione e checksum. Tutte e quattordici
-applicate al remoto: venti tabelle pubbliche RLS e due bucket privati; nessuna
+Provati reset locale da zero, quindici migrazioni, ripetizione e checksum. Tutte e quindici
+applicate al remoto: ventidue tabelle pubbliche RLS e due bucket privati; nessuna
 fixture o suite sintetica eseguita sul progetto ufficiale. Comando di pulizia remoto verificato senza fixture (zero claim). Server
 ricompilato con configurazione ufficiale e risposte health/login/manifest/API
 senza sessione verificate. Revisione team `ship`. Revisione clinica: otto catture, correzione delle schede
@@ -152,3 +152,24 @@ Obiettivi da misurare su staging, non garanzie già raggiunte:
 
 Queste checklist sono tutte aperte. La disponibilità delle credenziali e la
 presenza dei documenti di progetto non costituiscono un rilascio verificato.
+
+## Evidenze W14 — 16 ottobre 2026
+
+31 controlli SQL e quattro scenari browser aggiunti. Orientamento EXIF 6,
+compressione a 1600×2400, rimozione EXIF, HEIC utilizzabile, nessuna coda offline,
+risposta finale persa senza doppia foto, confronto privato e revoca/archivio.
+Lettura clinica realmente in attesa del lock: revoca dell’assegnazione prima
+dello sblocco restituisce 404 JSON, senza byte. Due nuovi unit verificano
+scelte indipendenti e PDF v2 deterministico con sì/no; v1 mantenuto.
+
+Suite completa 43/43 su database locale pulito dopo reset e 322/322 pgTAP.
+Un primo giro su fixture accumulate falliva sul batch di pulizia limitato a
+50 elementi: il reset documentato ha ripristinato il prerequisito del test.
+Nessuna asserzione disabilitata. I quattro scenari foto sono ripassati sulla
+build finale dopo il blocco dei controlli concorrenti durante l’upload.
+Le prove fisiche iPhone/Android e la revisione dei testi sono ancora da eseguire.
+
+Revisione grafica W14: disposizione `ship` sull’implementazione e sulle 15
+catture valide, senza correzioni materiali. Nessun overflow a 375/820/1280,
+azioni foto/confronto 44px. Detector una volta, zero rilievi; documenter senza
+modifiche al sistema. Provenienza public: tre raster esistenti, zero mancanti.

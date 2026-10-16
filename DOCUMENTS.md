@@ -106,3 +106,12 @@ risposta persa, versioni/revoca/scadenza, revoca clinica durante attesa lock,
 tablet/logout, rete assente senza coda, PDF lungo/accenti e crash dopo upload.
 Testi clinici, validità del consenso nel contesto professionale e dispositivi
 fisici restano da approvare/collaudare prima di raccogliere documenti reali.
+
+## Estensione W14: scelte foto
+
+Nuovi snapshot includono la policy foto versionata; scelte facoltative e non
+preselezionate sono distinte dalla conferma del trattamento. I record di
+autorizzazione separati, revocabili e legati al documento sono descritti in
+[PHOTOS.md](PHOTOS.md). `glow-pdf-v2` aggiunge testo e sì/no espliciti; v1 e
+relativi path/byte non vengono riscritti. Le vecchie richieste e gli invii senza
+scelte non concedono autorizzazioni.

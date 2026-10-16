@@ -101,6 +101,10 @@ export function ClientSignature() {
   const [uncertain, setUncertain] = useState(false);
   const [name, setName] = useState("");
   const [signature, setSignature] = useState<Handwriting>([]);
+  const [photoChoices, setPhotoChoices] = useState({
+    documentation: false,
+    demonstration: false,
+  });
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState("");
   useEffect(() => {
@@ -155,6 +159,7 @@ export function ClientSignature() {
         setSignature([]);
         setName("");
         setConfirmed(false);
+        setPhotoChoices({ documentation: false, demonstration: false });
         attempt.current = null;
         token.current = "";
         setUnavailable(true);
@@ -196,6 +201,9 @@ export function ClientSignature() {
         signer_name: name,
         confirmed,
         signature,
+        ...(context?.snapshot.photo_policy
+          ? { photo_choices: photoChoices }
+          : {}),
       });
       if (!parsed.success) {
         setError(
@@ -217,6 +225,7 @@ export function ClientSignature() {
       setSignature([]);
       setName("");
       setConfirmed(false);
+      setPhotoChoices({ documentation: false, demonstration: false });
       token.current = "";
       attempt.current = null;
       setUncertain(false);
@@ -386,6 +395,51 @@ export function ClientSignature() {
               className="mt-8 border-t pt-7"
               autoComplete="off"
             >
+              {s.photo_policy && (
+                <fieldset
+                  disabled={busy || uncertain}
+                  className="mb-8 space-y-4 border-b pb-7"
+                >
+                  <legend className="mb-3 font-display text-xl">
+                    Le tue scelte sulle foto
+                  </legend>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {s.photo_policy.notice}
+                  </p>
+                  <label className="flex min-h-11 items-start gap-3 text-sm leading-relaxed">
+                    <Checkbox
+                      className="mt-1"
+                      checked={photoChoices.documentation}
+                      onCheckedChange={(v) =>
+                        setPhotoChoices({
+                          documentation: v === true,
+                          demonstration:
+                            v === true && photoChoices.demonstration,
+                        })
+                      }
+                    />
+                    <span>{s.photo_policy.documentation}</span>
+                  </label>
+                  <label className="flex min-h-11 items-start gap-3 text-sm leading-relaxed">
+                    <Checkbox
+                      className="mt-1"
+                      checked={photoChoices.demonstration}
+                      disabled={!photoChoices.documentation}
+                      onCheckedChange={(v) =>
+                        setPhotoChoices({
+                          ...photoChoices,
+                          demonstration: v === true,
+                        })
+                      }
+                    />
+                    <span>{s.photo_policy.demonstration}</span>
+                  </label>
+                  <p className="text-sm text-muted-foreground">
+                    Puoi firmare il trattamento lasciando entrambe le scelte
+                    vuote.
+                  </p>
+                </fieldset>
+              )}
               <h2 className="text-xl">Conferma e firma</h2>
               <fieldset disabled={busy || uncertain} className="mt-5 space-y-5">
                 <div className="field">

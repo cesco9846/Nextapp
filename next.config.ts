@@ -32,6 +32,22 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: "/api/photos/:path*",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
+      },
+      {
+        source: "/api/clients/:id/photos",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
+      },
+      {
+        source: "/app/clienti/:id/foto",
+        headers: [
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+      {
         source: "/compila",
         headers: [
           { key: "Cache-Control", value: "private, no-store" },

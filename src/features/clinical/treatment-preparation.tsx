@@ -541,6 +541,15 @@ function PreparationForm({
           </span>
         </div>
       </form>
+      <div className="my-6">
+        <Button variant="outline" asChild>
+          <Link
+            href={`/app/clienti/${c.appointment.client_id}/foto?appuntamento=${c.appointment.id}`}
+          >
+            Foto e autorizzazioni della seduta
+          </Link>
+        </Button>
+      </div>
       {c.preparation && (
         <ConsentPanel
           id={c.appointment.id}

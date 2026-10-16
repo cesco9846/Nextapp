@@ -35,6 +35,10 @@ const dbErrors: Record<string, [number, string]> = {
   P0002: [404, "L'elemento non è stato trovato."],
 };
 const reasons: Record<string, string> = {
+  PHOTO_PERMISSION_REQUIRED:
+    "Serve un’autorizzazione firmata e attiva per le foto nel dossier di questo appuntamento.",
+  INVALID_PHOTO:
+    "Scegli un appuntamento disponibile e una categoria valida per la foto.",
   ALREADY_SIGNED:
     "Questa revisione è già firmata. Per nuovi contenuti salva una nuova preparazione.",
   INCOMPLETE_ANSWERS:

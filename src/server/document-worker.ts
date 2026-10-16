@@ -8,7 +8,7 @@ import { documentAdmin, sha256, verifiedDocumentFile } from "./documents";
 const claimSchema = z.object({
   id: z.uuid(),
   claim: z.uuid(),
-  renderer: z.literal("glow-pdf-v1"),
+  renderer: z.enum(["glow-pdf-v1", "glow-pdf-v2"]),
   content_hash: z.string(),
   path: z.string(),
   payload: signedPayloadSchema,
@@ -56,6 +56,7 @@ export async function processDocument(id: string) {
       job.content_hash,
       job.payload,
       labels,
+      job.renderer,
     );
     reason = "storage_failed";
     const storage = admin.storage.from("glow-documents");

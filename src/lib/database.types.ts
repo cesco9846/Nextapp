@@ -725,6 +725,167 @@ export type Database = {
           },
         ];
       };
+      photo_permissions: {
+        Row: {
+          allowed: boolean;
+          appointment_id: string;
+          client_id: string;
+          consent_id: string;
+          id: string;
+          purpose: string;
+          revoked_at: string | null;
+          revoked_by: string | null;
+          signed_at: string;
+          superseded_at: string | null;
+          tenant_id: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          allowed: boolean;
+          appointment_id: string;
+          client_id: string;
+          consent_id: string;
+          id?: string;
+          purpose: string;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+          signed_at: string;
+          superseded_at?: string | null;
+          tenant_id: string;
+          version?: number;
+        };
+        Update: {
+          allowed?: boolean;
+          appointment_id?: string;
+          client_id?: string;
+          consent_id?: string;
+          id?: string;
+          purpose?: string;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+          signed_at?: string;
+          superseded_at?: string | null;
+          tenant_id?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "photo_permissions_revoked_by_fkey";
+            columns: ["revoked_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "photo_permissions_tenant_id_appointment_id_fkey";
+            columns: ["tenant_id", "appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "photo_permissions_tenant_id_client_id_fkey";
+            columns: ["tenant_id", "client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "photo_permissions_tenant_id_consent_id_fkey";
+            columns: ["tenant_id", "consent_id"];
+            isOneToOne: false;
+            referencedRelation: "consents";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "photo_permissions_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      photos: {
+        Row: {
+          appointment_id: string;
+          archived_at: string | null;
+          category: string;
+          client_id: string;
+          created_at: string;
+          created_by: string;
+          file_id: string;
+          id: string;
+          state: string;
+          tenant_id: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          appointment_id: string;
+          archived_at?: string | null;
+          category: string;
+          client_id: string;
+          created_at?: string;
+          created_by: string;
+          file_id: string;
+          id?: string;
+          state?: string;
+          tenant_id: string;
+          version?: number;
+        };
+        Update: {
+          appointment_id?: string;
+          archived_at?: string | null;
+          category?: string;
+          client_id?: string;
+          created_at?: string;
+          created_by?: string;
+          file_id?: string;
+          id?: string;
+          state?: string;
+          tenant_id?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "photos_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "photos_tenant_id_appointment_id_fkey";
+            columns: ["tenant_id", "appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "photos_tenant_id_client_id_fkey";
+            columns: ["tenant_id", "client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "photos_tenant_id_file_id_fkey";
+            columns: ["tenant_id", "file_id"];
+            isOneToOne: false;
+            referencedRelation: "stored_files";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "photos_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       pigment_lots: {
         Row: {
           active: boolean;
@@ -1284,6 +1445,10 @@ export type Database = {
         Args: { p_display_name: string; p_token: string };
         Returns: string;
       };
+      archive_photo: {
+        Args: { p_id: string; p_version: number };
+        Returns: undefined;
+      };
       authorize_file_read: { Args: { p_id: string }; Returns: string };
       bootstrap_workspace: {
         Args: {
@@ -1316,6 +1481,7 @@ export type Database = {
         Args: { p_claim: string; p_id: string };
         Returns: undefined;
       };
+      complete_photo: { Args: { p_id: string }; Returns: Json };
       completed_report: { Args: { p_year?: number }; Returns: Json };
       create_appointment: {
         Args: { p_data: Json; p_key: string };
@@ -1500,6 +1666,18 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      prepare_photo: {
+        Args: {
+          p_appointment_id: string;
+          p_category: string;
+          p_client_id: string;
+          p_mime: string;
+          p_request_id: string;
+          p_sha256: string;
+          p_size: number;
+        };
+        Returns: Json;
+      };
       prepare_pigment_label: {
         Args: {
           p_mime: string;
@@ -1575,6 +1753,7 @@ export type Database = {
         };
       };
       read_consent_file: { Args: { p_id: string }; Returns: Json };
+      read_photo: { Args: { p_id: string }; Returns: Json };
       read_treatment_preparation: {
         Args: { p_appointment_id: string };
         Returns: Json;
@@ -1609,6 +1788,10 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      revoke_photo_permission: {
+        Args: { p_id: string; p_version: number };
+        Returns: undefined;
       };
       revoke_signature_request: {
         Args: { p_id: string; p_version: number };

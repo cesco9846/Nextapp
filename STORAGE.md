@@ -1,8 +1,9 @@
 # Archivio privato — incrementi W10–W11
 
-Questa consegna implementa API, ciclo di vita e UI delle etichette dei pigmenti. La schermata foto,
-le categorie prima/dopo/guarito, i consensi d’uso e gli upload da fotocamera
-saranno collegati in W14. Non è ancora il dossier clinico completo.
+API e ciclo di vita W10, etichette pigmenti W11 e galleria W14 sono implementati.
+Categorie Prima/Dopo/Guarito, acquisizione da telefono, confronto e autorizzazioni
+firmate separate usano questa base privata: contratto in [PHOTOS.md](PHOTOS.md).
+Scheduler di pulizia, conservazione e collaudo fisico restano nei gate del pilota.
 
 ## Confini attuali
 

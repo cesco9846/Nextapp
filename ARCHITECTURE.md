@@ -3,8 +3,8 @@
 Stato al 16 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
 React Query, Monarch/shadcn, team, Storage privata e preparazione clinica non firmata
 implementati, insieme a link cliente e passaggio tablet isolato. Firma, snapshot immutabile e PDF privati recuperabili W13 sono
-implementati; quattordici migrazioni applicate al progetto ufficiale. Worker email
-e foto restano pianificati.
+implementati; W14 estende con foto e scelte firmate separate. Worker email
+ancora pianificato (W15).
 La pulizia file ha un comando recuperabile, senza scheduler
 remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
 consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
@@ -243,3 +243,11 @@ con checksum da bucket privato, senza URL pubblica. PDF deterministico, lease
 e recupero dell’upload già riuscito prima del commit finale. Invio in background
 tramite `after`; retry professionale senza rifirma, scheduler continuo ancora W15.
 Dettagli, limiti, font e runbook: [DOCUMENTS.md](DOCUMENTS.md).
+
+## Foto (W14)
+
+[PHOTOS.md](PHOTOS.md) definisce acquisizione/compressione client, verifica W10,
+scelte firmate e galleria RLS. Endpoint binario auditato no-store con ricontrollo
+permessi, nessuna URL Storage nella UI. Scelte nel payload immutabile e PDF v2,
+renderer v1 mantenuto per lo storico. Blob soltanto in memoria con scadenza;
+nessun recupero offline né pubblicazione dimostrativa automatica.

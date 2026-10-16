@@ -34,6 +34,15 @@ const textVersion = z.object({
   body: z.string(),
   content_hash: z.string(),
 });
+export const photoChoicesSchema = z
+  .object({
+    documentation: z.boolean(),
+    demonstration: z.boolean(),
+  })
+  .strict()
+  .refine((v) => !v.demonstration || v.documentation, {
+    message: "L’uso dimostrativo richiede anche la documentazione nel dossier.",
+  });
 export const signedSnapshotSchema = z.object({
   schema: z.literal(1),
   studio: z.string(),
@@ -47,6 +56,14 @@ export const signedSnapshotSchema = z.object({
     .nullable(),
   answers: z.record(z.string(), z.union([z.boolean(), z.string()])),
   lots: z.array(lotSnapshotSchema),
+  photo_policy: z
+    .object({
+      version: z.literal("glow-photo-v1"),
+      documentation: z.string(),
+      demonstration: z.string(),
+      notice: z.string(),
+    })
+    .optional(),
 });
 export const signatureContextSchema = z.object({
   mode: z.enum(["link", "tablet"]),
@@ -62,6 +79,7 @@ export const signatureInputSchema = z
     signer_name: z.string().trim().min(2).max(150),
     confirmed: z.literal(true),
     signature: handwritingSchema,
+    photo_choices: photoChoicesSchema.optional(),
   })
   .strict();
 export const signatureSubmitSchema = signatureInputSchema
@@ -81,6 +99,7 @@ export const signedPayloadSchema = z.object({
   signed_at: z.string(),
   statement: z.string(),
   signature_kind: z.literal("drawn-v1"),
+  photo_choices: photoChoicesSchema.optional(),
 });
 export type SignedPayload = z.infer<typeof signedPayloadSchema>;
 export const consentMetadataSchema = z.object({

@@ -1,8 +1,9 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 16 ottobre 2026: **W13 firma e PDF implementati e verificati**.
-Checkpoint previsto: `checkpoint-signature-2026-10-16` sul ramo `main`.
-Precedenti: `checkpoint-intake-2026-10-15` (commit `1a98da4`),
+Aggiornato il 16 ottobre 2026: **W14 foto e autorizzazioni implementati e verificati nel browser**.
+Checkpoint di questo incremento: `checkpoint-photos-2026-10-16` sul ramo `main`.
+Precedenti: `checkpoint-signature-2026-10-16` (commit `0f41cdc`),
+`checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
 
@@ -29,7 +30,7 @@ Revoche e operazioni cliniche condividono il lock tenant e ricontrollano i perme
 W10: Storage immagine privato con staging, hash/MIME/dimensione/20MP,
 normalizzazione senza EXIF/GPS, finalizzazione immutabile, URL di lettura auditati
 30 secondi e pulizia con lease/riconciliazione. Vietati token di upload firmato,
-listing/download/upsert ordinari. Interfaccia foto per categoria ancora W14.
+listing/download/upsert ordinari. Galleria per categoria collegata in W14.
 
 W11: modelli consenso/anamnesi con pubblicazioni immutabili, catalogo pigmenti,
 lotti/scadenze ed etichette private; preparazione appuntamento ancora in bozza.
@@ -70,14 +71,35 @@ Scheduler continuo di retry ancora W15/pilota. Download POST auditato, checksum
 e no-store; bucket PDF senza grant Storage alle sessioni ordinarie.
 Contratti e limiti: [DOCUMENTS.md](DOCUMENTS.md).
 
+## W14 consegnato
+
+Galleria riservata per seduta Prima/Dopo/Guarito, selezione file/fotocamera,
+orientamento e compressione JPEG a 2400 px. Anteprima prima del salvataggio,
+HEIC con recupero utilizzabile; doppio controllo server e retry dello stesso
+tentativo senza ri-upload dopo risposta finale persa. Controlli concorrenti
+bloccati durante il caricamento. Confronto accessibile con pulsanti e due foto
+della stessa seduta; archivio esplicito, distinto da cancellazione.
+
+Scelte documentazione/uso dimostrativo facoltative e non preselezionate nel
+flusso di firma, registrate e revocabili separatamente dal consenso medico.
+Testo e sì/no nel payload immutabile e PDF v2; renderer v1 conservato per lo
+storico. Revoca durante upload impedisce l’inserimento; foto già raccolte restano
+private. Nessuna pubblicazione automatica. Letture binarie auditate no-store,
+SHA/dimensione verificati e permessi ricontrollati; blob in memoria, 60s e
+revoca alla tab nascosta/smontaggio. Nessuna URL Storage nella galleria.
+
+Contratto [PHOTOS.md](PHOTOS.md), inclusi limiti: raccolta di nuove scelte entro
+la validità della firma del trattamento, ultime 200 sedute nel selettore,
+retention e allegati pronti senza galleria in W19. Collaudo fisico e testi reali
+restano prima del pilota.
+
 ## Database e deploy
 
-Quattordici migrazioni `202610150001`–`202610160014` applicate e ri-verificate
-con checksum sul progetto ufficiale; riapplicazione idempotente. Venti tabelle
+Quindici migrazioni `202610150001`–`202610160015` applicate e ri-verificate
+con checksum sul progetto ufficiale; riapplicazione idempotente. Ventidue tabelle
 pubbliche con RLS; quattro nuove tabelle documentali private con RLS e senza
 grant anon/authenticated. Bucket `glow-private` e `glow-documents` privati.
-Nessuna fixture remota: richieste firma, consensi e oggetti PDF ufficiali zero
-al controllo di migrazione. Non azzerare o seminare il database ufficiale.
+Nessuna fixture remota creata: nuove tabelle foto/autorizzazioni vuote al controllo W14. Non azzerare o seminare il database ufficiale.
 
 Vercel: nuovo progetto `glow`, repository GitHub `cesco9846/Nextapp`, branch
 `main`, Node24/dub1, deploy automatico. URL https://glow-phi-eosin.vercel.app.
@@ -87,22 +109,26 @@ GitHub Actions. Configurazione e procedura in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Evidenze
 
-- Lint e TypeScript; build di produzione; 14 test unitari.
-- 291 asserzioni pgTAP su sei file, incluse 66 nuove su firma/immutabilità,
-  grant/RLS, audit/rollback, scopo, limiti persistenti e recupero/fencing PDF.
-- 39 scenari Chromium completi su build e Supabase locale reale. Otto nuovi:
-  flusso UI/etichette/firma/PDF, esito perso, concorrenza, crash dopo upload,
-  cambio revisione/revoca/scadenza, revoca clinica durante lock, tablet/offline,
-  risposta incompleta dopo logout. Otto scenari documentali ripassati dopo la
-  correzione PDF; CI esegue nuovamente l’intera suite sul commit pubblicato.
-- PDF lungo/accenti letto da Poppler; stessi input → stesso SHA. Vera
-  finalizzazione interrotta dopo upload, retry e download del contenuto originario.
-- Reset locale da zero con quattordici migrazioni; checksum/idempotenza ufficiali.
-- Quattordici catture locali a 375/820/1280 e PDF rasterizzato. Un solo fix
-  grafico: tenere l’intero blocco firma sulla stessa pagina. Conferma `ship`
-  sul rilievo valutato, nessuna regressione. Detector una volta, nessun finding.
-- Documenter: nessuna modifica a DESIGN.md/sidecar. Noto Sans solo per PDF;
-  varianti compatte preesistenti non promosse a default touch. Nessun nuovo raster pubblico.
+- Lint e TypeScript, build di produzione, 16 test unitari.
+- 322 asserzioni pgTAP su sette file, con 31 nuove sulle foto. Nessun grant
+  implicito o DML diretto, categorie/idempotenza, file verificato, scope/ruoli,
+  revoca durante upload e lettura, archivio e audit.
+- 43 scenari Chromium completi su database locale ripristinato da zero; quattro
+  nuovi sulle foto, ripassati sulla build finale. Compressione/orientamento EXIF,
+  firma con scelte distinte, esito perso senza duplicati, confronto, HEIC,
+  offline senza coda e revoca dell’assegnazione mentre una lettura attende il lock.
+- PDF v1/v2 deterministici e testo estratto da Poppler, incluso sì/no delle foto;
+  lo storico conserva il renderer precedente. Coda e recupero W13 restano provati.
+- Quindici migrazioni ricreate localmente e riapplicate con checksum al remoto;
+  22 tabelle pubbliche RLS e due bucket privati, nessuna fixture remota.
+- Quindici catture foto/scelte valide a 375/820/1280; pulsanti rilevanti da 44px,
+  nessun overflow orizzontale. Detector una volta: zero rilievi. Tre raster
+  pubblici preesistenti, provenienza completa; nessun nuovo raster distribuito.
+
+Revisione grafica W14: `ship` sull’implementazione e sulle quindici catture
+fornite, nessun fix materiale. Documenter senza modifiche al sistema: palette,
+tipografia e regole Glow conservate. Varianti compatte preesistenti non promosse
+a default touch; collaudo fisico e testi privacy ancora da verificare.
 
 ## Avvio e ripresa
 
@@ -116,15 +142,17 @@ sotto `/workspace/.cache`. Non stampare segreti; usare i binding già funzionant
 E2E, che generano altre fixture. `npm run test:e2e` usa `.next-e2e`/porta3100;
 la build normale `.next` usa configurazione ufficiale. I processi non sopravvivono
 al ripristino: ricompilare/avviare il server quando necessario. Le catture sono
-riproducibili con `scripts/capture-signature-ui.ts` solo su DB locale.
+riproducibili con `scripts/capture-photos-ui.ts` e
+`scripts/capture-signature-ui.ts` solo su DB locale. Reset necessario prima
+di ripetere la suite completa: il test di pulizia usa batch limitati e presuppone
+fixture pulite, come la CI.
 
 ## Prossime attività
 
-1. **W14**: foto prima/dopo/guarito, acquisizione/compressione da telefono,
-   categorie, consensi d’uso separati e scope appuntamento/cliente. Riusare
-   Storage W10 e documenti W13. HEIC e qualità su dispositivi reali da collaudare.
-2. W15–W17: coda/scheduler email, Resend reale, mittente/Reply-To, webhook e
-   conferma/disdetta. Configurazione dominio quando l’utente riprende il punto.
+1. **W15**: worker outbox, lease/fencing, retry, esiti incerti e monitoraggio.
+   Sviluppare contro adattatore di prova; nessun invio reale ora.
+2. W16–W17: Resend reale, mittente/Reply-To, webhook e conferma/disdetta.
+   Configurazione dominio quando l’utente riprende il punto.
 3. Export/retention/privacy, pulizia schedulata e alert, backup DB+Storage/restore,
    performance, dispositivi fisici, installazione PWA e gate R1.
 4. ICS, billing/fatture e funzioni commerciali del piano nelle rispettive fasi.

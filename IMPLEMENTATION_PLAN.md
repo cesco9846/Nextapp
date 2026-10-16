@@ -96,7 +96,8 @@ non avviati restano **pianificati**.
 | W11              | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                 |
 | W12              | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota. |
 | W13              | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma. |
-| W14–W17, W19–W25 | Pianificato                           | Prossimo incremento: foto prima/dopo/guarito e consensi d’uso separati. |
+| W14 | Implementato, verificato nel browser | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota. |
+| W15–W17, W19–W25 | Pianificato | Prossimo incremento: worker outbox affidabile, senza attivare invii reali. |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -174,8 +175,10 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-Proseguire W14 con foto prima/dopo/guarito e consensi d’uso separati, riusando
-Storage W10 e dossier W11–W13. Contratto firma/PDF in [DOCUMENTS.md](DOCUMENTS.md).
+Proseguire W15 con worker outbox: lease, retry/idempotenza, esito incerto,
+fencing, heartbeat e segnalazione guasti, senza invii reali finché Resend/DNS
+restano rinviati. Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
+[DOCUMENTS.md](DOCUMENTS.md).
 Contratto W12 in [INTAKE.md](INTAKE.md).
 Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
 [STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
@@ -260,3 +263,20 @@ test unitari, anche con estrazione Poppler da PDF lungo e accentato.
 Testi reali, dispositivi fisici e scheduler di retry continuo restano gate pilota.
 Resend/DNS non configurati per scelta utente. Prossimo W14; checkpoint corrente
 in DEVELOPMENT_CHECKPOINT.md, deploy in DEPLOYMENT.md.
+
+## Consegna W14 — 16 ottobre 2026
+
+Galleria per seduta Prima/Dopo/Guarito, input fotocamera, compressione/orientamento
+e recupero dell’upload. Confronto privato, letture binarie no-store con doppio
+controllo dei permessi; archiviazione distinta da cancellazione. Due scelte
+facoltative non preselezionate, evidenza firmata e record di revoca separati;
+PDF v2 compatibile con lo storico v1. Migrazione 015 sul progetto ufficiale,
+riapplicazione/checksum verificati, 22 tabelle pubbliche RLS e due bucket privati.
+
+16 unit, 322 pgTAP/7 file e 43 scenari Chromium completi passati su reset
+locale pulito. Quattro scenari foto ripassati dopo il blocco dei controlli
+concorrenti durante il caricamento. Dettagli e limiti in PHOTOS.md, compresa
+la raccolta delle nuove scelte entro la validità della firma del trattamento.
+Collaudo con fotocamera iPhone/Android e testi privacy restano gate prima del
+pilota. Resend/DNS non attivati. Checkpoint `checkpoint-photos-2026-10-16`.
+Prossimo incremento: W15.

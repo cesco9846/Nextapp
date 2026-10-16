@@ -158,6 +158,15 @@ export function ClientDetails({
                     </p>
                   )}
                 </section>
+                {(profile.role === "owner" || profile.clinical_access) && (
+                  <div className="px-7 py-5">
+                    <Button variant="outline" asChild>
+                      <Link href={`/app/clienti/${client.id}/foto`}>
+                        Foto prima e dopo
+                      </Link>
+                    </Button>
+                  </div>
+                )}
                 {profile.role === "owner" && (
                   <ClientAssignments clientId={id} />
                 )}

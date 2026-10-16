@@ -32,6 +32,7 @@ export async function renderConsentPdf(
   contentHash: string,
   payload: SignedPayload,
   labels: Uint8Array[],
+  renderer: "glow-pdf-v1" | "glow-pdf-v2" = RENDERER_VERSION,
 ) {
   await assertDocumentCharacters(payload);
   const pdf = await PDFDocument.create();
@@ -45,7 +46,7 @@ export async function renderConsentPdf(
   pdf.setModificationDate(stamp);
   pdf.setTitle("Consenso firmato — Glow");
   pdf.setAuthor(payload.snapshot.studio);
-  pdf.setCreator(RENDERER_VERSION);
+  pdf.setCreator(renderer);
   pdf.setProducer("Glow / pdf-lib 1.17.1");
   let page!: PDFPage,
     y = 0;
@@ -158,10 +159,25 @@ export async function renderConsentPdf(
     });
     y! -= scaled.height + 20;
   }
+  if (renderer === "glow-pdf-v2") {
+    if (!s.photo_policy || !payload.photo_choices)
+      throw new Error("Missing photo choices");
+    paragraph("Scelte facoltative sulle foto", 13);
+    paragraph(s.photo_policy.notice);
+    paragraph(s.photo_policy.documentation);
+    paragraph(
+      `Documentazione riservata: ${payload.photo_choices.documentation ? "Sì, autorizzo" : "No, non autorizzo"}`,
+    );
+    paragraph(s.photo_policy.demonstration);
+    paragraph(
+      `Uso dimostrativo: ${payload.photo_choices.demonstration ? "Sì, autorizzo" : "No, non autorizzo"}`,
+    );
+    paragraph(`Testo foto: ${s.photo_policy.version}`, 9);
+  }
   const signerDetails = `Nome e cognome del firmatario: ${payload.signer_name}\nFirma acquisita il ${date(payload.signed_at)}`;
   const disclaimer =
     "Firma disegnata acquisita tramite Glow. Non è una firma digitale qualificata.";
-  const identity = `Documento: ${id}\nContenuto firmato SHA-256: ${contentHash}\nRenderer: ${RENDERER_VERSION}`;
+  const identity = `Documento: ${id}\nContenuto firmato SHA-256: ${contentHash}\nRenderer: ${renderer}`;
   const confirmationHeight =
     paragraphHeight("Conferma e firma", 13) +
     paragraphHeight(payload.statement, 10) +

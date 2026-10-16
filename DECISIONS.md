@@ -110,3 +110,15 @@ controllate su fonti esterne. Non usarle come statistiche accertate nel prodotto
 Nessun invio a professioniste, creazione di abbonamenti, addebito, attivazione
 commerciale o modifica del vecchio sistema è stato eseguito. I passaggi dei PDF
 che richiedono queste azioni sono contenuto di riferimento, non autorizzazione.
+
+## Scelta W14 — Foto per seduta e scelte distinte (16 ottobre 2026)
+
+W14 raccoglie due scelte facoltative non preselezionate nello stesso documento
+di firma, con record e revoche distinti dal consenso medico. Scope della
+seduta, nuova firma per modificare le scelte; raccolta autonoma post-seduta
+fuori da questo incremento. Revoca blocca nuovi inserimenti, senza eliminare
+arbitrariamente il dossier. Confronto riservato; nessuna pubblicazione automatica.
+Browser comprime JPEG/PNG/WebP e tratta l’orientamento; HEIC riceve un errore
+utilizzabile. Il server verifica nuovamente. Letture binarie auditate e no-store
+evitano URL Storage nella UI. I PDF con scelte usano renderer v2; v1 resta
+immutato. Limiti e verifiche: [PHOTOS.md](PHOTOS.md).

@@ -1,7 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { PDFDocument } from "pdf-lib";
 import { execFileSync } from "node:child_process";
-import { handwritingSchema, type SignedPayload } from "@/lib/consents";
+import {
+  handwritingSchema,
+  photoChoicesSchema,
+  type SignedPayload,
+} from "@/lib/consents";
 import {
   assertDocumentCharacters,
   renderConsentPdf,
@@ -57,6 +61,75 @@ export const signedFixture: SignedPayload = {
   signature_kind: "drawn-v1",
 };
 describe("Signed document invariants", () => {
+  it("keeps optional photo choices independent from treatment and validates dependencies", () => {
+    expect(
+      photoChoicesSchema.safeParse({
+        documentation: false,
+        demonstration: false,
+      }).success,
+    ).toBe(true);
+    expect(
+      photoChoicesSchema.safeParse({
+        documentation: true,
+        demonstration: false,
+      }).success,
+    ).toBe(true);
+    expect(
+      photoChoicesSchema.safeParse({
+        documentation: false,
+        demonstration: true,
+      }).success,
+    ).toBe(false);
+    expect(photoChoicesSchema.safeParse({ documentation: true }).success).toBe(
+      false,
+    );
+  });
+  it("renders signed photo grants and declines only with the new version", async () => {
+    const payload: SignedPayload = {
+      ...signedFixture,
+      snapshot: {
+        ...signedFixture.snapshot,
+        photo_policy: {
+          version: "glow-photo-v1",
+          documentation: "Documentazione nel dossier",
+          demonstration: "Portfolio dimostrativo",
+          notice: "Scelte facoltative e revocabili",
+        },
+      },
+      photo_choices: { documentation: true, demonstration: false },
+    };
+    const rendered = await renderConsentPdf(
+      "aaaaaaaa-4444-4444-8444-444444444444",
+      "d".repeat(64),
+      payload,
+      [],
+      "glow-pdf-v2",
+    );
+    const retry = await renderConsentPdf(
+      "aaaaaaaa-4444-4444-8444-444444444444",
+      "d".repeat(64),
+      payload,
+      [],
+      "glow-pdf-v2",
+    );
+    expect(rendered.sha256).toBe(retry.sha256);
+    const text = execFileSync("pdftotext", ["-", "-"], {
+      input: rendered.bytes,
+      encoding: "utf8",
+    }).replace(/\s+/g, " ");
+    expect(text).toContain("Documentazione riservata: Sì, autorizzo");
+    expect(text).toContain("Uso dimostrativo: No, non autorizzo");
+    expect(text).toContain("glow-pdf-v2");
+    await expect(
+      renderConsentPdf(
+        "aaaaaaaa-4444-4444-8444-444444444444",
+        "d".repeat(64),
+        signedFixture,
+        [],
+        "glow-pdf-v2",
+      ),
+    ).rejects.toThrow("Missing photo choices");
+  });
   it("rejects point-only, out-of-bounds and excessive handwriting", () => {
     expect(
       handwritingSchema.safeParse([

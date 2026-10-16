@@ -64,7 +64,7 @@ export async function fillSignature(page: Page) {
   ])
     await canvas.press(key);
   await canvas.press("Enter");
-  await page.getByRole("checkbox").check();
+  await page.getByRole("checkbox", { name: /Ho letto il consenso/ }).check();
 }
 export async function documentList(page: Page, appointment: string) {
   const r = await page.request.get(`/api/appointments/${appointment}/consents`);
