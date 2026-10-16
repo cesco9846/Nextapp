@@ -37,14 +37,14 @@ vengono trasformati silenziosamente in invii Resend.
 
 ## Webhook
 
-Endpoint previsto su produzione:
-`https://glow-phi-eosin.vercel.app/api/webhooks/resend`.
+Endpoint di produzione:
+`https://glowlabs.it/api/webhooks/resend`.
 
 Configurare in [Resend Webhooks](https://resend.com/webhooks) questi eventi:
 `email.sent`, `email.delivered`, `email.bounced`, `email.complained`, `email.failed`,
 `email.suppressed`. Copiare il signing secret esclusivamente nel binding sicuro
 **RESEND_WEBHOOK_SECRET** dell’ambiente cloud. Il segreto dovrà essere distribuito
-anche al runtime Vercel come sensitive/server-only prima della consegna reale.
+anche al runtime Vercel: configurazione sensitive/server-only completata e verificata.
 La chiave sending-only non può creare o leggere questa configurazione.
 
 Il route handler Node verifica il body originale con Svix 2.8, tolleranza tempo
@@ -94,7 +94,12 @@ Prova separata alla casella autorizzata dall’utente accettata dal provider
 (`01a14507-6f56-7184-b987-41988f8625c5`); **l’utente ha confermato la ricezione
 nella posta in arrivo**, senza spam.
 
-Ancora necessari: secret/config webhook live, schermata delle
+Webhook live configurato sul dominio canonico; simulazioni consegna/bounce
+accettate e quattro chiamate aggiuntive alla RPC protetta osservate, senza
+creare righe outbox/clienti/eventi sintetiche nel database ufficiale. La correlazione
+su una riga reale è provata localmente; collaudo operativo completo prima dell’abilitazione.
+
+Ancora necessari: schermata delle
 impostazioni e degli esiti, runner continuo autenticato con hard timeout e canale
 allarmi, prova operativa di arresto/restore. Gli interruttori ufficiali restano
 OFF in questa consegna; la chiave da sola non attiva l’invio automatico.

@@ -180,8 +180,9 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 W16.a implementa adapter Resend, template testo fisso, From/Reply-To immutabili,
 API impostazioni e webhook firmati/correlati. L’utente ha ripreso la configurazione:
 glowlabs.it, mittente reminder@glowlabs.it e chiave sending-only verificata tramite
-simulatore ufficiale. Proseguire W16 con webhook remoto/signing secret, inbox
-autorizzata e UI impostazioni/esiti usando shadcn e skill di stile. Scheduler e
+simulatore ufficiale. Webhook remoto/signing secret configurati, inbox ricevuta e dominio canonico
+glowlabs.it verificato. Proseguire W16 con UI impostazioni/esiti usando shadcn
+e skill di stile. Scheduler e
 monitor operativo prima dell’attivazione automatica; Auth SMTP distinto.
 Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
 [DOCUMENTS.md](DOCUMENTS.md).
@@ -320,3 +321,14 @@ Playwright completi passati; 21 migrazioni ufficiali checksum-verificate due vol
 CLI ufficiale anche con --send: disabled, zero claim/invii; salute ok.
 Prova separata alla casella autorizzata accettata dal provider; utente conferma
 ricezione nella posta in arrivo.
+
+### Correzione account — 16 ottobre 2026
+
+Rifiuto signup422 dovuto a password sotto 10 caratteri, confermato nei log.
+Controllo esplicito coerente con la policy Supabase anche per autofill/Unicode,
+errore mirato e accessibile e recupero senza perdere i dati. Test browser
+negativi e ciclo reale locale di conferma/recupero; login preesistente preservato.
+Nessun bypass della conferma email o creazione di account ufficiali di prova.
+
+Verifica correzione: sei E2E mirati, 42 unit, lint/build/typecheck passati.
+Impeccable ship sulle sei catture, sistema di stile preservato.

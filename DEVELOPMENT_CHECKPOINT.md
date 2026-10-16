@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 16 ottobre 2026: **W16.a integrazione backend Resend**; attivazione automatica ancora disabilitata.
-Checkpoint di questo incremento: `checkpoint-resend-2026-10-16` sul ramo `main`.
+Aggiornato il 16 ottobre 2026: **correzione della validazione password in registrazione** dopo W16.a.
+Checkpoint di questo incremento: `checkpoint-signup-fix-2026-10-16` sul ramo `main`.
+Precedente W16.a: `checkpoint-resend-2026-10-16` (`f86c51c`).
 Precedente W15: `checkpoint-reminders-2026-10-16` (`5790217`).
 Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-signature-2026-10-16` (commit `0f41cdc`),
@@ -19,8 +20,9 @@ pronti, senza consegna dichiarata. Skill di stile in `.agents/skills`.
 
 Configurazione Resend ripresa dall’utente: dominio **glowlabs.it**, chiave sicura
 `RESEND_API_KEY` ready con permessi sending-only e invio al simulatore accettato.
-Mittente scelto **Glow <reminder@glowlabs.it>**. Secret webhook e inbox di prova
-ancora necessari; non richiedere duplicati della chiave già funzionante.
+Mittente scelto **Glow <reminder@glowlabs.it>**. Secret webhook configurato anche su Vercel e inbox confermata; non richiedere
+duplicati delle chiavi già funzionanti. Dominio app canonico https://glowlabs.it;
+vecchio URL Vercel reindirizza308. Callback Auth e webhook sul nuovo dominio verificati.
 Auth SMTP è una configurazione separata, ancora da verificare sul dominio reale.
 
 ## Funzioni disponibili
@@ -131,8 +133,8 @@ Nessun lookup mediante un nuovo POST: soltanto evidenza firmata; assenza resta u
 
 Prova del nuovo adapter sul simulatore Resend accettata dal mittente scelto.
 Una prova alla casella autorizzata dall’utente è stata accettata dal provider;
-l’utente ha confermato la ricezione nella posta in arrivo. Aperto W16: secret/webhook remoto, UI
-impostazioni/esiti con skill di stile, SMTP Auth separato.
+l’utente ha confermato la ricezione nella posta in arrivo. Webhook remoto configurato e prove tecniche completate sul dominio canonico.
+Aperto W16: UI impostazioni/esiti con skill di stile, SMTP Auth separato.
 Runner Edge/cron, hard timeout e notifiche monitor prima dell’abilitazione.
 Dettagli, configurazione e comandi in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
 
@@ -145,7 +147,7 @@ grant anon/authenticated. Bucket `glow-private` e `glow-documents` privati.
 Nessuna fixture remota creata: nuove tabelle operative senza fixture al controllo W15. Non azzerare o seminare il database ufficiale.
 
 Vercel: nuovo progetto `glow`, repository GitHub `cesco9846/Nextapp`, branch
-`main`, Node24/dub1, deploy automatico. URL https://glow-phi-eosin.vercel.app.
+`main`, Node24/dub1, deploy automatico. URL https://glowlabs.it; vecchio URL Vercel redirect308.
 Variabili production e callback Auth canonici configurati; preview disabilitate.
 Prima di dichiarare un nuovo deploy pronto verificare SHA e READY su Vercel e
 GitHub Actions. Configurazione e procedura in [DEPLOYMENT.md](DEPLOYMENT.md).
@@ -192,8 +194,8 @@ fixture pulite, come la CI.
 
 ## Prossime attività
 
-1. **W16**: configurare webhook Resend remoto e secret sicuro;
-   completare UI impostazioni/esiti con shadcn e skill di stile. Non chiedere
+1. **W16**: completare UI impostazioni/esiti con shadcn e skill di stile.
+   Webhook/secret/dominio configurati e verificati. Non chiedere
    duplicati di RESEND_API_KEY. Auth SMTP separato. Contratto in EMAIL_DELIVERY.md.
 2. W17: conferma/disdetta sicura. Collegare runner continuo e monitor operativo
    con notifica esterna, insieme al retry PDF e scheduler pulizia, prima del pilota.
@@ -203,3 +205,22 @@ fixture pulite, come la CI.
 
 Non confondere build/test locali, database migrato, push GitHub e deploy Vercel.
 Non dichiarare completati consegna SMTP, dispositivi fisici, restore o pilota clinico.
+
+## Correzione registrazione — 16 ottobre 2026
+
+Il rifiuto effettivo nei log Auth era POST/signup422 con
+“Password should be at least 10 characters.” Nessun errore SMTP nella richiesta
+in esame. Il messaggio generico nascondeva il requisito già imposto da Supabase.
+Validazione esplicita prima dell’SDK per registrazione e recupero: minimo 10 punti
+di codice, anche quando autofill o UTF-16 aggirano minlength HTML. Errori weak_password
+distinguono lunghezza da altra debolezza senza esporre diagnostica provider.
+Campo invalidato/descritto, focus e dati conservati; login non impone la policy
+di creazione a password di account preesistenti. Nessuna policy server abbassata.
+
+Sei scenari mirati Playwright passati: ciclo locale email/conferma/recupero con
+nuovo controllo, callback invalido, autofill breve, Unicode, errori server e login.
+Sei catture sintetiche 375/820/1280 dei due errori, detector una volta, zero rilievi.
+42 test unitari, lint, build e TypeScript passati. Revisione Impeccable ship
+sulle sei catture, nessun fix materiale; sistema Glow preservato. Verifica
+finale della pubblicazione controllata sullo stesso commit del checkpoint.
+Nessun account/email di prova nel progetto ufficiale, nessuna modifica SMTP.

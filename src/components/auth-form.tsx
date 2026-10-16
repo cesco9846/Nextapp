@@ -4,6 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { browserSupabase } from "@/lib/supabase/browser";
+import {
+  MIN_PASSWORD_LENGTH,
+  PASSWORD_TOO_SHORT,
+  passwordTooShort,
+  weakPasswordMessage,
+} from "@/lib/auth-password";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +30,7 @@ export function AuthForm({
   const [error, setError] = useState(initialError);
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordInvalid, setPasswordInvalid] = useState(false);
   function nextPath() {
     return destination === "/invito"
       ? `/invito${/^[a-f0-9]{64}$/.test(window.location.hash.slice(1)) ? window.location.hash : ""}`
@@ -42,24 +49,39 @@ export function AuthForm({
     if (["login", "signup", "reset"].includes(value))
       setMode(value as typeof mode);
     setError("");
+    setPasswordInvalid(false);
     setMessage("");
   };
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setPasswordInvalid(false);
     setMessage("");
     setPending(true);
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const email = String(form.get("email") ?? "").trim();
     const password = String(form.get("password") ?? "");
     const db = browserSupabase();
+    function markPasswordInvalid() {
+      setPasswordInvalid(true);
+      (formElement.elements.namedItem("password") as HTMLInputElement)?.focus();
+    }
     try {
+      if ((recovery || mode === "signup") && passwordTooShort(password)) {
+        markPasswordInvalid();
+        throw new Error(PASSWORD_TOO_SHORT);
+      }
       if (recovery) {
         const { error } = await db.auth.updateUser({ password });
-        if (error)
+        if (error) {
+          const weak = weakPasswordMessage(error);
+          if (weak) markPasswordInvalid();
           throw new Error(
-            "Il collegamento non è più valido. Richiedi un nuovo recupero password.",
+            weak ??
+              "Il collegamento non è più valido. Richiedi un nuovo recupero password.",
           );
+        }
         setMessage("Password aggiornata. Puoi tornare alla tua agenda.");
         enter(nextPath());
       } else if (mode === "login") {
@@ -77,10 +99,14 @@ export function AuthForm({
             emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/conferma${destination === "/invito" ? "?next=/invito" : ""}`,
           },
         });
-        if (error)
+        if (error) {
+          const weak = weakPasswordMessage(error);
+          if (weak) markPasswordInvalid();
           throw new Error(
-            "Non è stato possibile creare l'account. Controlla i dati o riprova tra poco.",
+            weak ??
+              "Non è stato possibile creare l'account. Controlla i dati o riprova tra poco.",
           );
+        }
         if (data.session) {
           enter(destination === "/invito" ? nextPath() : "/configurazione");
         } else
@@ -173,7 +199,18 @@ export function AuthForm({
                     ? "new-password"
                     : "current-password"
                 }
-                minLength={mode === "signup" || recovery ? 10 : 1}
+                minLength={
+                  mode === "signup" || recovery ? MIN_PASSWORD_LENGTH : 1
+                }
+                aria-invalid={passwordInvalid || undefined}
+                aria-describedby={
+                  [
+                    mode === "signup" ? "password-hint" : "",
+                    passwordInvalid ? "auth-error" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ") || undefined
+                }
                 required
                 className="pr-12"
               />
@@ -191,14 +228,15 @@ export function AuthForm({
               </Button>
             </div>
             {mode === "signup" && (
-              <p className="text-xs text-muted-foreground">
-                Almeno 10 caratteri.
+              <p id="password-hint" className="text-xs text-muted-foreground">
+                Almeno {MIN_PASSWORD_LENGTH} caratteri.
               </p>
             )}
           </div>
         )}
         {error && (
           <p
+            id="auth-error"
             role="alert"
             className="rounded-lg bg-red-50 p-3 text-sm leading-relaxed text-destructive"
           >

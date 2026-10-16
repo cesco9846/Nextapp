@@ -89,6 +89,19 @@ test("signup confirmation and password recovery work with real local Auth emails
   ).toBeVisible();
   await page.goto(await localEmailLink(request, email, previousIds));
   await expect(page).toHaveURL(/\/nuova-password$/);
+  await page
+    .getByLabel("Password", { exact: true })
+    .evaluate((input: HTMLInputElement) => {
+      input.value = "shortpass";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  await page
+    .getByRole("button", { name: "Aggiorna password", exact: true })
+    .click();
+  await expect(page.locator("#auth-error")).toHaveText(
+    "La password deve contenere almeno 10 caratteri.",
+  );
+  await expect(page).toHaveURL(/\/nuova-password$/);
   const nextPassword = `Changed-${crypto.randomUUID()}!`;
   await page.getByLabel("Password", { exact: true }).fill(nextPassword);
   await page

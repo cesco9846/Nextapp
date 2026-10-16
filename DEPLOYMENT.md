@@ -1,6 +1,7 @@
 # Glow su Vercel
 
-- App: https://glow-phi-eosin.vercel.app
+- App: https://glowlabs.it
+- Vecchio URL: https://glow-phi-eosin.vercel.app → redirect permanente 308 al dominio canonico.
 - Dashboard: https://vercel.com/francescoangiolini98-gmailcoms-projects/glow
 - Progetto: `glow` (`prj_v5J1Oc43amxd1MKJU8MQdkYoIfkf`).
 - Team: `team_yUX5Fj5mWKEDZNZI99Sgzb3X`.
@@ -21,8 +22,9 @@ Variabili production configurate su Vercel, senza valori nei file versionati:
 
 - `NEXT_PUBLIC_SUPABASE_URL`: progetto ufficiale `mexokvvvxdyekauupwvt`.
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: chiave pubblica dello stesso progetto.
-- `NEXT_PUBLIC_APP_URL`: `https://glow-phi-eosin.vercel.app`.
+- `NEXT_PUBLIC_APP_URL`: `https://glowlabs.it`.
 - `supabase_service_role_secret`: credenziale server, tipo **sensitive**.
+- `RESEND_WEBHOOK_SECRET`: firma webhook, tipo **sensitive**, solo production.
 
 PAT Supabase e token Vercel restano nell’ambiente di sviluppo: non servono al
 runtime dell’app. Non passarli a variabili `NEXT_PUBLIC_*`, argomenti, log o Git.
@@ -40,7 +42,16 @@ esatti `/auth/conferma`, `/auth/conferma?next=/nuova-password` e
 Conferma email obbligatoria; Auth SMTP ancora da configurare separatamente.
 Reminder Resend/glowlabs.it ripresi in W16.a: chiave solo nel binding del worker,
 mai nel browser. Il webhook richiede RESEND_WEBHOOK_SECRET sensitive/server-only
-su Vercel, distinto dalla chiave invio; non ancora configurato.
+su Vercel, distinto dalla chiave invio; configurato e verificato.
+
+Dominio glowlabs.it collegato e HTTPS attivo; DNS Register.it A216.198.79.1
+riconosciuto da Vercel. Record email preservati. Site URL Supabase aggiornato,
+con callback esatti sul nuovo dominio e precedenti localhost/Vercel conservati.
+Webhook esistente Resend aggiornato dall’utente a
+https://glowlabs.it/api/webhooks/resend; firme e callback dei simulatori verificati
+senza fixture remote. Master reminder ancora OFF, scheduler/monitor da completare.
+Auth SMTP rimane separato: servizio predefinito Supabase con limite2email/ora;
+non è stato modificato per il rifiuto signup422 di password troppo corta.
 
 ## Pubblicazione e verifica
 

@@ -36,3 +36,21 @@ Verdetto finale sulle due correzioni richieste: `ship`, entrambe risolte.
 Chiusura, opzione select, tab e link contatto misurati nel browser ad almeno
 44px. Sistema documentato in DESIGN.md e `.impeccable/design.json` (schema 2).
 Tre icone PNG con origine SVG incorporata; scansione senza provenienze mancanti.
+
+### Registrazione: errori password (16 ottobre 2026)
+
+Estensione della superficie esistente: registrazione e recupero applicano il
+minimo già previsto di 10 caratteri, contando i punti di codice; il campo errato
+mantiene valore e focus e collega istruzione e messaggio tramite ARIA. Gli errori
+password restituiti da Auth hanno indicazioni operative senza esporre il testo
+grezzo del provider. L'accesso con password esistenti mantiene il comportamento
+precedente. Sei scenari Playwright mirati superati, incluso il ciclo reale locale
+registrazione, conferma email e recupero; evidenza in
+`.cache/logs/signup-e2e.log`.
+
+Finish review: `ship`, senza correzioni materiali. Ispezionate le sei catture
+degli stati password corta e debole a 375, 820 e 1280 px in
+`.impeccable/review/signup/`; detector eseguito una volta, zero rilievi in
+`.cache/logs/signup-design-detect.json`. Nessun nuovo asset pubblico, token,
+regola CSS o cambio di direzione: DESIGN.md e `.impeccable/design.json`
+conservati invariati dopo confronto con foglio globale e componenti effettivi.
