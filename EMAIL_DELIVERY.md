@@ -1,69 +1,108 @@
-# Promemoria email — Resend scelto, configurazione rinviata
+# Promemoria email — Resend e glowlabs.it
 
-Domanda dell’utente del 15 ottobre 2026: ogni professionista può usare la propria
-email oppure serve un account Resend, un dominio e un indirizzo noreply?
+Il 16 ottobre 2026 l’utente ha ripreso la configurazione email, collegato
+`glowlabs.it` a Resend e fornito `RESEND_API_KEY` tramite binding sicuro diretto.
+Il mittente scelto dall’utente è **Glow <reminder@glowlabs.it>**. La chiave ha
+permessi sending-only: la lettura `/domains` restituisce restricted_api_key,
+mentre `/emails` accetta il mittente e il dominio. Non occorre ampliarne i permessi
+per spedire; amministrazione webhook e SMTP Auth sono configurazioni separate.
 
-Il 15 ottobre 2026 l’utente ha scelto **Resend** e comunicato di avere acquistato
-il dominio. Nome del dominio, caselle, DNS e integrazione verranno configurati più
-avanti, come richiesto. Non sono stati attivati invii o modificati DNS/account.
-Non servono nuove credenziali per il worker W15 con provider locale.
+## Integrazione W16.a
 
-## Proposta per la prima versione
+Adapter HTTP a origine fissa `https://api.resend.com/emails`, redirect vietati,
+timeout/abort e nessun retry implicito. Snapshot `glow-reminder-v2` in SQL include
+From, Reply-To, destinatario, oggetto e testo. Il Reply-To è l’indirizzo Auth
+confermato della titolare attiva dello studio; non un indirizzo arbitrario
+inserito da un’operatrice. Resta fissato nei retry. Il testo è generico: studio,
+data/ora nella timezone dello studio e invito a contattarlo; nessun dato clinico,
+nome cliente o servizio. Nessun HTML o template modificabile in questo incremento.
 
-Un account del provider gestito da Glow, con un dominio o sottodominio verificato
-dell’app e mittente come `promemoria@<dominio-app>`. Il nome visualizzato può
-identificare lo studio: “Studio Rossi tramite Glow”. Ogni tenant ha un Reply-To
-verificato e le risposte delle clienti arrivano alla professionista. La verifica
-serve a evitare di dirottare risposte verso indirizzi non controllati dallo studio.
+`GET/PUT /api/reminders/settings`: solo titolare, sessione/RLS, stessa origine
+per scrivere, schema limitato a `enabled`. Restituisce anche mittente, Reply-To,
+stato di verifica e interruttore operativo globale in sola lettura. Non abilita
+il master switch e non crea reminder retroattivi. Interfaccia impostazioni e
+stato messaggi ancora da collegare con shadcn e skill di stile nel seguito W16.
 
-Non è necessario usare `noreply`; il Reply-To non modifica il vero indirizzo From.
-Il promemoria rimane generico, senza anamnesi, foto o risposte sanitarie. Ogni
-messaggio è tracciato nella outbox del suo studio; l’accettazione del provider
-rimane distinta dalla consegna.
+Chiave stabile `glow-reminder-v1/<message-id>`; la versione della chiave è distinta
+dalla versione del contenuto. Idempotenza Resend valida **24 ore**, mentre il
+motore ammette dispatch soltanto nella finestra di recupero di due ore W15.
+Rifiuti documentati 429 consentono backoff; 400/401/403/422 con errore documentato
+sono definitivi. Rete, risposta incompleta, 5xx e 409 restano incerti.
 
-Questa opzione evita collegamenti OAuth e la gestione iniziale di numerose
-caselle, lasciando la migrazione verso mittenti dedicati possibile per tenant.
-Il dominio è già stato acquistato dall’utente. La scelta di Resend non anticipa
-la configurazione richiesta per un incremento successivo né altri acquisti.
+Resend non documenta un lookup autorevole per chiave. Un altro POST potrebbe
+creare un’email dopo l’annullamento: non viene usato per riconciliare. Solo
+l’evidenza webhook firmata e correlata può provare accettazione; se manca,
+`unknown` resta visibile e non autorizza un nuovo invio. Snapshot v1 storici non
+vengono trasformati silenziosamente in invii Resend.
 
-## Alternative
+## Webhook
 
-| Opzione                                 | Mittente reale                       | Configurazione necessaria                                                                                                                                                                                    |
-| --------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Dominio Glow condiviso, Reply-To studio | Dominio verificato Glow              | Provider e DNS del dominio app; indirizzo risposte verificato per studio.                                                                                                                                    |
-| Dominio della singola professionista    | Per esempio `appuntamenti@studio.it` | Verifica DNS di ciascun dominio e gestione dello stato dei mittenti per tenant; account del provider non necessariamente separati. Limiti dipendono dal piano del provider.                                  |
-| Casella personale Gmail/Outlook         | La casella collegata                 | OAuth e permessi di invio, token cifrati/rinnovo/revoca, limiti e gestione degli errori del provider. SMTP è un’alternativa quando il fornitore lo supporta. Non raccogliere normali password della casella. |
+Endpoint previsto su produzione:
+`https://glow-phi-eosin.vercel.app/api/webhooks/resend`.
 
-Resend richiede un dominio controllato e verificato per il From. Non basta
-inserire un indirizzo Gmail/Outlook personale nel campo mittente per inviare
-con quell’identità attraverso Resend. I collegamenti Gmail/Outlook sarebbero
-integrazioni distinte, implementate mediante le rispettive API o SMTP supportato.
+Configurare in [Resend Webhooks](https://resend.com/webhooks) questi eventi:
+`email.sent`, `email.delivered`, `email.bounced`, `email.complained`, `email.failed`,
+`email.suppressed`. Copiare il signing secret esclusivamente nel binding sicuro
+**RESEND_WEBHOOK_SECRET** dell’ambiente cloud. Il segreto dovrà essere distribuito
+anche al runtime Vercel come sensitive/server-only prima della consegna reale.
+La chiave sending-only non può creare o leggere questa configurazione.
 
-## Prima dell’attivazione (W15–W17)
+Il route handler Node verifica il body originale con Svix 2.8, tolleranza tempo
+e firme multiple, limite reale stream 64 KiB. Nessuna sessione professionale o
+controllo Origin richiesto a Resend: l’autenticazione è la firma. Mancanza di
+configurazione: 503; firma/body invalidi: 400; evento gestito/duplicato/estraneo:
+204; errore DB: 503 per consentire il retry provider.
 
-- Provider confermato: Resend. Definire dominio effettivo, modello dei mittenti
-  e casella che riceve le risposte prima della configurazione.
-- Configurare DNS/autenticazione del dominio secondo il provider e verificare
-  una consegna reale verso destinatari di prova autorizzati.
-- Implementare adapter del provider e worker con lease, retry, idempotenza,
-  esito incerto, eventi consegna/bounce e monitoraggio.
-- Conservare l’isolamento tra tenant, autorizzare la modifica del Reply-To e
-  mostrare lo stato di configurazione; nessun invio da un mittente non pronto.
-- Collaudare separatamente SMTP di Supabase Auth per conferma e recupero password:
-  queste email di accesso appartengono all’app, non al flusso reminder dello studio.
+Dopo la verifica si conserva solo una proiezione minima: ID evento/provider,
+outbox, tipo e orari. Tag opaco `glow_message_id`, From/To fissati, confine di
+primo dispatch e identità provider devono coincidere. Subject, diagnosi bounce,
+payload completo, indirizzi duplicati e firma non entrano nel registro eventi.
+Il destinatario soppresso è invece conservato nello schema privato per tenant.
 
-Credenziali e token restano nei binding sicuri; nessun nuovo segreto è necessario
-per proseguire con i moduli clinici. Le impostazioni email non vengono anticipate
-in tabelle inutilizzate prima dell’incremento che le rende operative.
+Deduplica globale dell’ID evento. La proiezione ha precedenza monotona:
+sent < delivered < failed < bounced < suppressed < complained. Un evento tardivo
+non cancella un fallimento definitivo. Un webhook prima dell’ack conserva la
+lease; l’ack o il recupero successivo applicano l’evidenza senza un altro POST.
+I conteggi CLI del batch descrivono gli esiti immediati dell’adapter; la salute
+SQL e la riga messaggio rappresentano l’esito riconciliato autorevole.
 
-Fonti ufficiali consultate:
-[verifica domini Resend](https://resend.com/docs/dashboard/domains/introduction),
-[parametri From e Reply-To](https://resend.com/docs/api-reference/emails/send-email).
+Bounce Permanent, complaint e suppressed impediscono nuovi dispatch al medesimo
+indirizzo normalizzato nello stesso studio e producono failure visibile nel
+monitor. Il bounce Temporary non sopprime. La soppressione non viene aggirata
+cambiando la chiave né cancellata automaticamente da un evento delivered.
+Correzione destinatario e retention/cancellazione restano gestite separatamente.
 
-## W15 implementato, invii reali ancora rinviati
+## Prove reali e attivazione
 
-Motore outbox, lease/fencing, snapshot/chiave stabili, esiti incerti e monitor
-sono implementati e provati con trasporto di prova locale. [REMINDER_WORKER.md](REMINDER_WORKER.md)
-definisce limiti, runbook e comandi. Master switch ufficiale disabled, nessun
-provider reale o cron attivato. W16 deve verificare le effettive capacità Resend
-di idempotenza/riconciliazione e webhook, senza assumere lookup per chiave.
+Il simulatore ufficiale `delivered+glow-integration@resend.dev` ha accettato un
+invio dal nuovo adapter con `reminder@glowlabs.it` (ID provider
+`01a14505-0a62-71bb-9727-aaeda079575c`). Questo prova autenticazione e accettazione
+del dominio/mittente; il webhook live resta una verifica separata. Nessuna fixture nel database ufficiale e nessun invio a clienti.
+
+Comando riproducibile, usando lo stesso request-id per un retry entro 24h:
+
+```sh
+node --use-env-proxy --import tsx scripts/test-resend.ts --simulator --request-id 1728b6c4-21d3-43a2-8811-995d6f77a511
+```
+
+Dopo 24h non ripetere quel comando come prova di deduplica: la garanzia provider
+è scaduta. Per un nuovo test usare consapevolmente un nuovo request-id.
+`--inbox` richiede `RESEND_TEST_RECIPIENT` e un destinatario autorizzato; non
+indovinare indirizzi dell’utente o prelevarli dai dati applicativi.
+
+Prova separata alla casella autorizzata dall’utente accettata dal provider
+(`01a14507-6f56-7184-b987-41988f8625c5`); **l’utente ha confermato la ricezione
+nella posta in arrivo**, senza spam.
+
+Ancora necessari: secret/config webhook live, schermata delle
+impostazioni e degli esiti, runner continuo autenticato con hard timeout e canale
+allarmi, prova operativa di arresto/restore. Gli interruttori ufficiali restano
+OFF in questa consegna; la chiave da sola non attiva l’invio automatico.
+Auth SMTP (conferma/recupero password) va collaudato separatamente.
+
+Fonti ufficiali:
+[invio](https://resend.com/docs/api-reference/emails/send-email),
+[idempotenza](https://resend.com/docs/dashboard/emails/idempotency-keys),
+[firme](https://resend.com/docs/dashboard/webhooks/verify-webhooks-requests),
+[eventi](https://resend.com/docs/webhooks/emails/delivered),
+[test ufficiali](https://resend.com/docs/dashboard/emails/send-test-emails).

@@ -4,24 +4,24 @@ Stato al 16 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
 React Query, Monarch/shadcn, team, Storage privata e preparazione clinica non firmata
 implementati, insieme a link cliente e passaggio tablet isolato. Firma, snapshot immutabile e PDF privati recuperabili W13 sono
 implementati; W14 estende con foto e scelte firmate separate. Motore worker email W15 implementato con trasporto locale;
-adattatore Resend e scheduler continuo restano da configurare.
+adattatore Resend e webhook firmati sono implementati in W16.a. Secret webhook live, inbox e scheduler continuo restano da configurare.
 La pulizia file ha un comando recuperabile, senza scheduler
 remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
 consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 
 ## Componenti e confini
 
-| Componente       | Scelta e responsabilità                                                                                                                                                                                   |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Applicazione     | Next.js App Router, React, TypeScript strict. Route e API organizzate per dominio; un'applicazione modulare, senza microservizi di dominio.                                                               |
-| Interfaccia      | shadcn/ui e Tailwind; FullCalendar React 7.1.2 con Monarch. Form con validazione condivisa Zod; accessibilità delle personalizzazioni verificata.                                                         |
-| Identità         | Supabase Auth con integrazione SSR/cookie supportata; sessione verificata sul server per ogni operazione riservata. Middleware solo per navigazione, non come unica autorizzazione.                       |
-| Persistenza      | Postgres Supabase, migrazioni versionate, RLS, FK tra tenant e RPC per operazioni atomiche. Tipi generati dallo schema.                                                                                   |
-| File             | Supabase Storage privato; metadati autorizzativi, staging/finalizzazione, URL firmati brevi e documenti immutabili.                                                                                       |
-| Lavori asincroni | Outbox in Postgres; pg_cron invoca worker Supabase Edge Functions autenticati. Batch limitati, lease, idempotenza e heartbeat. Nessun timer in memoria del server web.                                    |
+| Componente       | Scelta e responsabilità                                                                                                                                                                                                                                                      |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Applicazione     | Next.js App Router, React, TypeScript strict. Route e API organizzate per dominio; un'applicazione modulare, senza microservizi di dominio.                                                                                                                                  |
+| Interfaccia      | shadcn/ui e Tailwind; FullCalendar React 7.1.2 con Monarch. Form con validazione condivisa Zod; accessibilità delle personalizzazioni verificata.                                                                                                                            |
+| Identità         | Supabase Auth con integrazione SSR/cookie supportata; sessione verificata sul server per ogni operazione riservata. Middleware solo per navigazione, non come unica autorizzazione.                                                                                          |
+| Persistenza      | Postgres Supabase, migrazioni versionate, RLS, FK tra tenant e RPC per operazioni atomiche. Tipi generati dallo schema.                                                                                                                                                      |
+| File             | Supabase Storage privato; metadati autorizzativi, staging/finalizzazione, URL firmati brevi e documenti immutabili.                                                                                                                                                          |
+| Lavori asincroni | Outbox in Postgres; pg_cron invoca worker Supabase Edge Functions autenticati. Batch limitati, lease, idempotenza e heartbeat. Nessun timer in memoria del server web.                                                                                                       |
 | PDF              | Worker con renderer e font versionati, verificati con firma, etichette, accenti e documenti lunghi; non dipende dal browser della cliente. Implementato con pdf-lib/fontkit e Noto Sans versionati; coda persistente, Next after e retry manuale. Contratto in DOCUMENTS.md. |
-| Email            | Adapter server minimo per invio con chiave idempotente ed esiti; provider Resend scelto; integrazione rinviata. Auth SMTP e reminder sono due configurazioni distinte.                                   |
-| PWA              | Manifest installabile e istruzioni, connessione necessaria. Nessun service worker con dati riservati e nessuno snapshot IndexedDB. React Query mantiene soltanto memoria temporanea della sessione.       |
+| Email            | Adapter server minimo per invio con chiave idempotente ed esiti; Resend/glowlabs.it con adapter e webhook W16.a; attivazione automatica ancora disabilitata. Auth SMTP e reminder sono due configurazioni distinte.                                                          |
+| PWA              | Manifest installabile e istruzioni, connessione necessaria. Nessun service worker con dati riservati e nessuno snapshot IndexedDB. React Query mantiene soltanto memoria temporanea della sessione.                                                                          |
 
 ## Calendario: integrazione verificata
 
@@ -206,7 +206,6 @@ Il comando Node di pulizia usa claim con lease e token, cancella solo oggetti
 temporanei o non finalizzati e preserva i ready. Il deployment dello scheduler
 è ancora una dipendenza operativa dell’hosting; nessun timer nel processo web.
 
-
 ## Compilazione cliente e tablet implementati (W12)
 
 Il normale browser pubblico non usa la sessione professionale. Token in frammento
@@ -232,7 +231,6 @@ avvio: cache professionale svuotata e navigazione all’accesso. Pagine private 
 form cliente nascondono il documento prima della cattura della cronologia e
 ricaricano quando ripristinate, per un nuovo controllo server. Non è una gestione
 kiosk del dispositivo. Prove browser distinte dal collaudo fisico del tablet.
-
 
 ## Firma e documenti implementati (W13)
 

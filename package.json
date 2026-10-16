@@ -41,6 +41,7 @@
     "server-only": "0.0.1",
     "sharp": "0.35.5",
     "sonner": "2.0.8",
+    "svix": "2.8.0",
     "tailwind-merge": "3.7.0",
     "temporal-polyfill": "1.0.6",
     "zod": "4.6.7"

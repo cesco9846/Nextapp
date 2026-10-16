@@ -1,5 +1,5 @@
 import { z } from "zod";
-export const envelopeSchema = z
+const legacyEnvelopeSchema = z
   .object({
     version: z.literal("glow-reminder-v1"),
     to: z.email(),
@@ -8,6 +8,24 @@ export const envelopeSchema = z
   })
   .strict();
 export type Envelope = z.infer<typeof envelopeSchema>;
+export const resendEnvelopeSchema = z
+  .object({
+    version: z.literal("glow-reminder-v2"),
+    from: z.literal("Glow <reminder@glowlabs.it>"),
+    reply_to: z
+      .email()
+      .max(254)
+      .regex(/^[^\r\n]+$/),
+    to: z.email().max(254),
+    subject: z.literal("Promemoria appuntamento"),
+    text: z.string().min(1).max(1000),
+  })
+  .strict();
+// Historical/local test snapshots remain readable, but cannot go to Resend.
+export const envelopeSchema = z.union([
+  legacyEnvelopeSchema,
+  resendEnvelopeSchema,
+]);
 export const claimSchema = z.object({
   id: z.uuid(),
   claim: z.uuid(),

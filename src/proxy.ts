@@ -7,7 +7,8 @@ export async function proxy(request: NextRequest) {
   // Capability-only endpoints deliberately ignore professional cookies.
   if (
     request.nextUrl.pathname.startsWith("/api/intake/") ||
-    request.nextUrl.pathname.startsWith("/api/consent/")
+    request.nextUrl.pathname.startsWith("/api/consent/") ||
+    request.nextUrl.pathname === "/api/webhooks/resend"
   )
     return response;
   if (

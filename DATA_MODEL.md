@@ -250,3 +250,13 @@ accettazione distinta da consegna. `reminder_settings`, `reminder_runs`,
 Envelope/destinatario non entrano nei metadati pubblici; le RPC globali worker
 sono riservate a service_role. Health della titolare separato e circoscritto
 al suo tenant. Contratti e limiti in [REMINDER_WORKER.md](REMINDER_WORKER.md).
+
+## Evidenza Resend (W16.a)
+
+Dispatch aggiunge acceptance_id provider univoco e proiezione delivery monotona.
+`resend_events` registra solo ID evento/messaggio/provider, tipo e orari;
+`reminder_suppressions` impedisce nuovi invii all’indirizzo normalizzato nello
+stesso tenant. Entrambe private/RLS, senza grant ordinari. Envelope v2 conserva
+mittente e Reply-To confermato, senza riscrivere v1 storici. Webhook e lookup
+riservati al service role; impostazioni tenant owner-only sotto lock tenant.
+Contratto e limiti in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).

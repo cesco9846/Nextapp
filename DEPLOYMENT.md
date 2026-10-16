@@ -37,7 +37,10 @@ i redirect Auth. Il ramo `main` continua a distribuire normalmente.
 Supabase Auth usa il dominio pubblico come Site URL e autorizza soltanto i callback
 esatti `/auth/conferma`, `/auth/conferma?next=/nuova-password` e
 `/auth/conferma?next=/invito`. Restano autorizzati gli equivalenti locali.
-Conferma email obbligatoria; DNS/SMTP/Resend ancora rinviati per scelta utente.
+Conferma email obbligatoria; Auth SMTP ancora da configurare separatamente.
+Reminder Resend/glowlabs.it ripresi in W16.a: chiave solo nel binding del worker,
+mai nel browser. Il webhook richiede RESEND_WEBHOOK_SECRET sensitive/server-only
+su Vercel, distinto dalla chiave invio; non ancora configurato.
 
 ## Pubblicazione e verifica
 

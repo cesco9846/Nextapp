@@ -1,9 +1,11 @@
 import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { localEnvironment } from "./local-env";
+import { testResendSecret } from "../tests/fixtures/resend";
 const env = {
   ...process.env,
   ...localEnvironment(),
+  RESEND_WEBHOOK_SECRET: testResendSecret,
   NODE_USE_ENV_PROXY: "1",
   NEXT_DIST_DIR: ".next-e2e",
   PLAYWRIGHT_BROWSERS_PATH:

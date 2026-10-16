@@ -1644,6 +1644,7 @@ export type Database = {
         Args: { p_id: string; p_ok: boolean };
         Returns: undefined;
       };
+      lookup_reminder_acceptance: { Args: { p_id: string }; Returns: Json };
       membership_state: { Args: Record<PropertyKey, never>; Returns: string };
       prepare_client_file: {
         Args: {
@@ -1782,10 +1783,24 @@ export type Database = {
         Args: { p_appointment_id: string };
         Returns: Json;
       };
+      record_resend_event: {
+        Args: {
+          p_created_at: string;
+          p_event_id: string;
+          p_from: string;
+          p_message_id: string;
+          p_provider_id: string;
+          p_suppress: boolean;
+          p_to: string;
+          p_type: string;
+        };
+        Returns: boolean;
+      };
       reject_client_file: {
         Args: { p_actor: string; p_id: string; p_reason: string };
         Returns: undefined;
       };
+      reminder_preferences: { Args: { p_enabled?: boolean }; Returns: Json };
       reminder_tenant_health: {
         Args: Record<PropertyKey, never>;
         Returns: Json;

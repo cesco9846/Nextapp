@@ -35,6 +35,8 @@ const dbErrors: Record<string, [number, string]> = {
   P0002: [404, "L'elemento non è stato trovato."],
 };
 const reasons: Record<string, string> = {
+  SENDER_NOT_READY:
+    "Verifica l’indirizzo email della titolare prima di attivare i promemoria.",
   PHOTO_PERMISSION_REQUIRED:
     "Serve un’autorizzazione firmata e attiva per le foto nel dossier di questo appuntamento.",
   INVALID_PHOTO:

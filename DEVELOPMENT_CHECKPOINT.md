@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 16 ottobre 2026: **W15 motore outbox e monitor implementati e verificati**.
-Checkpoint di questo incremento: `checkpoint-reminders-2026-10-16` sul ramo `main`.
+Aggiornato il 16 ottobre 2026: **W16.a integrazione backend Resend**; attivazione automatica ancora disabilitata.
+Checkpoint di questo incremento: `checkpoint-resend-2026-10-16` sul ramo `main`.
+Precedente W15: `checkpoint-reminders-2026-10-16` (`5790217`).
 Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-signature-2026-10-16` (commit `0f41cdc`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
@@ -16,8 +17,10 @@ necessaria; nessuna agenda/dossier offline, coda di scritture, IndexedDB clinico
 o service worker che conservi dati riservati. WhatsApp manuale con chat/testo
 pronti, senza consegna dichiarata. Skill di stile in `.agents/skills`.
 
-Resend confermato e dominio acquistato: DNS, caselle e integrazione rinviati per
-scelta utente. Non chiedere ora credenziali o dominio e non attivare invii reali.
+Configurazione Resend ripresa dall’utente: dominio **glowlabs.it**, chiave sicura
+`RESEND_API_KEY` ready con permessi sending-only e invio al simulatore accettato.
+Mittente scelto **Glow <reminder@glowlabs.it>**. Secret webhook e inbox di prova
+ancora necessari; non richiedere duplicati della chiave già funzionante.
 Auth SMTP è una configurazione separata, ancora da verificare sul dominio reale.
 
 ## Funzioni disponibili
@@ -111,16 +114,33 @@ degradato e allarmi persistibili. GET health riservato alla titolare, conteggi
 solo del proprio studio, no-store. Nessun dato destinatario/testo nei report.
 
 `REMINDER_WORKER.md` documenta comandi, contratti provider e runbook. Master
-switch ufficiale disabled, adapter reale assente, nessun cron o notifica esterna
+switch ufficiale disabled; adapter reale aggiunto in W16.a, nessun cron o notifica esterna
 attivato. I comandi ufficiali sono stati eseguiti: disabled, zero claim/invii,
-salute ok. Resend/From/Reply-To/DNS/webhook e runner Edge/cron continuo devono
-ancora essere collegati e collaudati prima di abilitare email reali.
+salute ok. W16.a aggiunge adapter/identità/webhook backend; configurazione webhook
+live e runner Edge/cron continuo devono ancora essere collaudati prima dell’attivazione.
+
+## W16.a — backend Resend
+
+Adapter reale a origine fissa, senza retry impliciti, conservativo su 409/5xx/rete.
+Envelope v2 fissa anche From e Reply-To Auth confermato della titolare. Impostazioni
+via API owner-only/same-origin, senza retroattività e senza controllo del master switch.
+Webhook raw Svix, stream 64KiB, proiezione minima, deduplica/correlazione e gestione
+monotona degli eventi, anche prima dell’ack. Bounce permanente/complaint/suppressed
+bloccano nuovi invii allo stesso indirizzo per tenant e compaiono nella salute.
+Nessun lookup mediante un nuovo POST: soltanto evidenza firmata; assenza resta unknown.
+
+Prova del nuovo adapter sul simulatore Resend accettata dal mittente scelto.
+Una prova alla casella autorizzata dall’utente è stata accettata dal provider;
+l’utente ha confermato la ricezione nella posta in arrivo. Aperto W16: secret/webhook remoto, UI
+impostazioni/esiti con skill di stile, SMTP Auth separato.
+Runner Edge/cron, hard timeout e notifiche monitor prima dell’abilitazione.
+Dettagli, configurazione e comandi in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
 
 ## Database e deploy
 
-Diciannove migrazioni `202610150001`–`202610160019` applicate e ri-verificate
+Ventuno migrazioni `202610150001`–`202610160021` applicate e ri-verificate
 con checksum sul progetto ufficiale; riapplicazione idempotente. Ventidue tabelle
-pubbliche con RLS; tabelle documentali e quattro nuove tabelle outbox private con RLS e senza
+pubbliche con RLS; tabelle documentali e sei tabelle outbox/Resend private con RLS e senza
 grant anon/authenticated. Bucket `glow-private` e `glow-documents` privati.
 Nessuna fixture remota creata: nuove tabelle operative senza fixture al controllo W15. Non azzerare o seminare il database ufficiale.
 
@@ -132,18 +152,19 @@ GitHub Actions. Configurazione e procedura in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Evidenze
 
-- Lint, TypeScript, build di produzione e 24 unit passati (otto nuovi worker).
-- 381 pgTAP su otto file, con 59 nuovi su outbox, gate/permessi, lease/fencing,
-  snapshot e chiave, retry/lookup, finestre, DST, heartbeat e allarmi.
-- 49 scenari Playwright completi su reset locale pulito; sei nuovi per worker.
-  Sei ripassati con annullamento commesso mentre il gate aspetta il lock,
-  modifica durante provider in volo, CLI idle e monitor CLI exit2.
+- Lint, TypeScript, build di produzione e **42 unit** passati (18 nuovi Resend).
+- **414 pgTAP su nove file**, 33 nuovi su identità, eventi anticipati/fuori ordine,
+  deduplica, ack, correlazione, soppressione e permessi.
+- **52 scenari Playwright** completi su reset locale pulito; tre nuovi su API
+  impostazioni, webhook prima dell’ack e firme/stream/correlazione/bounce.
+  I sei W15 continuano a provare concorrenza, cancellazione in attesa/in volo,
+  crash reale, ack perso e CLI.
 - Due worker concorrenti: una sola submission. Timeout dopo accettazione,
   SIGKILL reale del processo e ack SQL perso: lookup senza seconda submission.
 - Due fixture PDF multipagina hanno ora timeout20s per font/Poppler su runner
   condivisi; contenuto e determinismo continuano a essere verificati, nessuna
   asserzione rimossa. I default5s erano insufficienti sotto contesa CPU.
-- Diciannove migrazioni ricreate localmente e ri-verificate al remoto con
+- Ventuno migrazioni ricreate localmente e ri-verificate al remoto con
   checksum/idempotenza; 22 tabelle pubbliche RLS e due bucket privati.
 - Incremento backend: nessuna modifica ai componenti visivi o al sistema Glow.
 
@@ -171,9 +192,9 @@ fixture pulite, come la CI.
 
 ## Prossime attività
 
-1. **W16**: adattatore Resend, snapshot mittente/Reply-To, template, impostazioni
-   e webhook firmati/correlati. Sviluppabili localmente; attivazione/inbox reale
-   soltanto quando l’utente riprende DNS/dominio, senza richiedere ora credenziali.
+1. **W16**: configurare webhook Resend remoto e secret sicuro;
+   completare UI impostazioni/esiti con shadcn e skill di stile. Non chiedere
+   duplicati di RESEND_API_KEY. Auth SMTP separato. Contratto in EMAIL_DELIVERY.md.
 2. W17: conferma/disdetta sicura. Collegare runner continuo e monitor operativo
    con notifica esterna, insieme al retry PDF e scheduler pulizia, prima del pilota.
 3. Export/retention/privacy, pulizia schedulata e alert, backup DB+Storage/restore,

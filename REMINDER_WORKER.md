@@ -1,11 +1,11 @@
-# Glow — worker dei reminder (W15)
+# Glow — worker dei reminder (W15 + backend W16.a)
 
 Il motore outbox è eseguibile e verificato con un provider di prova locale.
 **Gli invii reali sono disattivati**: la configurazione globale nasce disabled,
 ogni studio conserva il proprio `reminders_enabled=false` iniziale, il comando
-ufficiale rifiuta di acquisire lavori se manca l’adattatore reale. Resend, DNS,
-mittente/Reply-To e consegna in inbox restano W16, come richiesto dall’utente.
-Nessuna credenziale o configurazione del dominio è necessaria per questi test.
+ufficiale richiede `--send` esplicito e `RESEND_API_KEY` prima di acquisire lavori reali.
+Adapter Resend e webhook sono implementati in W16.a; configurazione webhook live,
+inbox autorizzata, UI e runner continuo restano aperti. Vedi [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
 
 ## Stato persistente e confine di invio
 
@@ -43,15 +43,16 @@ Il testo viene fissato al primo dispatch: solo studio, data/ora nella timezone
 dello studio e invito a contattarlo. Non include nome della cliente, servizio,
 anamnesi, foto o dettagli clinici. Destinatario, oggetto e testo sono privati e
 immutati nei retry. Se cambia il recapito, il vecchio payload non viene inviato.
-W16 deve includere anche identità del mittente/Reply-To verificati nello snapshot
-versionato prima di attivare il provider reale.
+W16.a include From `Glow <reminder@glowlabs.it>` e Reply-To Auth confermato
+della titolare nello snapshot v2. I v1 restano leggibili e usabili dal simulatore,
+ma non vengono spediti mediante Resend.
 
 ## Retry, errori e arresti
 
 Chiave stabile `glow-reminder-v1/<message-id>`, stesso payload a ogni tentativo.
 L’adattatore deve applicare idempotenza del provider: disponibilità e durata della
 sua garanzia vanno collaudate in W16. `accepted` significa accettato dal provider,
-non consegnato; delivery/bounce arrivano dai webhook W16.
+non consegnato; delivery/bounce sono gestiti dai webhook W16.a (configurazione remota ancora aperta).
 
 - Rifiuto temporaneo **con prova di mancata accettazione**: massimo cinque
   dispatch, backoff esponenziale fino a 15 minuti più jitter 0–15s.
@@ -133,3 +134,16 @@ canali autorizzati. Per uncertain, mantenere la chiave e lo snapshot; registrare
 un esito solo da evidenza verificata. Non cambiare chiave, non cancellare la
 storia e non segnare delivered per una semplice accettazione. Il recupero
 sperimentale si esegue sul DB locale; mai reset o fixture sul progetto ufficiale.
+
+## Comandi live W16.a
+
+Il target ufficiale usa l’adapter reale solo con `--send` e chiave disponibile:
+
+```sh
+node --use-env-proxy --import tsx scripts/reminder-worker.ts --project-ref mexokvvvxdyekauupwvt --send
+```
+
+Il master switch resta OFF: nessun claim/invio. Non abilitarlo prima di webhook,
+inbox autorizzata, scheduler e monitor operativo. Non usare il comando locale
+per spedire. `scripts/test-resend.ts` prova separatamente provider/simulatore senza
+fixture nel DB; non sostituisce il collaudo della catena outbox/webhook remota.

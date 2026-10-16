@@ -80,25 +80,26 @@ dopo l'agenda, senza aspettare tutta M5.
 Lo stato corrente è nella tabella seguente e nel registro finale. Gli item
 non avviati restano **pianificati**.
 
-| Item             | Stato corrente                        | Limite residuo                                                                                                                       |
-| ---------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| W01              | Verificato localmente                 | Workflow CI definito, run GitHub da verificare dopo push.                                                                            |
-| W02              | Verificato nell’incremento            | Monarch reale, quattro viste, viewport desktop/telefono e revisione grafica. Dispositivi fisici in W20.                              |
-| W03              | Verificato nell’incremento            | Reset locale, ledger/checksum/lock e RLS provati; schema base applicato al remoto.                                                   |
-| W04              | In corso                              | Registrazione, conferma e recupero provati con SMTP locale; SMTP e dominio finale da collaudare.                                     |
-| W05              | Implementato, verifiche core superate | Ampliare accettazione su omonime e archivio via UI prima di R1.                                                                      |
-| W06              | Verificato nell’incremento            | Concorrenza, idempotenza, sovrapposizioni, versioni e outbox; worker separato in W15.                                                |
-| W07              | In corso                              | Agenda/report implementati; drag/resize e stati da ampliare nel collaudo browser. Team migrato e verificato; collaudi fisici in W20. |
-| W08              | Verificato nel browser                | Link/chat/testo corretti; apertura sulle app di dispositivi fisici prima di R1.                                                      |
-| W09              | Implementato e migrato                | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; migrazioni remote applicate e revisione grafica ship.                 |
-| W18              | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                         |
-| W10              | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                       |
-| W11              | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                 |
-| W12              | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota. |
-| W13              | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma. |
-| W14 | Implementato, verificato nel browser | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota. |
-| W15 | Motore implementato e verificato | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione. |
-| W16–W17, W19–W25 | Pianificato | Prossimo incremento: adapter/template/webhook Resend; invii disattivati finché DNS/dominio restano rinviati. |
+| Item         | Stato corrente                        | Limite residuo                                                                                                                                |
+| ------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| W01          | Verificato localmente                 | Workflow CI definito, run GitHub da verificare dopo push.                                                                                     |
+| W02          | Verificato nell’incremento            | Monarch reale, quattro viste, viewport desktop/telefono e revisione grafica. Dispositivi fisici in W20.                                       |
+| W03          | Verificato nell’incremento            | Reset locale, ledger/checksum/lock e RLS provati; schema base applicato al remoto.                                                            |
+| W04          | In corso                              | Registrazione, conferma e recupero provati con SMTP locale; SMTP e dominio finale da collaudare.                                              |
+| W05          | Implementato, verifiche core superate | Ampliare accettazione su omonime e archivio via UI prima di R1.                                                                               |
+| W06          | Verificato nell’incremento            | Concorrenza, idempotenza, sovrapposizioni, versioni e outbox; worker separato in W15.                                                         |
+| W07          | In corso                              | Agenda/report implementati; drag/resize e stati da ampliare nel collaudo browser. Team migrato e verificato; collaudi fisici in W20.          |
+| W08          | Verificato nel browser                | Link/chat/testo corretti; apertura sulle app di dispositivi fisici prima di R1.                                                               |
+| W09          | Implementato e migrato                | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; migrazioni remote applicate e revisione grafica ship.                          |
+| W18          | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                                  |
+| W10          | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                                |
+| W11          | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                          |
+| W12          | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota.                  |
+| W13          | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma.                                                          |
+| W14          | Implementato, verificato nel browser  | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota.    |
+| W15          | Motore implementato e verificato      | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione. |
+| W16          | In corso: backend W16.a verificato    | Adapter, identità e webhook implementati; completare configurazione webhook live, inbox e UI. Invii automatici disattivati.                   |
+| W17, W19–W25 | Pianificato                           | Seguire dipendenze e gate; runner e monitor operativo prima dell’attivazione.                                                                 |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -176,9 +177,12 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-Proseguire W16 con adapter Resend, template, identità mittente/Reply-To e
-webhook firmati/correlati, sviluppabili contro fixture locali. DNS/dominio e
-attivazione reale restano rinviati: non chiedere ora credenziali né abilitare invii.
+W16.a implementa adapter Resend, template testo fisso, From/Reply-To immutabili,
+API impostazioni e webhook firmati/correlati. L’utente ha ripreso la configurazione:
+glowlabs.it, mittente reminder@glowlabs.it e chiave sending-only verificata tramite
+simulatore ufficiale. Proseguire W16 con webhook remoto/signing secret, inbox
+autorizzata e UI impostazioni/esiti usando shadcn e skill di stile. Scheduler e
+monitor operativo prima dell’attivazione automatica; Auth SMTP distinto.
 Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
 [DOCUMENTS.md](DOCUMENTS.md).
 Contratto W12 in [INTAKE.md](INTAKE.md).
@@ -191,9 +195,9 @@ permessi, flussi e criteri di conservazione.
 
 Per i reminder, [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md) confronta mittente Glow
 con Reply-To dello studio, domini dedicati e collegamenti Gmail/Outlook. Il primo
-resta la proposta iniziale dei mittenti; **Resend è confermato** e il dominio è
-stato acquistato dall’utente. Configurazione DNS/caselle e integrazione rinviate
-esplicitamente. `noreply` non è un requisito; nessun invio reale è attivo.
+è implementato come From Glow e Reply-To Auth confermato della titolare; **Resend
+e glowlabs.it sono confermati**. `noreply` non è un requisito; gli invii automatici
+restano disattivati mentre si completa il collaudo di webhook/inbox/scheduler.
 
 ## Registro di avanzamento
 
@@ -240,7 +244,6 @@ su letture e scritture già in attesa. Corretto l’ingombro delle schede su tel
 Stato ed evidenze definitive in DEVELOPMENT_CHECKPOINT.md. Prossimo W12;
 nessuna firma, PDF o email reale dichiarata completata da questa consegna.
 
-
 ### Quinto incremento — compilazione cliente e tablet, 15 ottobre 2026
 
 W12 implementato: capability casuali hash-only, scadenza e revoca, DTO minimo
@@ -252,7 +255,6 @@ Rete assente non accoda scritture; risposta di invio persa ritenta la stessa chi
 Una sola migrazione espansiva 012, senza edit di SQL applicato. Resend scelto e
 dominio acquistato, integrazione rinviata come richiesto. Evidenze e punto di
 ripresa in DEVELOPMENT_CHECKPOINT.md; prossimo W13, senza firme/PDF già promessi.
-
 
 ## Consegna W13 — 16 ottobre 2026
 
@@ -302,3 +304,19 @@ Master switch ufficiale disabled e comandi remoti verificati senza invii o
 fixture. Resend/DNS, runner remoto continuo e canale allarmi non attivati; sono
 prerequisiti prima dell’abilitazione, non consegne dichiarate complete. Prossimo
 W16; checkpoint `checkpoint-reminders-2026-10-16`.
+
+## W16.a — integrazione backend, 16 ottobre 2026
+
+Adapter Resend senza retry impliciti, envelope v2 con identità completa, API owner
+per preferenze e ricezione webhook raw Svix. Deduplica, eventi anticipati/fuori
+ordine, riconciliazione solo da evidenza firmata e soppressione tenant dei
+destinatari con bounce permanente/complaint. Prova provider-simulator accettata
+dal mittente scelto; non è inbox reale. W16 resta in corso per configurazione
+webhook/inbox, UI impostazioni/esiti e collaudo Auth SMTP separato. Nessun cron o
+master switch attivato da questa consegna.
+
+Verifica W16.a: lint/typecheck/build, 42 unit, 414 pgTAP/9 file e 52 scenari
+Playwright completi passati; 21 migrazioni ufficiali checksum-verificate due volte.
+CLI ufficiale anche con --send: disabled, zero claim/invii; salute ok.
+Prova separata alla casella autorizzata accettata dal provider; utente conferma
+ricezione nella posta in arrivo.
