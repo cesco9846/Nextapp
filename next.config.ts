@@ -3,6 +3,20 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   poweredByHeader: false,
+  outputFileTracingIncludes: {
+    "/api/consent/read": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
+    "/api/consent/label": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
+    "/api/consent/sign": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
+    "/api/consents/*/process": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
+  },
   async headers() {
     return [
       {
@@ -24,6 +38,18 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "no-referrer" },
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
         ],
+      },
+      {
+        source: "/firma",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+      {
+        source: "/api/consent/:path*",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
       },
       {
         source: "/api/intake/:path*",

@@ -2,19 +2,21 @@
 
 Stato: proposta progettuale derivata da T (`GlowTrace_Piano_Tecnico.pdf`, pp.
 10–18, 20) e adattata alle richieste dell'utente. Il modello descrive il perimetro
-completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–012:
+completo. Il sottoinsieme eseguibile corrente è nelle migrazioni 202610150001–202610160014:
 tenants, users, locations, services, clients, appointments, messages, audit_log,
 user_invitations, client_assignments, stored_files, clinical_templates,
 clinical_template_versions, pigments, pigment_lots, treatment_preparations e
 treatment_lots e intake_links, oltre a ledger/idempotenza, preparation_answers,
-intake_capabilities, intake_receipts e intake_rate_limits privati.
-Tutte e dodici sono applicate al progetto ufficiale; diciotto tabelle pubbliche con RLS.
+intake_capabilities, intake_receipts e intake_rate_limits privati. W13 aggiunge
+consent_requests e consents; signature_payloads, signed_payloads, document_jobs
+e signature_rate_limits rimangono privati e senza grant ordinari.
+Tutte e quattordici sono applicate al progetto ufficiale; venti tabelle pubbliche con RLS.
 Gli inviti conservano soltanto l’hash del token. I file usano staging, verifica
 server, oggetti immutabili, audit e pulizia con lease: vedere [STORAGE.md](STORAGE.md).
 L’accesso ai file delle clienti richiede abilitazione clinica e assegnazione per
 le operatrici; le etichette di catalogo richiedono l’abilitazione clinica. La
-titolare resta circoscritta al proprio studio. Firme/PDF e foto
-per categoria restano da collegare nei successivi incrementi.
+titolare resta circoscritta al proprio studio. Firma e PDF recuperabile sono
+implementati: contratti in [DOCUMENTS.md](DOCUMENTS.md). Le foto per categoria restano W14.
 Requisiti: `SPEC.md`; architettura: `ARCHITECTURE.md`; consegne: `IMPLEMENTATION_PLAN.md`.
 
 ## Collegamenti cliente implementati
@@ -31,12 +33,12 @@ server-only ha una RPC dedicata, non un accesso generico alle risposte.
 La compilazione accettata aggiorna risposte/versione della bozza e consuma il link
 in un commit con audit. `updated_by` diventa null per distinguere la cliente da
 una modifica della professionista; `intake.submitted` ne registra la provenienza.
-Il modulo pubblico non legge mai le precedenti risposte. Non è ancora lo snapshot
-firmato W13. Contratti di revoca, retry e limiti in [INTAKE.md](INTAKE.md).
+Il modulo pubblico non legge mai le precedenti risposte. La compilazione W12 non produce lo snapshot
+firmato; quello appartiene alla capability separata W13. Contratti di revoca, retry e limiti in [INTAKE.md](INTAKE.md).
 
 ## Confine dei dati
 
-Il sottoinsieme clinico implementato usa un modello distinto dalle firme future:
+Il sottoinsieme clinico implementato usa un modello distinto dai documenti firmati:
 `clinical_templates` punta alla pubblicazione corrente, mentre
 `clinical_template_versions` conserva testi/domande e hash immutabili.
 `pigment_lots` richiede un file pronto dello stesso pigmento e tenant.

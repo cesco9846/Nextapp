@@ -95,7 +95,8 @@ non avviati restano **pianificati**.
 | W10              | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                       |
 | W11              | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                 |
 | W12              | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota. |
-| W13–W17, W19–W25 | Pianificato                           | Prossimo incremento: firma, snapshot immutabile e generazione PDF recuperabile; poi foto.                             |
+| W13              | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma. |
+| W14–W17, W19–W25 | Pianificato                           | Prossimo incremento: foto prima/dopo/guarito e consensi d’uso separati. |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -173,8 +174,8 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-Proseguire W13 con firma della cliente, snapshot immutabile e job PDF
-recuperabile, riusando preparazione W11 e capability W12. Poi W14: foto.
+Proseguire W14 con foto prima/dopo/guarito e consensi d’uso separati, riusando
+Storage W10 e dossier W11–W13. Contratto firma/PDF in [DOCUMENTS.md](DOCUMENTS.md).
 Contratto W12 in [INTAKE.md](INTAKE.md).
 Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
 [STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
@@ -246,3 +247,16 @@ Rete assente non accoda scritture; risposta di invio persa ritenta la stessa chi
 Una sola migrazione espansiva 012, senza edit di SQL applicato. Resend scelto e
 dominio acquistato, integrazione rinviata come richiesto. Evidenze e punto di
 ripresa in DEVELOPMENT_CHECKPOINT.md; prossimo W13, senza firme/PDF già promessi.
+
+
+## Consegna W13 — 16 ottobre 2026
+
+Firma dedicata da link/tablet con controllo di testi, risposte ed etichette;
+snapshot/hash/firma immutabili, commit atomico e retry con la stessa ricevuta.
+PDF privato deterministico con lease e recupero da crash dopo upload; lettura
+auditata e verifica checksum. Migrazioni 013/014 espansive, senza edit al SQL
+già applicato. Otto nuovi scenari browser e 66 asserzioni SQL; quattro nuovi
+test unitari, anche con estrazione Poppler da PDF lungo e accentato.
+Testi reali, dispositivi fisici e scheduler di retry continuo restano gate pilota.
+Resend/DNS non configurati per scelta utente. Prossimo W14; checkpoint corrente
+in DEVELOPMENT_CHECKPOINT.md, deploy in DEPLOYMENT.md.

@@ -35,6 +35,12 @@ const dbErrors: Record<string, [number, string]> = {
   P0002: [404, "L'elemento non è stato trovato."],
 };
 const reasons: Record<string, string> = {
+  ALREADY_SIGNED:
+    "Questa revisione è già firmata. Per nuovi contenuti salva una nuova preparazione.",
+  INCOMPLETE_ANSWERS:
+    "Completa le risposte richieste prima di aprire la firma.",
+  DOCUMENT_PENDING:
+    "Il PDF non è ancora pronto. La firma è già conservata: riprova la generazione.",
   INVALID_INTAKE:
     "Controlla la preparazione prima di generare un collegamento.",
   PREPARATION_REQUIRED:

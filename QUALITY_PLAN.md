@@ -1,16 +1,16 @@
 # Piano di verifica e rilascio
 
-Stato al 15 ottobre 2026: lint, tipi, build, 10 test unitari, 225 asserzioni pgTAP
-su cinque file e 31 scenari Chromium su build di produzione e Supabase locale reale
+Stato al 16 ottobre 2026: lint, tipi, build, 14 test unitari, 291 asserzioni pgTAP
+su sei file e 39 scenari Chromium su build di produzione e Supabase locale reale
 superati. Sono coperti Auth con email catturate localmente, agenda, isolamento,
 team/revoca, rete/PWA e file privati. Per i file: MIME/hash/limiti, accessi negati,
 normalizzazione, completamento concorrente, riuso di oggetto già scritto,
 pulizia dopo crash, lease e idempotenza. Il test dei token di upload firmato
 falliva prima della guardia operativa 006 e passa dopo la correzione.
 
-Provati reset locale da zero, dodici migrazioni, ripetizione e checksum. Tutte e dodici
-applicate al remoto: diciotto tabelle pubbliche RLS, bucket privato, zero dati/oggetti di
-prova. Comando di pulizia remoto verificato senza fixture (zero claim). Server
+Provati reset locale da zero, quattordici migrazioni, ripetizione e checksum. Tutte e quattordici
+applicate al remoto: venti tabelle pubbliche RLS e due bucket privati; nessuna
+fixture o suite sintetica eseguita sul progetto ufficiale. Comando di pulizia remoto verificato senza fixture (zero claim). Server
 ricompilato con configurazione ufficiale e risposte health/login/manifest/API
 senza sessione verificate. Revisione team `ship`. Revisione clinica: otto catture, correzione delle schede
 mobili e conferma `ship` sul difetto valutato; documenter senza modifiche al sistema.
@@ -34,7 +34,14 @@ Tablet: cookie professionali eliminati, API 401, cronologia/URL senza dossier,
 nuovo accesso e risposta incompleta dopo logout. Input e token restano in memoria,
 nessuna coda alla riconnessione. Catture a 375/820/1280; collaudo fisico separato.
 
-Firme/PDF, foto per categoria, email reali, dispositivi fisici, installazione PWA HTTPS,
+W13 aggiunge 66 controlli SQL, otto scenari browser e quattro unitari: firma atomica,
+snapshot/handwriting immutabili, scope etichette, audit obbligatorio, lease/fencing,
+revoca mentre una firma attende il lock, duplicati, risposta persa e tablet/offline.
+PDF reale: font incorporato, accenti e testo lungo estratti da Poppler, byte
+deterministici; vero upload con finalizzazione forzata al fallimento e recupero
+senza rifirma. Download nega altre identità e verifica checksum.
+
+Foto per categoria, email reali, dispositivi fisici, installazione PWA su dispositivi,
 scheduler file, backup/restore e gate R1 restano da completare. Questi risultati
 non equivalgono al collaudo completo del prodotto.
 

@@ -25,8 +25,10 @@ Monarch ufficiale. Database e autenticazione: Supabase.
   della professionista. Nessuna firma raccolta in questo passaggio.
 - Interfaccia responsive, manifest con icone e istruzioni di installazione PWA.
   Richiede Internet; nessuna coda di modifiche o consultazione offline.
+- Firma tramite link dedicato o tablet, copia immutabile di testi/risposte/lotti,
+  PDF privato e recupero della generazione senza rifirma.
 
-Sono ancora da realizzare firma/PDF, foto,
+Sono ancora da realizzare foto,
 invio email e worker, conferma/disdetta tramite link,
 export/retention, ICS e funzioni commerciali. I reminder email restano disattivati;
 aprire WhatsApp non registra un invio. Non è ancora il pilota R1.
@@ -36,7 +38,8 @@ in [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md).
 
 ## Avvio
 
-Prerequisiti: Node 24 (file `.node-version`), npm, Python 3. Docker serve solo
+Prerequisiti: Node 24 (file `.node-version`), npm, Python 3; `poppler-utils`
+per i test PDF. Docker serve solo
 per il database e i test locali. Dalla radice del repository:
 
 Nel cloud la home non è scrivibile: prima dei comandi npm impostare
@@ -86,14 +89,16 @@ Una seconda applicazione non modifica i dati; un checksum diverso viene respinto
 Non modificare migrazioni già applicate: aggiungere un nuovo file. Non utilizzare
 `supabase db push` come secondo percorso con un ledger divergente.
 
-Il 15 ottobre 2026 sono state applicate e ri-verificate le dodici migrazioni
-`202610150001`–`202610150012` al progetto ufficiale dopo le prove locali.
-Diciotto tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
+Il 16 ottobre 2026 sono state applicate e ri-verificate le quattordici migrazioni
+`202610150001`–`202610160014` al progetto ufficiale dopo le prove locali.
+Venti tabelle pubbliche con RLS e bucket privato `glow-private`; nessun dato o
 oggetto sintetico creato nel remoto. Team e base Storage sono disponibili nello
 schema ufficiale, insieme a modelli, pigmenti e preparazioni. Le risposte
 anamnestiche restano nello schema privato, leggibili solo con RPC auditata.
 Contratti, limiti e pulizia in [STORAGE.md](STORAGE.md).
-Firme, PDF e foto prima/dopo riceveranno i flussi specifici nei prossimi incrementi.
+Firma e PDF hanno il loro flusso in [DOCUMENTS.md](DOCUMENTS.md).
+Le foto prima/dopo riceveranno l’interfaccia W14.
+Deploy GitHub/Vercel e variabili: [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Test isolati
 

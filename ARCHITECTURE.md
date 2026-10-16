@@ -1,9 +1,10 @@
 # Architettura di implementazione
 
-Stato al 15 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
+Stato al 16 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
 React Query, Monarch/shadcn, team, Storage privata e preparazione clinica non firmata
-implementati, insieme a link cliente e passaggio tablet isolato. Dodici migrazioni
-applicate al progetto ufficiale. Worker email, firme/PDF e foto restano pianificati.
+implementati, insieme a link cliente e passaggio tablet isolato. Firma, snapshot immutabile e PDF privati recuperabili W13 sono
+implementati; quattordici migrazioni applicate al progetto ufficiale. Worker email
+e foto restano pianificati.
 La pulizia file ha un comando recuperabile, senza scheduler
 remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
 consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
@@ -18,7 +19,7 @@ consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 | Persistenza      | Postgres Supabase, migrazioni versionate, RLS, FK tra tenant e RPC per operazioni atomiche. Tipi generati dallo schema.                                                                                   |
 | File             | Supabase Storage privato; metadati autorizzativi, staging/finalizzazione, URL firmati brevi e documenti immutabili.                                                                                       |
 | Lavori asincroni | Outbox in Postgres; pg_cron invoca worker Supabase Edge Functions autenticati. Batch limitati, lease, idempotenza e heartbeat. Nessun timer in memoria del server web.                                    |
-| PDF              | Worker con renderer e font versionati, verificati con firma, etichette, accenti e documenti lunghi; non dipende dal browser della cliente. Scegliere una libreria compatibile con il runtime durante W13. |
+| PDF              | Worker con renderer e font versionati, verificati con firma, etichette, accenti e documenti lunghi; non dipende dal browser della cliente. Implementato con pdf-lib/fontkit e Noto Sans versionati; coda persistente, Next after e retry manuale. Contratto in DOCUMENTS.md. |
 | Email            | Adapter server minimo per invio con chiave idempotente ed esiti; provider Resend scelto; integrazione rinviata. Auth SMTP e reminder sono due configurazioni distinte.                                   |
 | PWA              | Manifest installabile e istruzioni, connessione necessaria. Nessun service worker con dati riservati e nessuno snapshot IndexedDB. React Query mantiene soltanto memoria temporanea della sessione.       |
 
@@ -231,3 +232,14 @@ avvio: cache professionale svuotata e navigazione all’accesso. Pagine private 
 form cliente nascondono il documento prima della cattura della cronologia e
 ricaricano quando ripristinate, per un nuovo controllo server. Non è una gestione
 kiosk del dispositivo. Prove browser distinte dal collaudo fisico del tablet.
+
+
+## Firma e documenti implementati (W13)
+
+Capability separata `/firma#token`, snapshot privato fissato all’emissione,
+consumo/firma/audit/job nello stesso commit. I documenti firmati sono immutabili
+e non aggiornano retroattivamente testi, risposte o lotti. Download auditato
+con checksum da bucket privato, senza URL pubblica. PDF deterministico, lease
+e recupero dell’upload già riuscito prima del commit finale. Invio in background
+tramite `after`; retry professionale senza rifirma, scheduler continuo ancora W15.
+Dettagli, limiti, font e runbook: [DOCUMENTS.md](DOCUMENTS.md).

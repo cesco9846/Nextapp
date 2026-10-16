@@ -402,6 +402,159 @@ export type Database = {
           },
         ];
       };
+      consent_requests: {
+        Row: {
+          appointment_id: string;
+          appointment_version: number;
+          created_at: string;
+          created_by: string;
+          expires_at: string;
+          id: string;
+          mode: string;
+          preparation_id: string;
+          preparation_version: number;
+          request_id: string;
+          revoked_at: string | null;
+          tenant_id: string;
+          used_at: string | null;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          appointment_id: string;
+          appointment_version: number;
+          created_at?: string;
+          created_by: string;
+          expires_at: string;
+          id?: string;
+          mode: string;
+          preparation_id: string;
+          preparation_version: number;
+          request_id: string;
+          revoked_at?: string | null;
+          tenant_id: string;
+          used_at?: string | null;
+          version?: number;
+        };
+        Update: {
+          appointment_id?: string;
+          appointment_version?: number;
+          created_at?: string;
+          created_by?: string;
+          expires_at?: string;
+          id?: string;
+          mode?: string;
+          preparation_id?: string;
+          preparation_version?: number;
+          request_id?: string;
+          revoked_at?: string | null;
+          tenant_id?: string;
+          used_at?: string | null;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "consent_requests_tenant_id_created_by_fkey";
+            columns: ["tenant_id", "created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "consent_requests_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "consent_requests_tenant_id_preparation_id_appointment_id_fkey";
+            columns: ["tenant_id", "preparation_id", "appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "treatment_preparations";
+            referencedColumns: ["tenant_id", "id", "appointment_id"];
+          },
+        ];
+      };
+      consents: {
+        Row: {
+          appointment_id: string;
+          client_id: string;
+          content_hash: string;
+          document_state: string;
+          id: string;
+          preparation_version: number;
+          previous_id: string | null;
+          renderer: string;
+          request_id: string;
+          signed_at: string;
+          tenant_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          appointment_id: string;
+          client_id: string;
+          content_hash: string;
+          document_state?: string;
+          id?: string;
+          preparation_version: number;
+          previous_id?: string | null;
+          renderer?: string;
+          request_id: string;
+          signed_at?: string;
+          tenant_id: string;
+        };
+        Update: {
+          appointment_id?: string;
+          client_id?: string;
+          content_hash?: string;
+          document_state?: string;
+          id?: string;
+          preparation_version?: number;
+          previous_id?: string | null;
+          renderer?: string;
+          request_id?: string;
+          signed_at?: string;
+          tenant_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "consents_tenant_id_appointment_id_fkey";
+            columns: ["tenant_id", "appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "consents_tenant_id_client_id_fkey";
+            columns: ["tenant_id", "client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "consents_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "consents_tenant_id_previous_id_fkey";
+            columns: ["tenant_id", "previous_id"];
+            isOneToOne: false;
+            referencedRelation: "consents";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "consents_tenant_id_request_id_fkey";
+            columns: ["tenant_id", "request_id"];
+            isOneToOne: false;
+            referencedRelation: "consent_requests";
+            referencedColumns: ["tenant_id", "id"];
+          },
+        ];
+      };
       intake_links: {
         Row: {
           appointment_id: string;
@@ -1148,7 +1301,17 @@ export type Database = {
         Returns: boolean;
       };
       cancel_client_file: { Args: { p_id: string }; Returns: undefined };
+      claim_document_job: { Args: { p_id: string }; Returns: Json };
       claim_file_cleanup: { Args: { p_limit?: number }; Returns: Json[] };
+      complete_document_job: {
+        Args: {
+          p_claim: string;
+          p_id: string;
+          p_sha256: string;
+          p_size: number;
+        };
+        Returns: undefined;
+      };
       complete_file_cleanup: {
         Args: { p_claim: string; p_id: string };
         Returns: undefined;
@@ -1190,9 +1353,23 @@ export type Database = {
         };
         Returns: Json;
       };
+      create_signature_request: {
+        Args: {
+          p_appointment_id: string;
+          p_appointment_version: number;
+          p_mode: string;
+          p_preparation_version: number;
+          p_request_id: string;
+        };
+        Returns: Json;
+      };
       create_team_invitation: {
         Args: { p_clinical_access?: boolean; p_email: string };
         Returns: Json;
+      };
+      fail_document_job: {
+        Args: { p_claim: string; p_id: string; p_reason: string };
+        Returns: undefined;
       };
       file_for_completion: {
         Args: { p_id: string };
@@ -1397,6 +1574,7 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      read_consent_file: { Args: { p_id: string }; Returns: Json };
       read_treatment_preparation: {
         Args: { p_appointment_id: string };
         Returns: Json;
@@ -1405,6 +1583,7 @@ export type Database = {
         Args: { p_actor: string; p_id: string; p_reason: string };
         Returns: undefined;
       };
+      request_document_retry: { Args: { p_id: string }; Returns: undefined };
       revoke_intake_link: {
         Args: { p_id: string; p_version: number };
         Returns: {
@@ -1430,6 +1609,10 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      revoke_signature_request: {
+        Args: { p_id: string; p_version: number };
+        Returns: undefined;
       };
       revoke_team_invitation: { Args: { p_id: string }; Returns: undefined };
       save_pigment: {
@@ -1648,6 +1831,10 @@ export type Database = {
           p_request_id: string;
           p_token_hash: string;
         };
+        Returns: Json;
+      };
+      use_signature_request: {
+        Args: { p_action: string; p_input?: Json; p_token_hash: string };
         Returns: Json;
       };
     };
