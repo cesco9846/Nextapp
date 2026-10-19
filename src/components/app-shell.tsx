@@ -51,7 +51,9 @@ export function AppShell({
 }) {
   const path = usePathname();
   const navigationPath =
-    path.startsWith("/app/team") || path.startsWith("/app/documenti")
+    path.startsWith("/app/team") ||
+    path.startsWith("/app/documenti") ||
+    path.startsWith("/app/promemoria")
       ? "/app/impostazioni"
       : path.startsWith("/app/appuntamenti")
         ? "/app/agenda"
@@ -71,11 +73,14 @@ export function AppShell({
   }
   const currentTitle = path.startsWith("/app/team")
     ? "Team"
-    : path.startsWith("/app/documenti")
-      ? "Consensi e pigmenti"
-      : path.startsWith("/app/appuntamenti")
-        ? "Preparazione trattamento"
-        : (navigation.find((n) => path.startsWith(n.href))?.title ?? "Studio");
+    : path.startsWith("/app/promemoria")
+      ? "Promemoria email"
+      : path.startsWith("/app/documenti")
+        ? "Consensi e pigmenti"
+        : path.startsWith("/app/appuntamenti")
+          ? "Preparazione trattamento"
+          : (navigation.find((n) => path.startsWith(n.href))?.title ??
+            "Studio");
   const accessError =
     error instanceof RequestError && [401, 403].includes(error.status);
   return (

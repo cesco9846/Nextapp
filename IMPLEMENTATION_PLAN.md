@@ -98,7 +98,7 @@ non avviati restano **pianificati**.
 | W13          | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma.                                                          |
 | W14          | Implementato, verificato nel browser  | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota.    |
 | W15          | Motore implementato e verificato      | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione. |
-| W16          | In corso: backend W16.a verificato    | Adapter, identità e webhook implementati; completare configurazione webhook live, inbox e UI. Invii automatici disattivati.                   |
+| W16          | In corso: backend e UI verificati    | Adapter, identità, webhook live, inbox e preferenze/esiti disponibili. Restano runner, monitor esterno e SMTP Auth separato. Invii automatici disattivati. |
 | W17, W19–W25 | Pianificato                           | Seguire dipendenze e gate; runner e monitor operativo prima dell’attivazione.                                                                 |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
@@ -181,9 +181,10 @@ W16.a implementa adapter Resend, template testo fisso, From/Reply-To immutabili,
 API impostazioni e webhook firmati/correlati. L’utente ha ripreso la configurazione:
 glowlabs.it, mittente reminder@glowlabs.it e chiave sending-only verificata tramite
 simulatore ufficiale. Webhook remoto/signing secret configurati, inbox ricevuta e dominio canonico
-glowlabs.it verificato. Proseguire W16 con UI impostazioni/esiti usando shadcn
-e skill di stile. Scheduler e
-monitor operativo prima dell’attivazione automatica; Auth SMTP distinto.
+glowlabs.it verificato. W16.b aggiunge UI impostazioni/esiti con shadcn e skill
+di stile. Proseguire con runner continuo autenticato, hard timeout e
+monitor operativo con notifica esterna prima dell’attivazione automatica;
+completare il collaudo operativo e configurare Auth SMTP separatamente.
 Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
 [DOCUMENTS.md](DOCUMENTS.md).
 Contratto W12 in [INTAKE.md](INTAKE.md).
@@ -198,7 +199,7 @@ Per i reminder, [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md) confronta mittente Glow
 con Reply-To dello studio, domini dedicati e collegamenti Gmail/Outlook. Il primo
 è implementato come From Glow e Reply-To Auth confermato della titolare; **Resend
 e glowlabs.it sono confermati**. `noreply` non è un requisito; gli invii automatici
-restano disattivati mentre si completa il collaudo di webhook/inbox/scheduler.
+restano disattivati mentre si completa il collaudo operativo dello scheduler e del monitor.
 
 ## Registro di avanzamento
 
@@ -312,8 +313,8 @@ Adapter Resend senza retry impliciti, envelope v2 con identità completa, API ow
 per preferenze e ricezione webhook raw Svix. Deduplica, eventi anticipati/fuori
 ordine, riconciliazione solo da evidenza firmata e soppressione tenant dei
 destinatari con bounce permanente/complaint. Prova provider-simulator accettata
-dal mittente scelto; non è inbox reale. W16 resta in corso per configurazione
-webhook/inbox, UI impostazioni/esiti e collaudo Auth SMTP separato. Nessun cron o
+dal mittente scelto; non è inbox reale. Le sezioni successive registrano
+inbox, webhook e UI; restano runner/monitor e collaudo Auth SMTP separato. Nessun cron o
 master switch attivato da questa consegna.
 
 Verifica W16.a: lint/typecheck/build, 42 unit, 414 pgTAP/9 file e 52 scenari
@@ -332,3 +333,16 @@ Nessun bypass della conferma email o creazione di account ufficiali di prova.
 
 Verifica correzione: sei E2E mirati, 42 unit, lint/build/typecheck passati.
 Impeccable ship sulle sei catture, sistema di stile preservato.
+
+## W16.b — preferenze e storico, 19 ottobre 2026
+
+Schermata shadcn solo titolare, preferenza con salvataggio e indirizzi mittente/
+risposte in sola lettura. Banner esplicito sul servizio ancora sospeso. Storico
+paginato di 25 messaggi con filtro degli esiti da verificare e scheda cliente;
+accettazione, consegna ed esito incerto distinti, senza reinvio manuale. API
+sessione/RLS con proiezione minima e cursore validato, nessuna migrazione.
+
+Sette E2E mirati passati, inclusi quattro nuovi scenari UI/API; lint, typecheck
+e build verificati. Finish review Impeccable `ship` su telefono/tablet/desktop,
+stati vuoto, pieno ed errore. Prossimo: runner/monitor e collaudo operativo W16;
+Auth SMTP separato, poi W17. Master reminder OFF.

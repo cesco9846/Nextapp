@@ -4,8 +4,9 @@ Il motore outbox è eseguibile e verificato con un provider di prova locale.
 **Gli invii reali sono disattivati**: la configurazione globale nasce disabled,
 ogni studio conserva il proprio `reminders_enabled=false` iniziale, il comando
 ufficiale richiede `--send` esplicito e `RESEND_API_KEY` prima di acquisire lavori reali.
-Adapter Resend e webhook sono implementati in W16.a; configurazione webhook live,
-inbox autorizzata, UI e runner continuo restano aperti. Vedi [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
+Adapter Resend e webhook sono implementati in W16.a; webhook live e inbox
+autorizzata verificati. W16.b collega preferenze e storico alla UI della titolare.
+Runner continuo e canale allarmi restano aperti. Vedi [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
 
 ## Stato persistente e confine di invio
 
@@ -52,7 +53,7 @@ ma non vengono spediti mediante Resend.
 Chiave stabile `glow-reminder-v1/<message-id>`, stesso payload a ogni tentativo.
 L’adattatore deve applicare idempotenza del provider: disponibilità e durata della
 sua garanzia vanno collaudate in W16. `accepted` significa accettato dal provider,
-non consegnato; delivery/bounce sono gestiti dai webhook W16.a (configurazione remota ancora aperta).
+non consegnato; delivery/bounce sono gestiti dai webhook W16.a, configurati sul dominio canonico.
 
 - Rifiuto temporaneo **con prova di mancata accettazione**: massimo cinque
   dispatch, backoff esponenziale fino a 15 minuti più jitter 0–15s.

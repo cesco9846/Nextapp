@@ -41,16 +41,15 @@ export default function SettingsPage() {
         </Button>
       </section>
       {profile.role === "owner" && (
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap gap-3">
           <Button variant="outline" asChild>
             <Link href="/app/riepilogo">Consulta il valore delle sedute</Link>
           </Button>
-          <Button
-            variant="outline"
-            asChild
-            className="ml-0 mt-3 sm:ml-3 sm:mt-0"
-          >
+          <Button variant="outline" asChild>
             <Link href="/app/team">Gestisci il team</Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/app/promemoria">Gestisci promemoria email</Link>
           </Button>
         </div>
       )}

@@ -20,8 +20,32 @@ nome cliente o servizio. Nessun HTML o template modificabile in questo increment
 `GET/PUT /api/reminders/settings`: solo titolare, sessione/RLS, stessa origine
 per scrivere, schema limitato a `enabled`. Restituisce anche mittente, Reply-To,
 stato di verifica e interruttore operativo globale in sola lettura. Non abilita
-il master switch e non crea reminder retroattivi. Interfaccia impostazioni e
-stato messaggi ancora da collegare con shadcn e skill di stile nel seguito W16.
+il master switch e non crea reminder retroattivi.
+
+## Interfaccia W16.b
+
+Da **Il tuo studio → Gestisci promemoria email**, la titolare apre
+`/app/promemoria`: preferenza esplicita con salvataggio, mittente e indirizzo
+confermato delle risposte in sola lettura. Il banner distingue la preferenza
+dello studio dal servizio ancora sospeso. La preferenza vale per nuove
+prenotazioni/riprogrammazioni idonee; non recupera appuntamenti già presenti.
+Disattivare blocca nuovi dispatch, senza richiamare email già partite.
+
+`GET /api/reminders/messages` usa sessione, controllo titolare e RLS. Proietta
+solo identificatore, stato/codice/orari, richiesta di annullamento e nome/ID
+cliente corrente: nessun destinatario, testo, ID provider o dato clinico.
+Pagine di 25 con cursore validato su `(scheduled_for,id)` decrescente;
+filtro `attention` include elaborazione, incertezza, bounce e fallimento.
+L’ordine usa la scadenza del singolo messaggio, non l’orario attuale di un
+appuntamento eventualmente modificato. Dati privati `no-store`.
+
+Accettazione, consegna al server destinatario e lettura sono distinte;
+la consegna non garantisce la posta in arrivo. La schermata apre la scheda
+cliente esistente e non espone azioni di reinvio, sblocco destinatario o
+modifica manuale dell’esito. Errori/incertezze richiedono verifica operativa.
+Riepilogo e pagina corrente si aggiornano ogni 30 secondi o su richiesta;
+un errore di aggiornamento rimane visibile. Offline: salvataggio disabilitato,
+nessuna richiesta differita e nessuna persistenza dei dati nel dispositivo.
 
 Chiave stabile `glow-reminder-v1/<message-id>`; la versione della chiave è distinta
 dalla versione del contenuto. Idempotenza Resend valida **24 ore**, mentre il
@@ -99,8 +123,7 @@ accettate e quattro chiamate aggiuntive alla RPC protetta osservate, senza
 creare righe outbox/clienti/eventi sintetiche nel database ufficiale. La correlazione
 su una riga reale è provata localmente; collaudo operativo completo prima dell’abilitazione.
 
-Ancora necessari: schermata delle
-impostazioni e degli esiti, runner continuo autenticato con hard timeout e canale
+Ancora necessari: runner continuo autenticato con hard timeout e canale
 allarmi, prova operativa di arresto/restore. Gli interruttori ufficiali restano
 OFF in questa consegna; la chiave da sola non attiva l’invio automatico.
 Auth SMTP (conferma/recupero password) va collaudato separatamente.

@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 16 ottobre 2026: **correzione della validazione password in registrazione** dopo W16.a.
-Checkpoint di questo incremento: `checkpoint-signup-fix-2026-10-16` sul ramo `main`.
+Aggiornato il 19 ottobre 2026: **W16.b — preferenze email e storico dei promemoria**.
+Checkpoint di questo incremento: `checkpoint-reminder-ui-2026-10-19` sul ramo `main`.
+Precedente correzione account: `checkpoint-signup-fix-2026-10-16` (`dc947b1`).
 Precedente W16.a: `checkpoint-resend-2026-10-16` (`f86c51c`).
 Precedente W15: `checkpoint-reminders-2026-10-16` (`5790217`).
 Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
@@ -118,8 +119,8 @@ solo del proprio studio, no-store. Nessun dato destinatario/testo nei report.
 `REMINDER_WORKER.md` documenta comandi, contratti provider e runbook. Master
 switch ufficiale disabled; adapter reale aggiunto in W16.a, nessun cron o notifica esterna
 attivato. I comandi ufficiali sono stati eseguiti: disabled, zero claim/invii,
-salute ok. W16.a aggiunge adapter/identità/webhook backend; configurazione webhook
-live e runner Edge/cron continuo devono ancora essere collaudati prima dell’attivazione.
+salute ok. W16.a aggiunge adapter/identità/webhook backend; webhook live verificato,
+runner Edge/cron continuo ancora da collaudare prima dell’attivazione.
 
 ## W16.a — backend Resend
 
@@ -134,9 +135,35 @@ Nessun lookup mediante un nuovo POST: soltanto evidenza firmata; assenza resta u
 Prova del nuovo adapter sul simulatore Resend accettata dal mittente scelto.
 Una prova alla casella autorizzata dall’utente è stata accettata dal provider;
 l’utente ha confermato la ricezione nella posta in arrivo. Webhook remoto configurato e prove tecniche completate sul dominio canonico.
-Aperto W16: UI impostazioni/esiti con skill di stile, SMTP Auth separato.
+Aperto W16: runner/monitor operativo e SMTP Auth separato; UI consegnata in W16.b.
 Runner Edge/cron, hard timeout e notifiche monitor prima dell’abilitazione.
 Dettagli, configurazione e comandi in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
+
+## W16.b — preferenze e storico email
+
+Da **Il tuo studio → Gestisci promemoria email**, solo la titolare può salvare
+la preferenza e consultare lo storico. Il servizio globale ancora OFF è distinto
+dalla scelta dello studio. Mittente scelto e Reply-To confermato sono in sola
+lettura. Regola delle 24 ore e assenza di recupero retroattivo esplicite.
+
+API di lettura con sessione/RLS, DTO minimo senza indirizzi cliente, testo o ID
+provider. Pagine di 25, cursore validato su scadenza/ID; filtro include fallimenti,
+incertezze ed elaborazione. Le date usano il fuso dello studio e la scadenza del
+messaggio storico. Scheda cliente esistente apribile dallo storico.
+Accettazione distinta dalla consegna al server destinatario e dalla lettura;
+richiesta di annullamento in volo visibile, nessun pulsante di reinvio o sblocco.
+Salvataggio esplicito, errore recuperabile senza perdere la preferenza compilata,
+controlli offline disabilitati e nessuna scrittura differita.
+
+Verifica locale: lint, typecheck e build; sette E2E mirati passati (quattro nuovi
+UI/API e tre integrazione Resend). Permessi operatrice/altro studio, proiezione
+privata, cursori malformati, pagina con date uguali, salvataggio, offline e
+scheda cliente verificati. Impeccable `ship` sulle sette catture a 375/820/1280px;
+unico advisory del detector: 11px della navigazione mobile preesistente.
+Sistema di stile conservato, nessun asset pubblico aggiunto.
+
+Nessuna migrazione necessaria: ventuno migrazioni immutate. Nessuna fixture
+ufficiale o nuova email di prova. Invii automatici ancora disattivati.
 
 ## Database e deploy
 
@@ -194,8 +221,9 @@ fixture pulite, come la CI.
 
 ## Prossime attività
 
-1. **W16**: completare UI impostazioni/esiti con shadcn e skill di stile.
-   Webhook/secret/dominio configurati e verificati. Non chiedere
+1. **W16**: collegare runner continuo autenticato con hard timeout e monitor
+   esterno, quindi collaudo operativo prima dell’abilitazione. Preferenze/esiti
+   W16.b disponibili. Webhook/secret/dominio e inbox verificati. Non chiedere
    duplicati di RESEND_API_KEY. Auth SMTP separato. Contratto in EMAIL_DELIVERY.md.
 2. W17: conferma/disdetta sicura. Collegare runner continuo e monitor operativo
    con notifica esterna, insieme al retry PDF e scheduler pulizia, prima del pilota.
