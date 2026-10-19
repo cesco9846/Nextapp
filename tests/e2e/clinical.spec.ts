@@ -183,11 +183,13 @@ test("professional publishes models, uploads a lot label and saves an unsigned p
     .click();
   await page.getByLabel("Numero lotto", { exact: true }).fill("UI-01");
   await page.getByLabel("Scadenza", { exact: true }).fill("2035-12-31");
-  await page.getByLabel("Foto dell’etichetta", { exact: true }).setInputFiles({
-    name: "etichetta-prova.jpg",
-    mimeType: "image/jpeg",
-    buffer: await labelImage(),
-  });
+  await page
+    .getByLabel("Foto dell’etichetta (facoltativa)", { exact: true })
+    .setInputFiles({
+      name: "etichetta-prova.jpg",
+      mimeType: "image/jpeg",
+      buffer: await labelImage(),
+    });
   await page.getByRole("button", { name: "Salva lotto", exact: true }).click();
   await expect(page.getByRole("dialog")).not.toBeVisible();
   await page.getByRole("tab", { name: "Lotti", exact: true }).click();

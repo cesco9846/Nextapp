@@ -56,7 +56,7 @@ export const lotSchema = z
     pigment_id: z.uuid(),
     lot_number: z.string().trim().min(1).max(100),
     expires_on: z.iso.date(),
-    label_file_id: z.uuid(),
+    label_file_id: z.uuid().nullable().default(null),
     label_text: z.string().trim().max(2000),
     active: z.boolean(),
   })
@@ -98,18 +98,23 @@ export type TemplateDetail = {
     "id" | "revision" | "title" | "published_at"
   >[];
 };
-export const lotSnapshotSchema = z.object({
-  brand: z.string(),
-  name: z.string(),
-  code: z.string(),
-  lot_number: z.string(),
-  expires_on: z.string(),
-  label_file_id: z.uuid(),
-  label_sha256: z.string(),
-  label_text: z.string(),
-  lot_version: z.number(),
-  pigment_version: z.number(),
-});
+export const lotSnapshotSchema = z
+  .object({
+    brand: z.string(),
+    name: z.string(),
+    code: z.string(),
+    lot_number: z.string(),
+    expires_on: z.string(),
+    label_file_id: z.uuid().nullable(),
+    label_sha256: z.string().nullable(),
+    label_text: z.string(),
+    lot_version: z.number(),
+    pigment_version: z.number(),
+  })
+  .refine(
+    (lot) => (lot.label_file_id === null) === (lot.label_sha256 === null),
+    "L’etichetta e la sua verifica devono essere presenti insieme.",
+  );
 export const preparationContextSchema = z.object({
   appointment: z.object({
     id: z.uuid(),

@@ -8,7 +8,9 @@ export async function proxy(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith("/api/intake/") ||
     request.nextUrl.pathname.startsWith("/api/consent/") ||
-    request.nextUrl.pathname === "/api/webhooks/resend"
+    request.nextUrl.pathname === "/api/webhooks/resend" ||
+    request.nextUrl.pathname === "/api/internal/reminders/run" ||
+    request.nextUrl.pathname === "/api/internal/reminders/monitor"
   )
     return response;
   if (

@@ -49,7 +49,7 @@ riconosciuto da Vercel. Record email preservati. Site URL Supabase aggiornato,
 con callback esatti sul nuovo dominio e precedenti localhost/Vercel conservati.
 Webhook esistente Resend aggiornato dall’utente a
 https://glowlabs.it/api/webhooks/resend; firme e callback dei simulatori verificati
-senza fixture remote. Master reminder ancora OFF, scheduler/monitor da completare.
+senza fixture remote. Master reminder ancora OFF; scheduler/monitor W16.c documentati sotto.
 Auth SMTP rimane separato: servizio predefinito Supabase con limite2email/ora;
 non è stato modificato per il rifiuto signup422 di password troppo corta.
 
@@ -67,3 +67,14 @@ La PWA è installabile e richiede rete. I PDF usano la coda persistente descritt
 in [DOCUMENTS.md](DOCUMENTS.md); `after()` non sostituisce uno scheduler sempre
 attivo. Prima del pilota completare worker/monitoraggio, email, dispositivi e
 backup/restore del piano qualità.
+
+## Runner e monitor W16.c
+
+Due route Node con richieste HMAC scadenti e nonce monouso, attivate da
+Supabase Cron ogni minuto tramite pg_net. Variabili production sensitive
+`REMINDER_RUNNER_SECRET` e `RESEND_API_KEY`; nessuna nel bundle browser.
+La chiave di firma è anche in Vault, mai nel comando cron o nella coda HTTP.
+Credenziali, prova con invii disattivati, avvio/arresto dei soli job Glow e
+controllo delle risposte in [REMINDER_SCHEDULER.md](REMINDER_SCHEDULER.md).
+Per scelta utente, nessuna notifica email tecnica. L’esecuzione del monitor
+non sostituisce un allarme esterno indipendente o il collaudo prima del pilota.

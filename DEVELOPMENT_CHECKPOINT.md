@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 19 ottobre 2026: **W16.b — preferenze email e storico dei promemoria**.
-Checkpoint di questo incremento: `checkpoint-reminder-ui-final-2026-10-19` sul ramo `main`.
+Aggiornato il 19 ottobre 2026: **lotti senza foto obbligatoria e W16.c — scheduler/monitor**.
+Checkpoint di questo incremento: `checkpoint-lots-scheduler-2026-10-19` sul ramo `main`.
+Precedente W16.b: `checkpoint-reminder-ui-final-2026-10-19` (`41218df`).
 Precedente correzione account: `checkpoint-signup-fix-2026-10-16` (`dc947b1`).
 Precedente W16.a: `checkpoint-resend-2026-10-16` (`f86c51c`).
 Precedente W15: `checkpoint-reminders-2026-10-16` (`5790217`).
@@ -169,7 +170,7 @@ ufficiale o nuova email di prova. Invii automatici ancora disattivati.
 
 ## Database e deploy
 
-Ventuno migrazioni `202610150001`–`202610160021` applicate e ri-verificate
+Ventitré migrazioni `202610150001`–`202610190023` applicate e ri-verificate
 con checksum sul progetto ufficiale; riapplicazione idempotente. Ventidue tabelle
 pubbliche con RLS; tabelle documentali e sei tabelle outbox/Resend private con RLS e senza
 grant anon/authenticated. Bucket `glow-private` e `glow-documents` privati.
@@ -223,8 +224,8 @@ fixture pulite, come la CI.
 
 ## Prossime attività
 
-1. **W16**: collegare runner continuo autenticato con hard timeout e monitor
-   esterno, quindi collaudo operativo prima dell’abilitazione. Preferenze/esiti
+1. **W16**: collaudo operativo e monitor esterno prima dell’abilitazione.
+   Runner/monitor W16.c presenti; nessuna notifica email per scelta utente. Preferenze/esiti
    W16.b disponibili. Webhook/secret/dominio e inbox verificati. Non chiedere
    duplicati di RESEND_API_KEY. Auth SMTP separato. Contratto in EMAIL_DELIVERY.md.
 2. W17: conferma/disdetta sicura. Collegare runner continuo e monitor operativo
@@ -254,3 +255,26 @@ Sei catture sintetiche 375/820/1280 dei due errori, detector una volta, zero ril
 sulle sei catture, nessun fix materiale; sistema Glow preservato. Verifica
 finale della pubblicazione controllata sullo stesso commit del checkpoint.
 Nessun account/email di prova nel progetto ufficiale, nessuna modifica SMTP.
+
+## Lotti facoltativi e W16.c — checkpoint corrente
+
+La foto del lotto è facoltativa in UI/API/DB; numero e scadenza obbligatori.
+Snapshot null espliciti per ID/hash senza foto, stato scritto in preparazione/
+firma/PDF, storico immutabile se la foto viene aggiunta in seguito.
+Etichette presenti continuano a richiedere file verificato e corretto tenant/
+pigmento. Review Impeccable ship sulle sette catture finali, detector zero
+rilievi; sistema di stile invariato.15E2E clinici/documenti/lottosenza foto,
+poi nove su lotto/runner/worker e due finali sulle firme del runner passati.
+
+W16.c: cron Supabase separati per worker/monitor ogni minuto, pg_net asincrono
+verso route Vercel firmate HMAC; finestra90s e nonce monouso service-only.
+Limiti Vercel60s/15s, worker3lavori/budget35s/RPC3s/provider8s.
+Chiave generata in Vault e Vercel, mai in Git/log/coda HTTP. Metadata privati
+e risposte HTTP controllabili; nessun endpoint di configurazione per utenti.
+L’utente ha scelto il monitor **senza notifiche email**: nessun nuovo destinatario
+o invio tecnico. Master OFF; probe e scheduler si configurano solo da disattivato.
+Runbook e gate rimasti: REMINDER_SCHEDULER.md.
+
+Migrazioni nuove22 (foto facoltativa) e23 (scheduler firmato), nessuna modifica
+a quelle già ufficiali.434 pgTAP/10file verificati su reset locale pulito.
+Nessuna fixture, account o email di prova sul database ufficiale.

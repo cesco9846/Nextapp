@@ -116,3 +116,17 @@ autorizzazione separati, revocabili e legati al documento sono descritti in
 [PHOTOS.md](PHOTOS.md). `glow-pdf-v2` aggiunge testo e sì/no espliciti; v1 e
 relativi path/byte non vengono riscritti. Le vecchie richieste e gli invii senza
 scelte non concedono autorizzazioni.
+
+## Lotto senza foto — decisione utente del 19 ottobre 2026
+
+L’etichetta è facoltativa dalla creazione del lotto alla firma. Lo snapshot
+registra esplicitamente `label_file_id=null` e `label_sha256=null`: nel modulo
+e nel PDF compare «Foto dell’etichetta non allegata». Il worker salta solo
+questi slot dichiaratamente vuoti. Se lo snapshot contiene un riferimento,
+continua a verificare bytes/hash e a rifiutare immagini mancanti. Gli slot
+restano ordinati per lotto anche nei documenti con immagini e assenze miste.
+
+Foto e testo aggiunti dopo non cambiano una preparazione già salvata, una
+richiesta di firma o un documento firmato. Il ramo per i documenti con foto
+resta invariato; i renderer storici v1/v2 rimangono disponibili. Nessuna
+riscrittura di payload, hash o PDF esistenti.

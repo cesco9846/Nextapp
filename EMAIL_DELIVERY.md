@@ -123,8 +123,9 @@ accettate e quattro chiamate aggiuntive alla RPC protetta osservate, senza
 creare righe outbox/clienti/eventi sintetiche nel database ufficiale. La correlazione
 su una riga reale è provata localmente; collaudo operativo completo prima dell’abilitazione.
 
-Ancora necessari: runner continuo autenticato con hard timeout e canale
-allarmi, prova operativa di arresto/restore. Gli interruttori ufficiali restano
+Runner e monitor W16.c: vedere REMINDER_SCHEDULER.md. Per scelta utente non
+inviano notifiche email tecniche. Ancora necessari: canale esterno indipendente
+e prova operativa di arresto/restore. Gli interruttori ufficiali restano
 OFF in questa consegna; la chiave da sola non attiva l’invio automatico.
 Auth SMTP (conferma/recupero password) va collaudato separatamente.
 

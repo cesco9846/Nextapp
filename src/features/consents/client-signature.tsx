@@ -381,10 +381,16 @@ export function ClientSignature() {
                           {lot.label_text}
                         </p>
                       )}
-                      <PublicLabel
-                        token={() => token.current}
-                        id={lot.label_file_id}
-                      />
+                      {lot.label_file_id ? (
+                        <PublicLabel
+                          token={() => token.current}
+                          id={lot.label_file_id}
+                        />
+                      ) : (
+                        <p className="mt-3 text-sm text-muted-foreground">
+                          Foto dell’etichetta non allegata.
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>

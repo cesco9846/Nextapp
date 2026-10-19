@@ -31,7 +31,7 @@ export async function renderConsentPdf(
   id: string,
   contentHash: string,
   payload: SignedPayload,
-  labels: Uint8Array[],
+  labels: (Uint8Array | null)[],
   renderer: "glow-pdf-v1" | "glow-pdf-v2" = RENDERER_VERSION,
 ) {
   await assertDocumentCharacters(payload);
@@ -148,7 +148,14 @@ export async function renderConsentPdf(
     paragraph(
       `${lot.brand} — ${lot.name}\nCodice: ${lot.code || "Non indicato"}\nLotto: ${lot.lot_number}\nScadenza: ${lot.expires_on}\n${lot.label_text}`,
     );
-    const image = await pdf.embedJpg(labels[i]);
+    const label = labels[i];
+    if (lot.label_file_id === null && lot.label_sha256 === null) {
+      if (label !== null) throw new Error("Unexpected historical label");
+      paragraph("Foto dell’etichetta non allegata.");
+      continue;
+    }
+    if (!label) throw new Error("Missing historical label");
+    const image = await pdf.embedJpg(label);
     const scaled = image.scaleToFit(measure, 220);
     if (y - scaled.height < margin + 25) fresh();
     page!.drawImage(image, {

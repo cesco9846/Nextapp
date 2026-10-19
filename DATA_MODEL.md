@@ -81,7 +81,7 @@ indica dettagli progettuali necessari, non campi dichiarati testualmente nel PDF
 | `anamnesis`                | Cliente, questionario e risposte versionati, consensi pertinenti; accesso ristretto e letture registrate.                                                                                                                                                         | T pp. 12, 16, 20.                                             |
 | `photos`                   | Cliente e appuntamento se pertinente, categoria prima/dopo/guarito, oggetto Storage privato, metadati minimi e scopo autorizzato.                                                                                                                                 | T pp. 12, 16.                                                 |
 | `pigments`                 | Anagrafica pigmento del tenant, produttore e identificazione commerciale.                                                                                                                                                                                         | T pp. 12, 16.                                                 |
-| `pigment_lots`             | Pigmento, codice lotto, scadenza, etichetta privata e informazioni di etichetta versionate.                                                                                                                                                                       | T p. 16.                                                      |
+| `pigment_lots`             | Pigmento, codice lotto, scadenza, etichetta privata facoltativa e informazioni di etichetta versionate.                                                                                                                                                                       | T p. 16.                                                      |
 | `treatment_lots`           | Collegamento tra trattamento e lotti usati. Proposta iniziale: il trattamento è l'appuntamento, con FK `appointment_id`; snapshot della documentazione consegnata.                                                                                                | T pp. 12, 16; FK e snapshot: integrazione.                    |
 | `messages`                 | Outbox email: appuntamento, tipo, canale, revisione, pianificazione, stato, tentativi, lease, ID provider, errore tecnico non sensibile.                                                                                                                          | T pp. 14–15 adattato a U: email automatica, WhatsApp manuale. |
 | `intake_links`             | Hash token, tenant, scopo, cliente/appuntamento ove applicabile, scadenza, consumo, revoca. Nessun token in chiaro persistito.                                                                                                                                    | T p. 11; scopo e revoca: integrazione.                        |
@@ -260,3 +260,18 @@ stesso tenant. Entrambe private/RLS, senza grant ordinari. Envelope v2 conserva
 mittente e Reply-To confermato, senza riscrivere v1 storici. Webhook e lookup
 riservati al service role; impostazioni tenant owner-only sotto lock tenant.
 Contratto e limiti in [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
+
+## Etichetta lotto facoltativa — 19 ottobre 2026
+
+Decisione utente: la foto non blocca l’inserimento o l’uso di un lotto.
+`pigment_lots.label_file_id` è nullable; un riferimento presente deve ancora
+appartenere allo stesso studio/pigmento e puntare a un file pronto e verificato.
+Numero lotto e scadenza restano obbligatori. La preparazione registra ID/hash
+entrambi null se la foto non era allegata, senza file o hash inventati. Una
+foto aggiunta in seguito al catalogo non riscrive quella scelta storica.
+Firma e PDF esplicitano l’assenza; una foto storica presente ma mancante o
+corrotta continua a impedire la generazione di un PDF incompleto.
+
+W16.c aggiunge `reminder_invocations` e `reminder_nonces` privati/RLS e una RPC
+service-only per consumo atomico anti-replay. Trasporto pg_net firmato e
+scadenze/retention in [REMINDER_SCHEDULER.md](REMINDER_SCHEDULER.md).

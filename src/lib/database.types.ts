@@ -898,7 +898,7 @@ export type Database = {
           created_at: string;
           expires_on: string;
           id: string;
-          label_file_id: string;
+          label_file_id: string | null;
           label_text: string;
           lot_number: string;
           pigment_id: string;
@@ -911,7 +911,7 @@ export type Database = {
           created_at?: string;
           expires_on: string;
           id?: string;
-          label_file_id: string;
+          label_file_id?: string | null;
           label_text?: string;
           lot_number: string;
           pigment_id: string;
@@ -923,7 +923,7 @@ export type Database = {
           created_at?: string;
           expires_on?: string;
           id?: string;
-          label_file_id?: string;
+          label_file_id?: string | null;
           label_text?: string;
           lot_number?: string;
           pigment_id?: string;
@@ -1494,6 +1494,10 @@ export type Database = {
       };
       complete_photo: { Args: { p_id: string }; Returns: Json };
       completed_report: { Args: { p_year?: number }; Returns: Json };
+      consume_reminder_invocation: {
+        Args: { p_nonce: string; p_stamp: number };
+        Returns: boolean;
+      };
       create_appointment: {
         Args: { p_data: Json; p_key: string };
         Returns: {
@@ -1886,7 +1890,7 @@ export type Database = {
           created_at: string;
           expires_on: string;
           id: string;
-          label_file_id: string;
+          label_file_id: string | null;
           label_text: string;
           lot_number: string;
           pigment_id: string;

@@ -40,3 +40,34 @@ Il documenter ha confrontato DESIGN.md, sidecar, PRODUCT.md, globals, cinque
 componenti clinici e primitive shadcn: nessun cambiamento del sistema, nessuna
 modifica ai due file di design. Deriva preesistente degli snippet focus nel
 sidecar e label mobili da 11 px segnalate, senza ripararle o trasformarle in regole.
+
+## Estensione del 19 ottobre 2026 — foto lotto facoltativa
+
+Richiesta utente: salvare un lotto anche senza foto dell’etichetta. Ordinary
+extension in modalità Operate: il campo dichiara «Foto dell’etichetta
+(facoltativa)» e l’aiuto spiega che si può salvare senza foto, mantenendo formati,
+limite e riservatezza dell’eventuale allegato. In preparazione, il ramo privo di
+foto mostra «Foto dell’etichetta non allegata.» senza comando per aprirla.
+Una correzione locale assegna allo stato assente una riga intera nel contenitore
+flex; non introduce una nuova regola di layout del sistema.
+
+Evidenze finali sintetiche locali, rigenerate dopo la correzione e validate:
+[nuovo lotto 375](../review/optional-lot/new-lot-375.png),
+[820](../review/optional-lot/new-lot-820.png),
+[1280](../review/optional-lot/new-lot-1280.png) e
+[preparazione 375](../review/optional-lot/preparation-375.png).
+Le tre catture di firma sono registrate nel contratto signature.md. Il finish
+reviewer `optional_lot_finish_reviewer` ha dato disposizione `ship` sullo stato
+finale in tutte e cinque le sezioni, senza correzioni materiali richieste.
+Detector eseguito una sola volta: `.cache/logs/optional-lot-detect.json` contiene
+`[]`. Verifica funzionale: 15 E2E clinici/documenti/nuovo lotto superati;
+ulteriori nove test nuovo lotto/runner/worker superati.
+
+L’assenza viene conservata con ID e hash null espliciti; aggiungere una foto al
+catalogo successivamente non modifica lo snapshot già conservato. Gli allegati
+esistenti mantengono le verifiche previste. Documenter: confronto di PRODUCT.md,
+DESIGN.md, sidecar, globals, tre componenti modificati e primitive shadcn;
+palette, font, controlli e regole incumbent confermati. DESIGN.md e design.json
+rimangono invariati. Nessun nuovo raster pubblico: le catture documentano prove
+con dati sintetici locali. Deriva preesistente del focus negli snippet sidecar e
+label mobili da 11 px non riparata né canonizzata, fuori dal perimetro richiesto.

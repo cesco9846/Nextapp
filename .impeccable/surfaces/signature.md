@@ -40,3 +40,34 @@ shadcn. Nessun cambiamento al sistema. Noto Sans appartiene al renderer PDF;
 Bricolage/Instrument Sans restano i font dell’app. Varianti compatte preesistenti
 non canonizzate come default touch. Nessun nuovo raster pubblico: firma e label
 sono dati utente sintetici nelle prove, non asset decorativi.
+
+## Estensione del 19 ottobre 2026 — lotto senza foto
+
+Richiesta utente: la foto dell’etichetta del lotto è facoltativa. Ordinary
+extension in modalità Operate, limitata nel client di firma al ramo senza foto:
+«Foto dell’etichetta non allegata.» compare dopo i dati del lotto, senza pulsante
+di apertura. Font Bricolage/Instrument Sans, palette Glow, colonna di lettura e
+componenti originali shadcn restano quelli del contratto incumbent.
+
+Evidenze finali sintetiche locali, rigenerate e validate:
+[firma 375](../review/optional-lot/signature-375.png),
+[820](../review/optional-lot/signature-820.png) e
+[1280](../review/optional-lot/signature-1280.png).
+Completano le sette catture finali nuovo lotto 375/820/1280 e preparazione 375,
+elencate nel contratto clinical.md. Il finish reviewer
+`optional_lot_finish_reviewer` ha dato disposizione `ship` sullo stato finale in
+tutte e cinque le sezioni, senza correzioni materiali richieste. Detector una
+sola volta, zero finding (`.cache/logs/optional-lot-detect.json`: `[]`).
+
+Il percorso E2E verifica creazione, modifica, selezione, firma e PDF privato di un
+lotto senza foto: 15 E2E clinici/documenti/nuovo lotto superati, più nove test
+nuovo lotto/runner/worker. Lo snapshot conserva ID/hash null espliciti e non
+cambia se una foto viene aggiunta al catalogo in seguito. Il PDF raggiunge lo
+stato pronto e riporta l’assenza della foto; le vecchie immagini conservano la
+validazione. Nessun nuovo raster pubblico o asset decorativo.
+
+Documenter: confronto PRODUCT.md, DESIGN.md, sidecar, globals, componenti
+modificati e primitive shadcn conferma l’estensione del sistema esistente;
+nessuna modifica a DESIGN.md o design.json. Deriva preesistente del focus negli
+snippet sidecar e label mobili da 11 px non riparata né canonizzata, fuori dal
+perimetro richiesto.

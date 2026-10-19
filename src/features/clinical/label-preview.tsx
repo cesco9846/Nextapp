@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-export function LabelPreview({ id }: { id: string }) {
+export function LabelPreview({ id }: { id: string | null }) {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
@@ -32,6 +32,12 @@ export function LabelPreview({ id }: { id: string }) {
       setPending(false);
     }
   }
+  if (!id)
+    return (
+      <p className="basis-full text-sm text-muted-foreground">
+        Foto dell’etichetta non allegata.
+      </p>
+    );
   return (
     <>
       <Button type="button" variant="outline" onClick={() => void show()}>

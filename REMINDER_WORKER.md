@@ -6,7 +6,7 @@ ogni studio conserva il proprio `reminders_enabled=false` iniziale, il comando
 ufficiale richiede `--send` esplicito e `RESEND_API_KEY` prima di acquisire lavori reali.
 Adapter Resend e webhook sono implementati in W16.a; webhook live e inbox
 autorizzata verificati. W16.b collega preferenze e storico alla UI della titolare.
-Runner continuo e canale allarmi restano aperti. Vedi [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
+W16.c collega un runner programmato e un monitor persistente senza notifiche email, come richiesto; canale esterno e gate operativo restano aperti. Vedi [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md).
 
 ## Stato persistente e confine di invio
 
@@ -121,8 +121,7 @@ pubblica: non sostituisce il monitor operativo privato.
    mantenere unknown. Un replay idempotente che potrebbe creare una nuova email
    non è un lookup innocuo dopo annullamento della seduta.
 3. Collegare il motore a un runner continuo autenticato (destinazione prevista:
-   Supabase Edge/pg_cron), con hard timeout, frequenza e limiti verificati. Oggi
-   nessun cron o worker remoto continuo è attivato.
+   Supabase Edge/pg_cron), con hard timeout, frequenza e limiti verificati. W16.c introduce Cron → pg_net → Vercel con invii disattivati; dettagli in REMINDER_SCHEDULER.md.
 4. Eseguire separatamente il monitor ogni minuto e collegare exit 2/indisponibilità
    al canale operativo scelto. L’allarme persistito e il segnale di uscita sono
    implementati; la notifica esterna e il test di reperibilità sono ancora da configurare.
@@ -148,3 +147,11 @@ Il master switch resta OFF: nessun claim/invio. Non abilitarlo prima di webhook,
 inbox autorizzata, scheduler e monitor operativo. Non usare il comando locale
 per spedire. `scripts/test-resend.ts` prova separatamente provider/simulatore senza
 fixture nel DB; non sostituisce il collaudo della catena outbox/webhook remota.
+
+## W16.c — esecuzione programmata
+
+[REMINDER_SCHEDULER.md](REMINDER_SCHEDULER.md) descrive le due route firmate,
+i job indipendenti ogni minuto, i limiti effettivi Vercel e i comandi di
+configurazione, prova, pausa e stato. L’utente ha scelto esplicitamente un
+monitor senza notifiche email per ora. Non attivare il master prima degli
+ulteriori gate operativi; SMTP Auth e runner PDF rimangono separati.

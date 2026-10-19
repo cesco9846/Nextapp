@@ -154,8 +154,7 @@ export function LotEditor({
   } | null>(null);
   async function label() {
     if (!file) {
-      if (entry) return entry.label_file_id;
-      throw new Error("Aggiungi una foto dell’etichetta del lotto.");
+      return entry?.label_file_id ?? null;
     }
     if (
       !["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
@@ -284,9 +283,9 @@ export function LotEditor({
             </div>
             <div className="field">
               <Label htmlFor="lot-label">
-                {entry
+                {entry?.label_file_id
                   ? "Sostituisci etichetta (facoltativo)"
-                  : "Foto dell’etichetta"}
+                  : "Foto dell’etichetta (facoltativa)"}
               </Label>
               <Input
                 id="lot-label"
@@ -297,11 +296,11 @@ export function LotEditor({
                   setFile(e.target.files?.[0] ?? null);
                   upload.current = null;
                 }}
-                required={!entry}
                 className="h-auto min-h-11 bg-white"
               />
               <p className="text-xs text-muted-foreground">
-                JPEG, PNG o WebP, fino a 10 MB. L’immagine rimane privata.
+                Puoi salvare il lotto senza foto. Se la alleghi: JPEG, PNG o
+                WebP, fino a 10 MB. L’immagine rimane privata.
               </p>
             </div>
             <div className="field">

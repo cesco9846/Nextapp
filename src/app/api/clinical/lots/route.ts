@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       p_pigment_id: body.pigment_id,
       p_lot_number: body.lot_number,
       p_expires_on: body.expires_on,
-      p_label_file_id: body.label_file_id,
+      p_label_file_id: body.label_file_id!,
       p_label_text: body.label_text,
       p_active: body.active,
     });

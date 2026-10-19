@@ -1,0 +1,26 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set local search_path=public,extensions;
+select no_plan();
+select ok(not has_function_privilege('anon','app_private.enqueue_reminder_runner(text)','execute'),'anonymous cannot enqueue privileged runner');
+select ok(not has_function_privilege('authenticated','app_private.enqueue_reminder_runner(text)','execute'),'studio users cannot enqueue privileged runner');
+select ok(not has_function_privilege('service_role','app_private.enqueue_reminder_runner(text)','execute'),'even the app service client cannot reconfigure cron');
+select ok(not has_table_privilege('authenticated','app_private.reminder_invocations','select'),'runner records remain private');
+select throws_ok($$select app_private.enqueue_reminder_runner('anything')$$,'P0001','INVALID_RUNNER','fixed runner destinations only');
+select throws_ok($$select app_private.enqueue_reminder_runner('run')$$,'P0001','RUNNER_NOT_CONFIGURED','missing secret cannot queue an HTTP request');
+insert into app_private.reminder_invocations(id,kind) values(-1,'run');
+select is(app_private.enqueue_reminder_runner('run'),null::bigint,'in-flight invocation prevents a second HTTP request');
+select is((select count(*)::int from cron.job where jobname in('glow-reminder-worker','glow-reminder-monitor')),0,'migration never activates scheduled jobs');
+-- Rollback prevents pg_net from starting these synthetic transport requests.
+select vault.create_secret(repeat('a',64),'glow_reminder_runner','Local transaction-only fixture');
+delete from app_private.reminder_invocations where id=-1;
+select app_private.enqueue_reminder_runner('run');
+select ok((select headers->>'Authorization' is null and headers::text not like '%'||repeat('a',64)||'%' from net.http_request_queue where id=(select id from app_private.reminder_invocations where kind='run' and finished_at is null)),'queue never contains the reusable signing key');
+select is((select length(headers->>'X-Glow-Signature') from net.http_request_queue where id=(select id from app_private.reminder_invocations where kind='run' and finished_at is null)),64,'transport uses a per-request HMAC');
+select ok(not has_table_privilege('authenticated','app_private.reminder_nonces','select'),'replay history stays private');
+select ok(not has_function_privilege('authenticated','public.consume_reminder_invocation(uuid,bigint)','execute'),'studio sessions cannot consume signed invocations');
+select is(public.consume_reminder_invocation('f8888888-8888-4888-8888-888888888888',floor(extract(epoch from clock_timestamp()))::bigint),true,'fresh nonce accepted once');
+select is(public.consume_reminder_invocation('f8888888-8888-4888-8888-888888888888',floor(extract(epoch from clock_timestamp()))::bigint),false,'nonce replay rejected');
+select is(public.consume_reminder_invocation(gen_random_uuid(),floor(extract(epoch from clock_timestamp()))::bigint-91),false,'expired invocation rejected');
+select * from finish();
+rollback;

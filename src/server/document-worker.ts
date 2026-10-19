@@ -28,8 +28,12 @@ export async function processDocument(id: string) {
   let reason: "render_failed" | "storage_failed" | "integrity_failed" =
     "render_failed";
   try {
-    const labels: Uint8Array[] = [];
+    const labels: (Uint8Array | null)[] = [];
     for (const lot of job.payload.snapshot.lots) {
+      if (lot.label_file_id === null && lot.label_sha256 === null) {
+        labels.push(null);
+        continue;
+      }
       const file = job.labels.find(
         (f) => f.id === lot.label_file_id && f.sha256 === lot.label_sha256,
       );

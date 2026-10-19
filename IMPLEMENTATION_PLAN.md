@@ -98,7 +98,7 @@ non avviati restano **pianificati**.
 | W13          | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma.                                                          |
 | W14          | Implementato, verificato nel browser  | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota.    |
 | W15          | Motore implementato e verificato      | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione. |
-| W16          | In corso: backend e UI verificati    | Adapter, identità, webhook live, inbox e preferenze/esiti disponibili. Restano runner, monitor esterno e SMTP Auth separato. Invii automatici disattivati. |
+| W16          | In corso: backend e UI verificati    | Adapter, identità, webhook live, inbox e preferenze/esiti disponibili. Runner/monitor W16.c con richieste firmate; restano allarme esterno, gate operativo e SMTP Auth separato. Invii automatici disattivati. |
 | W17, W19–W25 | Pianificato                           | Seguire dipendenze e gate; runner e monitor operativo prima dell’attivazione.                                                                 |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
@@ -182,8 +182,9 @@ API impostazioni e webhook firmati/correlati. L’utente ha ripreso la configura
 glowlabs.it, mittente reminder@glowlabs.it e chiave sending-only verificata tramite
 simulatore ufficiale. Webhook remoto/signing secret configurati, inbox ricevuta e dominio canonico
 glowlabs.it verificato. W16.b aggiunge UI impostazioni/esiti con shadcn e skill
-di stile. Proseguire con runner continuo autenticato, hard timeout e
-monitor operativo con notifica esterna prima dell’attivazione automatica;
+di stile. W16.c aggiunge runner continuo e monitor persistente senza notifiche
+email per scelta utente. Proseguire con monitor esterno e collaudo operativo
+prima dell’attivazione automatica;
 completare il collaudo operativo e configurare Auth SMTP separatamente.
 Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
 [DOCUMENTS.md](DOCUMENTS.md).
@@ -347,3 +348,16 @@ fixture di storico isolate e rimosse a fine test. Lint, typecheck
 e build verificati. Finish review Impeccable `ship` su telefono/tablet/desktop,
 stati vuoto, pieno ed errore. Prossimo: runner/monitor e collaudo operativo W16;
 Auth SMTP separato, poi W17. Master reminder OFF.
+
+## Lotti e W16.c — 19 ottobre 2026
+
+Foto etichetta facoltativa per decisione utente: API/DB/UI, snapshot di
+preparazione, firma e PDF gestiscono l’assenza esplicita senza riscrivere
+lo storico. Foto presenti conservano validazione, privacy e controllo hash.
+Percorso completo creazione/edit/preparazione/firma/download provato.
+
+Runner e monitor separati tramite Supabase Cron/pg_net → Vercel, HMAC con
+finestra90s e nonce atomico anti-replay; chiave solo Vault/server. Nessuna
+notifica email tecnica per scelta utente. Scheduler configurabile e
+collaudabile con master OFF; limiti, pausa e gate in REMINDER_SCHEDULER.md.
+Migrazioni22/23; 434 pgTAP su dieci file e test browser mirati.
