@@ -342,7 +342,8 @@ paginato di 25 messaggi con filtro degli esiti da verificare e scheda cliente;
 accettazione, consegna ed esito incerto distinti, senza reinvio manuale. API
 sessione/RLS con proiezione minima e cursore validato, nessuna migrazione.
 
-Sette E2E mirati passati, inclusi quattro nuovi scenari UI/API; lint, typecheck
+Tredici E2E mirati passati, inclusi quattro nuovi scenari UI/API e sei del worker;
+fixture di storico isolate e rimosse a fine test. Lint, typecheck
 e build verificati. Finish review Impeccable `ship` su telefono/tablet/desktop,
 stati vuoto, pieno ed errore. Prossimo: runner/monitor e collaudo operativo W16;
 Auth SMTP separato, poi W17. Master reminder OFF.

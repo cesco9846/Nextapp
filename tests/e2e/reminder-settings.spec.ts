@@ -5,6 +5,18 @@ import { account, login, origin } from "./helpers";
 import { intakeAdmin } from "./intake-helpers";
 import type { ReminderPage } from "@/features/reminders/types";
 
+const fixtureMessages = new Set<string>();
+test.afterEach(async () => {
+  if (!fixtureMessages.size) return;
+  // Other suites start real local workers: never leave synthetic delivery states behind.
+  const result = await intakeAdmin
+    .from("messages")
+    .delete()
+    .in("id", [...fixtureMessages]);
+  fixtureMessages.clear();
+  expect(result.error).toBeNull();
+});
+
 async function capture(page: Page, state: string, widths = [375, 820, 1280]) {
   const directory = process.env.GLOW_REMINDERS_CAPTURE_DIR;
   if (!directory) return;
@@ -86,6 +98,7 @@ async function fixtures(page: Page, count = 9) {
     )
     .select("id");
   expect(messages.error).toBeNull();
+  for (const row of messages.data!) fixtureMessages.add(row.id);
   return { owner, tenant, ids: messages.data!.map((m) => m.id) };
 }
 

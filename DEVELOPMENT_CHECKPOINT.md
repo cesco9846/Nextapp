@@ -1,7 +1,7 @@
 # Glow — punto di ripresa dello sviluppo
 
 Aggiornato il 19 ottobre 2026: **W16.b — preferenze email e storico dei promemoria**.
-Checkpoint di questo incremento: `checkpoint-reminder-ui-2026-10-19` sul ramo `main`.
+Checkpoint di questo incremento: `checkpoint-reminder-ui-final-2026-10-19` sul ramo `main`.
 Precedente correzione account: `checkpoint-signup-fix-2026-10-16` (`dc947b1`).
 Precedente W16.a: `checkpoint-resend-2026-10-16` (`f86c51c`).
 Precedente W15: `checkpoint-reminders-2026-10-16` (`5790217`).
@@ -155,8 +155,10 @@ richiesta di annullamento in volo visibile, nessun pulsante di reinvio o sblocco
 Salvataggio esplicito, errore recuperabile senza perdere la preferenza compilata,
 controlli offline disabilitati e nessuna scrittura differita.
 
-Verifica locale: lint, typecheck e build; sette E2E mirati passati (quattro nuovi
-UI/API e tre integrazione Resend). Permessi operatrice/altro studio, proiezione
+Verifica locale: lint, typecheck e build; tredici E2E mirati passati (quattro nuovi
+UI/API, sei worker e tre integrazione Resend). Le fixture di storico vengono
+rimosse a fine test per non interferire con i worker delle suite successive.
+Permessi operatrice/altro studio, proiezione
 privata, cursori malformati, pagina con date uguali, salvataggio, offline e
 scheda cliente verificati. Impeccable `ship` sulle sette catture a 375/820/1280px;
 unico advisory del detector: 11px della navigazione mobile preesistente.
