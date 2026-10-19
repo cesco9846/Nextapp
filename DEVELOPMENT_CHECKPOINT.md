@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 19 ottobre 2026: **reminder email attivati su richiesta esplicita dell’utente**.
-Checkpoint operativo: `checkpoint-reminders-live-2026-10-19` sul ramo `main`.
+Aggiornato il 19 ottobre 2026: **retention tecnica attiva, reminder email ancora ON**.
+Checkpoint: `checkpoint-log-retention-2026-10-19` sul ramo `main`.
+Precedente attivazione: `checkpoint-reminders-live-2026-10-19` (`a93c085`).
 Precedente lotti/scheduler: `checkpoint-lots-scheduler-2026-10-19` (`1fcd5f8`).
 Precedente W16.b: `checkpoint-reminder-ui-final-2026-10-19` (`41218df`).
 Precedente correzione account: `checkpoint-signup-fix-2026-10-16` (`dc947b1`).
@@ -12,6 +13,35 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## Spazio e registri tecnici — 19 ottobre
+
+Piano Free dichiarato dall’utente; circa 15 MB su 500 MB per il database, circa
+0,4 MB nelle tabelle di log operativo al momento della verifica. Migrazione
+forward **24** ufficiale applicata e verificata due volte per checksum;
+la prossima migrazione è la 25. Non riscrivere migrazioni applicate.
+
+Job `glow-reminder-retention`, `17 * * * *` UTC, attivato senza disattivare
+worker/monitor o modificare preferenze degli studi. Prima pulizia manuale
+riuscita e configurazione ripetuta senza duplicazioni. `enabled / ok`, zero
+allarmi nella verifica successiva; nessuna email di prova o fixture ufficiale.
+
+Run vuoti riusciti e cron riusciti: 7 giorni; errori eliminabili: 30 giorni.
+Riferimenti agli invii, run aperti/con lavori, ultimi heartbeat/errori,
+outbox, deduplica, webhook, soppressioni, audit e dati clinici preservati.
+Invocazioni 7 giorni, nonce 10 minuti; pg_net mantiene il TTL gestito di 6 ore.
+Pulizia solo dei job Glow attualmente nominati, al massimo 5.000 righe per
+tabella e passaggio. Nessun cambio globale di log o piano Supabase.
+
+CLI scheduler esteso con `--schedule-retention`, `--run-retention`,
+`--pause-retention` (utilizzabili a servizio attivo); `--status` aggiunge
+manutenzione e dimensioni aggregate. **Non usare `--probe`, `--configure` o
+`--schedule` a servizio attivo**: richiedono master OFF. Test: lint, typecheck,
+457 pgTAP/11 file passati, inclusi 23 controlli nuovi su protezione delle
+evidenze, heartbeat dopo sospensione, isolamento cron e arretrato di 5.001 run.
+Dettagli quote/costi e limiti: [REMINDER_LOG_RETENTION.md](REMINDER_LOG_RETENTION.md).
+Alert email e notifiche di spazio non configurati: attendere la casella
+dedicata. La retention del contenuto applicativo è ancora parte di W19.
 
 ## Stato operativo corrente — attivazione del 19 ottobre
 

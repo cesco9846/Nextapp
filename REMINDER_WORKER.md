@@ -126,7 +126,8 @@ pubblica: non sostituisce il monitor operativo privato.
    al canale operativo scelto. L’allarme persistito e il segnale di uscita sono
    implementati; la notifica esterna e il test di reperibilità sono ancora da configurare.
 5. Eseguire inbox reale autorizzata, prova di arresto/restore, limiti provider,
-   rotazione segreti e retention dei run prima del pilota. Nessun segreto in
+   rotazione segreti prima del pilota. Retention tecnica implementata nella
+   migrazione 24: [REMINDER_LOG_RETENTION.md](REMINDER_LOG_RETENTION.md). Nessun segreto in
    argomenti, Git o log; nessun endpoint pubblico di dispatch.
 
 Se degradato: verificare prima il codice/allarme, poi il provider attraverso

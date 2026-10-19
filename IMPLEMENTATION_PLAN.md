@@ -371,3 +371,15 @@ enabled/ok. Preferenze dei singoli studi preservate, nessun messaggio di prova
 o recupero retroattivo. La casella per gli alert verrà creata dall’utente;
 nel frattempo solo allarmi persistiti. Le precedenti annotazioni OFF sono
 lo storico dei checkpoint, non lo stato corrente. Nessuna modifica allo schema.
+
+## Conservazione dei registri tecnici — 19 ottobre 2026
+
+Richiesta utente di limitare spazio e costi sul piano Supabase Free. Misurati
+circa 15 MB su 500 MB, con circa 0,4 MB di registri operativi. Migrazione 24:
+manutenzione privata oraria, run vuoti e cron riusciti per 7 giorni, errori
+eliminabili per 30. Heartbeat, invii, deduplica, audit e dati clinici protetti;
+nessuna variazione al piano o agli invii attivi. Attivazione ripetibile e prima
+pulizia ufficiale verificate, salute enabled/ok. Lint, typecheck e 457 pgTAP
+passati. [Politica, quote e operazioni](REMINDER_LOG_RETENTION.md).
+Notifiche email tecniche ancora in attesa della casella dedicata; retention
+dei dati applicativi in W19, collaudo operativo W16 e successivo W17 restano.

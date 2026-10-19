@@ -68,7 +68,7 @@ Per scelta esplicita dell’utente, questo incremento **non invia notifiche emai
 tecniche**. Gli allarmi sono consultabili tramite CLI, API riservata e registri
 operativi. Non è presente un monitor esterno indipendente da Supabase/Vercel:
 un guasto a entrambi non può notificarsi da solo. Canale esterno, prova di
-reperibilità/restore, retention dei run cron e collaudo operativo con consegne
+reperibilità/restore e collaudo operativo con consegne
 autorizzate restano verifiche aperte per il pilota. Il 19 ottobre 2026 alle
 09:55 Europe/Rome il master è stato attivato su richiesta esplicita
 dell’utente, che creerà in seguito una casella per gli alert. Le preferenze
@@ -76,6 +76,10 @@ degli studi restano separate. Usare `--status` a servizio attivo: `--probe`,
 `--configure` e `--schedule` richiedono intenzionalmente il master OFF e non
 devono provocare una disattivazione per eseguire nuovamente le prove.
 SMTP Auth, runner PDF e pulizia file sono lavori separati.
+
+La conservazione dei registri tecnici è ora gestita dalla migrazione 24 e dal
+job orario `glow-reminder-retention`, senza sospendere gli invii. Politica,
+limiti Free, comandi e dati preservati in [REMINDER_LOG_RETENTION.md](REMINDER_LOG_RETENTION.md).
 
 Fonti: [Supabase Cron](https://supabase.com/docs/guides/cron),
 [pg_net](https://supabase.com/docs/guides/database/extensions/pg_net),

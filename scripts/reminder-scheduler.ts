@@ -4,7 +4,16 @@ import { randomBytes, randomUUID, createHmac } from "node:crypto";
 class SchedulerError extends Error {}
 const project = "mexokvvvxdyekauupwvt";
 const args = process.argv.slice(2);
-const modes = ["--configure", "--schedule", "--pause", "--probe", "--status"];
+const modes = [
+  "--configure",
+  "--schedule",
+  "--pause",
+  "--probe",
+  "--status",
+  "--schedule-retention",
+  "--run-retention",
+  "--pause-retention",
+];
 if (
   args.length !== 3 ||
   args[0] !== "--project-ref" ||
@@ -12,7 +21,7 @@ if (
   !modes.includes(args[2])
 )
   throw new SchedulerError(
-    "Use --project-ref mexokvvvxdyekauupwvt --configure|--schedule|--pause|--probe|--status",
+    "Use --project-ref mexokvvvxdyekauupwvt --configure|--schedule|--pause|--probe|--status|--schedule-retention|--run-retention|--pause-retention",
   );
 const mode = args[2];
 const pat = process.env.Nextapp_token_access;
@@ -170,15 +179,45 @@ async function main() {
         emailSent: false,
       }),
     );
+  } else if (mode === "--schedule-retention") {
+    await sql(
+      "select cron.schedule('glow-reminder-retention','17 * * * *',$job$select app_private.prune_reminder_logs();$job$);",
+    );
+    console.log(
+      JSON.stringify({
+        retentionScheduled: true,
+        cadence: "hourly",
+        deliveryEnabled: config[0]?.enabled,
+      }),
+    );
+  } else if (mode === "--run-retention") {
+    console.log(
+      JSON.stringify(
+        await sql("select app_private.prune_reminder_logs() as retention;"),
+      ),
+    );
+  } else if (mode === "--pause-retention") {
+    await sql(
+      "select cron.unschedule(jobid) from cron.job where jobname='glow-reminder-retention';",
+    );
+    console.log(
+      JSON.stringify({
+        retentionScheduled: false,
+        deliveryEnabled: config[0]?.enabled,
+      }),
+    );
   } else {
     const jobs = await sql(
-      "select jobname,schedule,active from cron.job where jobname in('glow-reminder-worker','glow-reminder-monitor') order by jobname;",
+      "select jobname,schedule,active from cron.job where jobname in('glow-reminder-worker','glow-reminder-monitor','glow-reminder-retention') order by jobname;",
     );
     const requests = await sql(
       "select distinct on(i.kind) i.kind,i.queued_at,i.finished_at,coalesce(i.status_code,r.status_code) as status_code from app_private.reminder_invocations i left join net._http_response r on r.id=i.id order by i.kind,i.queued_at desc;",
     );
     const runs = await sql(
-      "select distinct on(j.jobname) j.jobname,d.status,d.start_time,d.end_time from cron.job_run_details d join cron.job j using(jobid) where j.jobname in('glow-reminder-worker','glow-reminder-monitor') order by j.jobname,d.start_time desc;",
+      "select distinct on(j.jobname) j.jobname,d.status,d.start_time,d.end_time from cron.job_run_details d join cron.job j using(jobid) where j.jobname in('glow-reminder-worker','glow-reminder-monitor','glow-reminder-retention') order by j.jobname,d.start_time desc;",
+    );
+    const storage = await sql(
+      "select pg_database_size(current_database()) as database_bytes, (select coalesce(sum(pg_total_relation_size(c.oid)),0) from pg_class c join pg_namespace n on n.oid=c.relnamespace where c.relkind='r' and ((n.nspname='app_private' and c.relname in('reminder_runs','reminder_invocations','reminder_nonces','reminder_alerts')) or (n.nspname='cron' and c.relname='job_run_details') or (n.nspname='net' and c.relname in('_http_response','http_request_queue')))) as operational_log_bytes;",
     );
     console.log(
       JSON.stringify({
@@ -186,6 +225,7 @@ async function main() {
         jobs,
         requests,
         runs,
+        storage,
         emailAlerts: false,
       }),
     );
