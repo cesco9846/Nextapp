@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 19 ottobre 2026: **lotti senza foto obbligatoria e W16.c — scheduler/monitor**.
-Checkpoint di questo incremento: `checkpoint-lots-scheduler-2026-10-19` sul ramo `main`.
+Aggiornato il 19 ottobre 2026: **reminder email attivati su richiesta esplicita dell’utente**.
+Checkpoint operativo: `checkpoint-reminders-live-2026-10-19` sul ramo `main`.
+Precedente lotti/scheduler: `checkpoint-lots-scheduler-2026-10-19` (`1fcd5f8`).
 Precedente W16.b: `checkpoint-reminder-ui-final-2026-10-19` (`41218df`).
 Precedente correzione account: `checkpoint-signup-fix-2026-10-16` (`dc947b1`).
 Precedente W16.a: `checkpoint-resend-2026-10-16` (`f86c51c`).
@@ -11,6 +12,22 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## Stato operativo corrente — attivazione del 19 ottobre
+
+L’utente ha chiesto esplicitamente «attiva i reminder», rimandando la casella
+per gli alert. Interruttore generale ufficiale **ON** dal 19 ottobre 2026,
+09:55 Europe/Rome (07:55 UTC), provider `resend-v1`. I due job ogni minuto
+rimangono attivi. Il worker ha completato un’esecuzione reale e la salute è
+`enabled / ok`. Non è stata inviata un’email di prova né creata una fixture.
+
+Le preferenze dei singoli studi non vengono modificate dall’attivazione: deve
+essere abilitata anche la preferenza dello studio. Nessun recupero retroattivo
+dei suoi appuntamenti. Gli alert sono persistiti senza notifiche email;
+attendere l’indirizzo dedicato dall’utente prima di configurarle.
+Le indicazioni OFF nelle sezioni storiche sotto descrivono le precedenti
+consegne, non lo stato attuale. Non disattivare il servizio per ripetere prove
+da disabilitato. SMTP Auth e ulteriori verifiche pilota restano separati.
 
 ## Scelte confermate
 

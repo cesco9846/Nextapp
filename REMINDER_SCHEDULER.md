@@ -62,14 +62,19 @@ Schedule crea/aggiorna soltanto i due job nominati. Pause li rimuove senza tocca
 altri job o dichiarare richiamata una richiesta in volo. Per fermare gli invii
 anche nelle richieste successive, l’operatore deve disattivare il master W15.
 
-## Limiti e prossimo gate
+## Stato corrente e verifiche residue
 
 Per scelta esplicita dell’utente, questo incremento **non invia notifiche email
 tecniche**. Gli allarmi sono consultabili tramite CLI, API riservata e registri
 operativi. Non è presente un monitor esterno indipendente da Supabase/Vercel:
 un guasto a entrambi non può notificarsi da solo. Canale esterno, prova di
 reperibilità/restore, retention dei run cron e collaudo operativo con consegne
-autorizzate restano prima dell’abilitazione reale. Il master resta OFF.
+autorizzate restano verifiche aperte per il pilota. Il 19 ottobre 2026 alle
+09:55 Europe/Rome il master è stato attivato su richiesta esplicita
+dell’utente, che creerà in seguito una casella per gli alert. Le preferenze
+degli studi restano separate. Usare `--status` a servizio attivo: `--probe`,
+`--configure` e `--schedule` richiedono intenzionalmente il master OFF e non
+devono provocare una disattivazione per eseguire nuovamente le prove.
 SMTP Auth, runner PDF e pulizia file sono lavori separati.
 
 Fonti: [Supabase Cron](https://supabase.com/docs/guides/cron),

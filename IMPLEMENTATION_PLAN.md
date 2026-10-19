@@ -183,8 +183,9 @@ glowlabs.it, mittente reminder@glowlabs.it e chiave sending-only verificata tram
 simulatore ufficiale. Webhook remoto/signing secret configurati, inbox ricevuta e dominio canonico
 glowlabs.it verificato. W16.b aggiunge UI impostazioni/esiti con shadcn e skill
 di stile. W16.c aggiunge runner continuo e monitor persistente senza notifiche
-email per scelta utente. Proseguire con monitor esterno e collaudo operativo
-prima dell’attivazione automatica;
+email per scelta utente. L’utente ha autorizzato l’attivazione il 19 ottobre:
+master ON, preferenze dei singoli studi separate. Monitor esterno e collaudo
+operativo restano verifiche aperte per il pilota;
 completare il collaudo operativo e configurare Auth SMTP separatamente.
 Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
 [DOCUMENTS.md](DOCUMENTS.md).
@@ -361,3 +362,12 @@ finestra90s e nonce atomico anti-replay; chiave solo Vault/server. Nessuna
 notifica email tecnica per scelta utente. Scheduler configurabile e
 collaudabile con master OFF; limiti, pausa e gate in REMINDER_SCHEDULER.md.
 Migrazioni22/23; 434 pgTAP su dieci file e test browser mirati.
+
+## Attivazione operativa — 19 ottobre 2026
+
+Interruttore generale reminder abilitato alle 09:55 Europe/Rome su richiesta
+esplicita dell’utente. Scheduler/monitor attivi, worker completato, salute
+enabled/ok. Preferenze dei singoli studi preservate, nessun messaggio di prova
+o recupero retroattivo. La casella per gli alert verrà creata dall’utente;
+nel frattempo solo allarmi persistiti. Le precedenti annotazioni OFF sono
+lo storico dei checkpoint, non lo stato corrente. Nessuna modifica allo schema.

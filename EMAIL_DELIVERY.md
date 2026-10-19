@@ -125,8 +125,10 @@ su una riga reale è provata localmente; collaudo operativo completo prima dell�
 
 Runner e monitor W16.c: vedere REMINDER_SCHEDULER.md. Per scelta utente non
 inviano notifiche email tecniche. Ancora necessari: canale esterno indipendente
-e prova operativa di arresto/restore. Gli interruttori ufficiali restano
-OFF in questa consegna; la chiave da sola non attiva l’invio automatico.
+e prova operativa di arresto/restore per il pilota. Il 19 ottobre 2026
+l’utente ha autorizzato l’attivazione: interruttore generale ON, preferenza
+di ogni studio ancora necessaria. Nessuna notifica email tecnica finché
+l’utente non fornisce la casella dedicata.
 Auth SMTP (conferma/recupero password) va collaudato separatamente.
 
 Fonti ufficiali:
