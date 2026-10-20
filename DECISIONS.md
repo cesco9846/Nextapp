@@ -134,3 +134,19 @@ switch ufficiale disabled; adapter reale e Edge/cron continui saranno collegati
 con W16 e collaudati prima del pilota. Allarmi persistiti e segnale operativo
 CLI implementati, notifica esterna ancora da configurare. Nessuna nuova UI: il
 sistema grafico e le skill di stile rimangono invariati.
+
+## Scelta W17 — Link personale e regola di disdetta (20 ottobre 2026)
+
+L’utente ha richiesto conferma/disdetta tramite link personale. Si estende
+l’identità Glow esistente, senza account cliente e senza accesso al dossier.
+Il link gestisce lo stesso appuntamento: la conferma consente una successiva
+disdetta entro il termine; la disdetta è terminale. Ricevute e revisioni
+impediscono doppie azioni o modifiche di un appuntamento spostato.
+
+Default tecnico di anticipo **0 ore**, fino all’inizio, configurabile dalla
+titolare tra 0 e 168 ore e dichiarato in pagina. Non è una politica commerciale
+fornita dall’utente. Una modifica vale anche sui link già emessi ed è ricontrollata
+sul server. I token manuali nuovi revocano quelli manuali precedenti; i link
+congelati nelle email restano indipendenti e revocabili esplicitamente.
+Nessuna notifica push o email tecnica aggiunta: rispettivamente W22 e casella
+dedicata ancora da fornire. Dettagli in APPOINTMENT_RESPONSES.md.

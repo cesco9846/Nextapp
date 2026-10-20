@@ -275,3 +275,20 @@ corrotta continua a impedire la generazione di un PDF incompleto.
 W16.c aggiunge `reminder_invocations` e `reminder_nonces` privati/RLS e una RPC
 service-only per consumo atomico anti-replay. Trasporto pg_net firmato e
 scadenze/retention in [REMINDER_SCHEDULER.md](REMINDER_SCHEDULER.md).
+
+## W17 — risposte all’appuntamento, 20 ottobre 2026
+
+Migrazione 25: `app_private.appointment_action_links` conserva hash del token,
+studio/appuntamento, versione di emissione, revisione di agenda, emittente o
+messaggio sorgente, scadenza e revoca. `app_private.appointment_responses`
+registra ricevute per conferma/disdetta, con unicità per link/azione e
+link/UUID richiesta. `app_private.appointment_response_limits` contiene solo
+bucket tecnici, eliminati dopo un’ora. Tutte private/RLS, senza grant ordinari.
+
+`tenants.cancellation_notice_hours` ha default 0 e vincolo 0–168; modifica solo
+owner tramite RPC auditata. Le API professionali restituiscono metadati ed
+eventi autorizzati, mai hash/token già emessi. La conferma non cambia la
+revisione di agenda; la disdetta la incrementa e sincronizza l’outbox nello
+stesso commit. L’email congela il proprio token nel testo privato al primo
+dispatch; nessuna riscrittura di snapshot storici. Contratto e limiti in
+[APPOINTMENT_RESPONSES.md](APPOINTMENT_RESPONSES.md).

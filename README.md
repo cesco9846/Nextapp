@@ -32,11 +32,15 @@ Monarch ufficiale. Database e autenticazione: Supabase.
   privato e scelte firmate distinte per documentazione e uso dimostrativo.
 
 - Worker outbox con lease, fencing, retry/riconciliazione, heartbeat e allarmi;
-  invii reali disattivati e trasporto di prova solo locale.
+  Resend attivo, webhook firmati e scheduler continuo. Monitor e pulizia dei
+  registri tecnici attivi; notifiche email tecniche in attesa della casella dedicata.
+- Link personale per confermare/disdire: incluso nei nuovi reminder o creato
+  e revocato dall’agenda, con regole di disdetta configurabili e ricevute.
 
-Sono ancora da realizzare invio email reale e scheduler continuo, conferma/disdetta tramite link,
-export/retention, ICS e funzioni commerciali. I reminder email restano disattivati;
-aprire WhatsApp non registra un invio. Non è ancora il pilota R1.
+Restano export/retention dei contenuti, completamento dei runner PDF/pulizia file,
+collaudo operativo, ICS e funzioni commerciali. I reminder richiedono anche la
+preferenza attiva nello studio; aprire WhatsApp non registra un invio.
+Non è ancora il pilota R1. Contratto W17: [APPOINTMENT_RESPONSES.md](APPOINTMENT_RESPONSES.md).
 
 Il punto esatto da cui riprendere, le verifiche e le attività ancora aperte sono
 in [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md).

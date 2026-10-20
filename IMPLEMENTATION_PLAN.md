@@ -99,7 +99,8 @@ non avviati restano **pianificati**.
 | W14          | Implementato, verificato nel browser  | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota.    |
 | W15          | Motore implementato e verificato      | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione. |
 | W16          | In corso: backend e UI verificati    | Adapter, identità, webhook live, inbox e preferenze/esiti disponibili. Runner/monitor W16.c con richieste firmate; restano allarme esterno, gate operativo e SMTP Auth separato. Invii automatici disattivati. |
-| W17, W19–W25 | Pianificato                           | Seguire dipendenze e gate; runner e monitor operativo prima dell’attivazione.                                                                 |
+| W17          | Implementato, verificato nel browser | Link personale, conferma/disdetta, revoca, regola configurabile e ricevute; contratto APPOINTMENT_RESPONSES.md. |
+| W19–W25      | Pianificato                           | Seguire dipendenze e gate; completare collaudo operativo prima del pilota. |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -177,31 +178,28 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 ## Prossimo incremento
 
-W16.a implementa adapter Resend, template testo fisso, From/Reply-To immutabili,
-API impostazioni e webhook firmati/correlati. L’utente ha ripreso la configurazione:
-glowlabs.it, mittente reminder@glowlabs.it e chiave sending-only verificata tramite
-simulatore ufficiale. Webhook remoto/signing secret configurati, inbox ricevuta e dominio canonico
-glowlabs.it verificato. W16.b aggiunge UI impostazioni/esiti con shadcn e skill
-di stile. W16.c aggiunge runner continuo e monitor persistente senza notifiche
-email per scelta utente. L’utente ha autorizzato l’attivazione il 19 ottobre:
-master ON, preferenze dei singoli studi separate. Monitor esterno e collaudo
-operativo restano verifiche aperte per il pilota;
-completare il collaudo operativo e configurare Auth SMTP separatamente.
+W17 implementa i link personali di conferma/disdetta e le regole configurabili
+dello studio. Il prossimo incremento funzionale è W19: export autorizzato,
+richieste privacy e conservazione dei contenuti. Prima del pilota completare
+anche recupero PDF e pulizia file schedulati, Auth SMTP e collaudo operativo W16.
+Resend, webhook e dominio sono già configurati; reminder ON su richiesta utente,
+monitor persistente e retention tecnica attivi. Le notifiche tecniche attendono
+la casella dedicata, senza bloccare le funzioni già implementate.
 Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [PHOTOS.md](PHOTOS.md); contratto firma/PDF in
 [DOCUMENTS.md](DOCUMENTS.md).
 Contratto W12 in [INTAKE.md](INTAKE.md).
 Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
 [STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
 W05/W07 nei collaudi browser residui e runner continui di file/PDF/reminder
-restano aperti; nessun invio reale finché provider e
-osservabilità non sono verificati. Nessun dato clinico reale prima dei relativi
+restano aperti nei rispettivi collaudi, senza disattivare i reminder operativi.
+Nessun dato clinico reale prima dei relativi
 permessi, flussi e criteri di conservazione.
 
 Per i reminder, [EMAIL_DELIVERY.md](EMAIL_DELIVERY.md) confronta mittente Glow
 con Reply-To dello studio, domini dedicati e collegamenti Gmail/Outlook. Il primo
 è implementato come From Glow e Reply-To Auth confermato della titolare; **Resend
 e glowlabs.it sono confermati**. `noreply` non è un requisito; gli invii automatici
-restano disattivati mentre si completa il collaudo operativo dello scheduler e del monitor.
+sono attivi dal 19 ottobre 2026, con preferenza separata per ciascuno studio.
 
 ## Registro di avanzamento
 
@@ -383,3 +381,14 @@ pulizia ufficiale verificate, salute enabled/ok. Lint, typecheck e 457 pgTAP
 passati. [Politica, quote e operazioni](REMINDER_LOG_RETENTION.md).
 Notifiche email tecniche ancora in attesa della casella dedicata; retention
 dei dati applicativi in W19, collaudo operativo W16 e successivo W17 restano.
+
+## W17 — conferma/disdetta tramite link, 20 ottobre 2026
+
+Pagina personale con riepilogo minimo, conferma e disdetta esplicite, termine
+configurabile, scadenza/revoca/revisione e ricevute idempotenti. Agenda con
+creazione/copia/revoca e storico delle risposte; i nuovi snapshot Resend v2
+includono il link senza riscrivere quelli storici. Migrazione 25 e tipi aggiornati.
+501 pgTAP/12 file e 42 unit passati; 16 E2E pertinenti passati (7 W17 e 9
+regressioni reminder/Resend), comprese concorrenza e verifiche del focus.
+Il prossimo incremento funzionale è W19, con le verifiche operative W16/W20
+ancora aperte per il pilota. Contratto: APPOINTMENT_RESPONSES.md.

@@ -122,6 +122,7 @@ export function Agenda() {
         `/api/appointments?${new URLSearchParams({ start: range!.start, end: range!.end, ...(locationId ? { location: locationId } : {}), ...(operator !== "all" ? { operator } : {}) })}`,
       ),
     enabled: !!range,
+    refetchInterval: 30000,
   });
   const move = useMutation({
     mutationFn: ({

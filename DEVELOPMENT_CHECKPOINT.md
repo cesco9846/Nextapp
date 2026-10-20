@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 19 ottobre 2026: **retention tecnica attiva, reminder email ancora ON**.
-Checkpoint: `checkpoint-log-retention-2026-10-19` sul ramo `main`.
+Aggiornato il 20 ottobre 2026: **W17 conferma/disdetta da link personale**.
+Checkpoint: `checkpoint-appointment-responses-2026-10-20` sul ramo `main`.
+Precedente retention: `checkpoint-log-retention-2026-10-19` (`2459bf9`).
 Precedente attivazione: `checkpoint-reminders-live-2026-10-19` (`a93c085`).
 Precedente lotti/scheduler: `checkpoint-lots-scheduler-2026-10-19` (`1fcd5f8`).
 Precedente W16.b: `checkpoint-reminder-ui-final-2026-10-19` (`41218df`).
@@ -14,12 +15,44 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
 
+## W17 — risposta all’appuntamento
+
+Pagina cliente `/appuntamento#token`, senza account: solo studio, data, orario
+e sede, nessun nome cliente/servizio o dato clinico. Lettura e GET/HEAD non
+cambiano lo stato; conferma esplicita e disdetta con seconda scelta in linea.
+Confermare lascia possibile la disdetta entro il termine. Ricevute idempotenti,
+blocco delle altre azioni dopo esito incerto e retry esatto; nessuna coda offline.
+
+Nuovi snapshot Resend v2 includono il link creato atomicamente al primo
+dispatch. Storico e chiavi idempotenti invariati; retry riusa lo stesso testo.
+Dettaglio agenda: crea/copia/revoca link, WhatsApp manuale e risposte datate;
+refresh agenda ogni 30 secondi. Titolare o operatrice assegnata, senza richiedere
+permesso clinico. Nei promemoria si configura la disdetta con anticipo 0–168 ore;
+default 0 fino all’inizio, modifica valida anche per link già emessi.
+
+Migrazione forward **25**, tre tabelle private/RLS e gateway service-only.
+Token casuali 256 bit/hash-only, salvo il testo necessario dello snapshot
+email privato; frammento rimosso, no-store/no-referrer. Scadenza al più tardi
+all’inizio e dopo massimo 30 giorni; revoca, cambio revisione e sospensione
+dell’emittente manuale verificati sul server. Limiti accesso in bucket di
+un’ora, nessuna crescita da polling a vuoto. Audit e ricevute conservati per W19.
+
+Contratto, API e limiti in [APPOINTMENT_RESPONSES.md](APPOINTMENT_RESPONSES.md).
+Verifiche: 501 pgTAP/12 file, 42 unit e 16 E2E pertinenti passati (7 W17,
+9 reminder/Resend), lint/typecheck e build produzione. Review Impeccable:
+prima una correzione di focus, poi `ship` sulla correzione; 9 catture valide
+e detector una volta senza rilievi. Documenter completato, DESIGN.md e sidecar
+preservati senza modifiche. Nessun nuovo raster pubblico.
+Non modificare le migrazioni ufficiali applicate; dopo W17 la prossima è la 26.
+Nessuna nuova chiave, fixture ufficiale o email di prova per questo incremento.
+Reminder restano **ON**; alert email ancora in attesa della casella dedicata.
+
 ## Spazio e registri tecnici — 19 ottobre
 
 Piano Free dichiarato dall’utente; circa 15 MB su 500 MB per il database, circa
 0,4 MB nelle tabelle di log operativo al momento della verifica. Migrazione
 forward **24** ufficiale applicata e verificata due volte per checksum;
-la prossima migrazione è la 25. Non riscrivere migrazioni applicate.
+W17 aggiunge la 25, descritta sopra. Non riscrivere migrazioni applicate.
 
 Job `glow-reminder-retention`, `17 * * * *` UTC, attivato senza disattivare
 worker/monitor o modificare preferenze degli studi. Prima pulizia manuale
@@ -271,13 +304,13 @@ fixture pulite, come la CI.
 
 ## Prossime attività
 
-1. **W16**: collaudo operativo e monitor esterno prima dell’abilitazione.
+1. **W16**: completare collaudo operativo e monitor esterno prima del pilota.
    Runner/monitor W16.c presenti; nessuna notifica email per scelta utente. Preferenze/esiti
    W16.b disponibili. Webhook/secret/dominio e inbox verificati. Non chiedere
    duplicati di RESEND_API_KEY. Auth SMTP separato. Contratto in EMAIL_DELIVERY.md.
-2. W17: conferma/disdetta sicura. Collegare runner continuo e monitor operativo
-   con notifica esterna, insieme al retry PDF e scheduler pulizia, prima del pilota.
-3. Export/retention/privacy, pulizia schedulata e alert, backup DB+Storage/restore,
+2. W17 implementato; collegare retry PDF continuo e pulizia file schedulata,
+   completare Auth SMTP e notifiche del monitor quando sarà fornita la casella.
+3. W19: export/retention/privacy; poi backup DB+Storage/restore,
    performance, dispositivi fisici, installazione PWA e gate R1.
 4. ICS, billing/fatture e funzioni commerciali del piano nelle rispettive fasi.
 

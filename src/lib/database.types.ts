@@ -1167,6 +1167,7 @@ export type Database = {
       };
       tenants: {
         Row: {
+          cancellation_notice_hours: number;
           created_at: string;
           currency: string;
           id: string;
@@ -1176,6 +1177,7 @@ export type Database = {
         };
         ComputedFields: never;
         Insert: {
+          cancellation_notice_hours?: number;
           created_at?: string;
           currency?: string;
           id?: string;
@@ -1184,6 +1186,7 @@ export type Database = {
           timezone?: string;
         };
         Update: {
+          cancellation_notice_hours?: number;
           created_at?: string;
           currency?: string;
           id?: string;
@@ -1451,6 +1454,10 @@ export type Database = {
         Args: { p_display_name: string; p_token: string };
         Returns: string;
       };
+      appointment_response_preferences: {
+        Args: { p_notice_hours?: number };
+        Returns: Json;
+      };
       archive_photo: {
         Args: { p_id: string; p_version: number };
         Returns: undefined;
@@ -1649,6 +1656,16 @@ export type Database = {
         Returns: undefined;
       };
       lookup_reminder_acceptance: { Args: { p_id: string }; Returns: Json };
+      manage_appointment_action_links: {
+        Args: {
+          p_action?: string;
+          p_appointment_id: string;
+          p_link_id?: string;
+          p_request_id?: string;
+          p_version?: number;
+        };
+        Returns: Json;
+      };
       membership_state: { Args: Record<PropertyKey, never>; Returns: string };
       prepare_client_file: {
         Args: {
@@ -2057,6 +2074,10 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      use_appointment_action_link: {
+        Args: { p_action: string; p_request_id?: string; p_token_hash: string };
+        Returns: Json;
       };
       use_intake_link: {
         Args: {

@@ -48,6 +48,18 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: "/appuntamento",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+      {
+        source: "/api/appointment-response/:path*",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
+      },
+      {
         source: "/compila",
         headers: [
           { key: "Cache-Control", value: "private, no-store" },

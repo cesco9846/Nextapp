@@ -13,6 +13,7 @@ import { api } from "@/lib/api";
 import { useOnline } from "@/lib/connectivity";
 import { formatDate } from "@/lib/dates";
 import { messageStatus } from "./message-status";
+import { ResponsePolicy } from "./response-policy";
 import { ClientDetails } from "@/features/clients/client-details";
 import type {
   ReminderHealth,
@@ -240,6 +241,7 @@ export function ReminderSettings() {
           )
         )}
       </section>
+      <ResponsePolicy />
       <section className="mt-10" aria-labelledby="reminder-history-heading">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="reminder-history-heading" className="text-2xl">

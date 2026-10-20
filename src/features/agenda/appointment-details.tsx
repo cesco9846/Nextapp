@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AppointmentResponsePanel } from "./appointment-response-panel";
 import { api } from "@/lib/api";
 import { formatDate, formatTime, money, whatsappUrl } from "@/lib/dates";
 import { statusLabels, type AppointmentStatus } from "@/lib/contracts";
@@ -157,9 +158,16 @@ export function AppointmentDetails({
               </p>
             )}
             <p className="mt-4 text-xs text-muted-foreground">
-              Promemoria email automatici non attivi.
+              Le preferenze dei promemoria email si gestiscono da Il tuo studio.
             </p>
           </section>
+          {(profile.role === "owner" || profile.id === a.operator_id) && (
+            <AppointmentResponsePanel
+              key={a.id}
+              appointment={a}
+              timezone={tenant.timezone}
+            />
+          )}
           {(profile.role === "owner" || profile.clinical_access) && (
             <section className="border-t pt-6">
               <h3 className="text-lg">Prima del trattamento</h3>
