@@ -21,10 +21,12 @@ Non è ancora il pilota R1.
 Contratto e runbook: [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
 Migrazione forward 026: due heartbeat, cinque tipi di avviso massimo, metadati
 HTTP con retention e claim automatico PDF con budget di cinque tentativi.
-Job previsti: PDF ogni minuto, pulizia staging/scarti ogni dieci, monitor SQL
-ogni cinque. Migrazione 026 applicata sul progetto ufficiale, manutenzione ancora OFF.
-Attivazione dei job e verifica da registrare dopo il deploy READY; Nessun nuovo segreto: riuso della
-firma HMAC già in Vault/Vercel. Il master reminder rimane ON.
+Job attivi: PDF ogni minuto, pulizia staging/scarti ogni dieci, monitor SQL
+ogni cinque. Migrazione 026 ufficiale applicata e checksum verificati due volte.
+Manutenzione ON dopo probe OFF e deploy READY del codice `9cede93`.
+Tutti i tre cron risultano riusciti alle 13:50 UTC del 20 ottobre;
+PDF e pulizia rispondono HTTP 200, health enabled/ok senza arretrati.
+Nessun nuovo segreto: riuso della firma HMAC già in Vault/Vercel. Il master reminder rimane ON.
 
 SMTP Auth ufficiale configurato su Resend con template italiani e limite 20/ora.
 Accesso e recupero inviati una sola volta ciascuno alla casella autorizzata:
@@ -388,3 +390,20 @@ Runbook e gate rimasti: REMINDER_SCHEDULER.md.
 Migrazioni nuove22 (foto facoltativa) e23 (scheduler firmato), nessuna modifica
 a quelle già ufficiali.434 pgTAP/10file verificati su reset locale pulito.
 Nessuna fixture, account o email di prova sul database ufficiale.
+
+## Evidenza del rilascio operativo — 20 ottobre 2026
+
+Codice `9cede9329d0cca85c95fc4569d7bf5ec77edb683`, deployment Vercel
+`dpl_G3HXJ7mNQnDt3XxtQ8s6yktJ2SBC` READY e alias glowlabs.it.
+Tre nuovi cron attivi e verificati: PDF ogni minuto, cleanup ogni dieci, monitor
+ogni cinque. Primo giro schedulato di tutti e tre riuscito alle 13:50 UTC.
+Heartbeat dei worker ok, zero PDF pendenti/da intervenire o pulizie in ritardo.
+Reminder sempre ON, tre cron precedenti attivi, ultime due route HTTP 200.
+Retention estesa eseguita anche ufficialmente; nessun contenuto clinico eliminato.
+Misura alle 13:49 UTC: DB 17.807.027 byte, registri operativi 2.826.240 byte
+(circa 2,7 MiB). Non è una previsione di crescita né una prova di restore.
+
+Checkpoint finale: `checkpoint-operations-2026-10-20`. Ripartire da W18 per
+collaudo su dispositivi fisici e W19 per privacy/export/conservazione.
+Nessuna nuova prova email automatica: le due autorizzate sono già ricevute.
+Le email di allarme attendono ancora la casella tecnica dedicata.

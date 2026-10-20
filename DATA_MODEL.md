@@ -81,7 +81,7 @@ indica dettagli progettuali necessari, non campi dichiarati testualmente nel PDF
 | `anamnesis`                | Cliente, questionario e risposte versionati, consensi pertinenti; accesso ristretto e letture registrate.                                                                                                                                                         | T pp. 12, 16, 20.                                             |
 | `photos`                   | Cliente e appuntamento se pertinente, categoria prima/dopo/guarito, oggetto Storage privato, metadati minimi e scopo autorizzato.                                                                                                                                 | T pp. 12, 16.                                                 |
 | `pigments`                 | Anagrafica pigmento del tenant, produttore e identificazione commerciale.                                                                                                                                                                                         | T pp. 12, 16.                                                 |
-| `pigment_lots`             | Pigmento, codice lotto, scadenza, etichetta privata facoltativa e informazioni di etichetta versionate.                                                                                                                                                                       | T p. 16.                                                      |
+| `pigment_lots`             | Pigmento, codice lotto, scadenza, etichetta privata facoltativa e informazioni di etichetta versionate.                                                                                                                                                           | T p. 16.                                                      |
 | `treatment_lots`           | Collegamento tra trattamento e lotti usati. Proposta iniziale: il trattamento è l'appuntamento, con FK `appointment_id`; snapshot della documentazione consegnata.                                                                                                | T pp. 12, 16; FK e snapshot: integrazione.                    |
 | `messages`                 | Outbox email: appuntamento, tipo, canale, revisione, pianificazione, stato, tentativi, lease, ID provider, errore tecnico non sensibile.                                                                                                                          | T pp. 14–15 adattato a U: email automatica, WhatsApp manuale. |
 | `intake_links`             | Hash token, tenant, scopo, cliente/appuntamento ove applicabile, scadenza, consumo, revoca. Nessun token in chiaro persistito.                                                                                                                                    | T p. 11; scopo e revoca: integrazione.                        |
@@ -292,3 +292,12 @@ revisione di agenda; la disdetta la incrementa e sincronizza l’outbox nello
 stesso commit. L’email congela il proprio token nel testo privato al primo
 dispatch; nessuna riscrittura di snapshot storici. Contratto e limiti in
 [APPOINTMENT_RESPONSES.md](APPOINTMENT_RESPONSES.md).
+
+## Manutenzione privata — migrazione 026
+
+`maintenance_settings`, `maintenance_runs`, `maintenance_invocations` e
+`maintenance_alerts` sono nello schema privato con RLS e senza accesso delle
+sessioni ordinarie. Due heartbeat e cinque tipi di avviso al massimo; i soli
+metadati HTTP hanno retention. Il claim PDF automatico riusa document_jobs e
+non duplica snapshot o firme.
+Contratto, limiti e comandi: [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).

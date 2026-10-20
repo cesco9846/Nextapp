@@ -259,3 +259,10 @@ claim SQL con lease e fencing, ultimo controllo serializzato, snapshot privato
 e chiave stabili, riconciliazione senza retry ciechi, heartbeat e allarmi.
 Modifiche di appuntamenti/recapiti e worker seguono tenant → risorsa; nessun
 lock DB durante richieste al provider. Stato disabled ufficiale, nessun cron live.
+
+## Automazione operativa corrente
+
+Supabase Cron invoca Vercel con HMAC per recupero PDF e cleanup; monitor SQL
+separato. SMTP Auth usa Resend e template italiani. Reminder ON e scheduler
+operativi; le note storiche W15 disabled non descrivono lo stato corrente.
+Contratto, limiti e comandi: [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).

@@ -408,3 +408,9 @@ Ciclo registrazione/conferma verificato localmente. Contratto e comandi:
 Le notifiche tecniche restano intenzionalmente sospese fino alla casella
 dedicata. W18 collaudo fisico, W19 privacy e W20 restore/monitor esterno
 restano separati: non dichiarare concluso il gate del pilota.
+
+Attivazione ufficiale verificata il 20 ottobre alle 13:50 UTC: tre nuovi cron
+riusciti, worker HTTP 200, health enabled/ok senza backlog, reminder ON.
+Migrazione 026 e checksum remoti verificati due volte. Checkpoint operativo
+`checkpoint-operations-2026-10-20`, codice `9cede93`; evidenze in
+DEVELOPMENT_CHECKPOINT.md. Nessuna notifica email tecnica attivata.

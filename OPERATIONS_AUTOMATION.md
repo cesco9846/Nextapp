@@ -2,7 +2,9 @@
 
 ## Job e limiti
 
-Migrazione 026, attivazione separata dal deploy. Tre job Supabase Cron:
+Migrazione 026 ufficiale verificata due volte. Attivi dal 20 ottobre 2026,
+primo giro schedulato verificato alle 13:50 UTC dopo deploy READY e probe OFF.
+Tre job Supabase Cron:
 
 | Job                        | Frequenza      | Lavoro                                                            |
 | -------------------------- | -------------- | ----------------------------------------------------------------- |
