@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 20 ottobre 2026: **W17 conferma/disdetta da link personale**.
-Checkpoint: `checkpoint-appointment-responses-2026-10-20` sul ramo `main`.
+Aggiornato il 20 ottobre 2026: **completamento operativo W17**.
+Checkpoint di questo incremento: `checkpoint-operations-2026-10-20` sul ramo `main`.
+Precedente W17 link: `checkpoint-appointment-responses-2026-10-20` (`22e6ccf`).
 Precedente retention: `checkpoint-log-retention-2026-10-19` (`2459bf9`).
 Precedente attivazione: `checkpoint-reminders-live-2026-10-19` (`a93c085`).
 Precedente lotti/scheduler: `checkpoint-lots-scheduler-2026-10-19` (`1fcd5f8`).
@@ -14,6 +15,35 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## Completamento operativo W17 — stato corrente
+
+Contratto e runbook: [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
+Migrazione forward 026: due heartbeat, cinque tipi di avviso massimo, metadati
+HTTP con retention e claim automatico PDF con budget di cinque tentativi.
+Job previsti: PDF ogni minuto, pulizia staging/scarti ogni dieci, monitor SQL
+ogni cinque. Migrazione 026 applicata sul progetto ufficiale, manutenzione ancora OFF.
+Attivazione dei job e verifica da registrare dopo il deploy READY; Nessun nuovo segreto: riuso della
+firma HMAC già in Vault/Vercel. Il master reminder rimane ON.
+
+SMTP Auth ufficiale configurato su Resend con template italiani e limite 20/ora.
+Accesso e recupero inviati una sola volta ciascuno alla casella autorizzata:
+entrambe ricevute nella posta in arrivo, confermato dall’utente. Il recupero
+ha richiesto un retry dopo il 429 antiabuso, senza duplicare l’accesso.
+Nessuna password modificata, link usato o account ufficiale creato.
+Registrazione/conferma e recupero completi verificati localmente con Mailpit
+e gli stessi template italiani, con controllo degli oggetti email.
+
+Verifiche locali: 539 pgTAP/13 file e 42 unit passati; Auth, Storage e runner
+reminder passati. Il test di crash ha trovato e fatto correggere una
+classificazione errata: errore temporaneo di finalizzazione non è integrità.
+Undici E2E PDF/manutenzione, sette pulizia/manutenzione e due Auth con template
+italiani successivamente passati, incluso recupero automatico
+di oggetto già caricato senza sovrascriverlo né richiedere una nuova firma.
+
+Le notifiche tecniche attendono la casella dedicata. W18 su dispositivi reali,
+W19 privacy/conservazione e W20 backup/restore/monitor esterno restano aperti.
+Le note storiche sotto non prevalgono su questo stato corrente.
 
 ## W17 — risposta all’appuntamento
 
@@ -43,7 +73,7 @@ Verifiche: 501 pgTAP/12 file, 42 unit e 16 E2E pertinenti passati (7 W17,
 prima una correzione di focus, poi `ship` sulla correzione; 9 catture valide
 e detector una volta senza rilievi. Documenter completato, DESIGN.md e sidecar
 preservati senza modifiche. Nessun nuovo raster pubblico.
-Non modificare le migrazioni ufficiali applicate; dopo W17 la prossima è la 26.
+Non modificare le migrazioni ufficiali applicate; dopo il completamento operativo la prossima è la 27.
 Nessuna nuova chiave, fixture ufficiale o email di prova per questo incremento.
 Reminder restano **ON**; alert email ancora in attesa della casella dedicata.
 
@@ -307,15 +337,15 @@ fixture pulite, come la CI.
 1. **W16**: completare collaudo operativo e monitor esterno prima del pilota.
    Runner/monitor W16.c presenti; nessuna notifica email per scelta utente. Preferenze/esiti
    W16.b disponibili. Webhook/secret/dominio e inbox verificati. Non chiedere
-   duplicati di RESEND_API_KEY. Auth SMTP separato. Contratto in EMAIL_DELIVERY.md.
-2. W17 implementato; collegare retry PDF continuo e pulizia file schedulata,
-   completare Auth SMTP e notifiche del monitor quando sarà fornita la casella.
+   duplicati di RESEND_API_KEY. Auth SMTP verificato separatamente. Contratto in EMAIL_DELIVERY.md.
+2. W17 e automazione operativa implementati: PDF/pulizia/monitor e SMTP Auth.
+   Collegare le notifiche del monitor quando sarà fornita la casella dedicata.
 3. W19: export/retention/privacy; poi backup DB+Storage/restore,
    performance, dispositivi fisici, installazione PWA e gate R1.
 4. ICS, billing/fatture e funzioni commerciali del piano nelle rispettive fasi.
 
 Non confondere build/test locali, database migrato, push GitHub e deploy Vercel.
-Non dichiarare completati consegna SMTP, dispositivi fisici, restore o pilota clinico.
+Consegna SMTP verificata; non dichiarare completati dispositivi fisici, restore o pilota clinico.
 
 ## Correzione registrazione — 16 ottobre 2026
 

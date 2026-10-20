@@ -1,4 +1,10 @@
 import { spawn, spawnSync } from "node:child_process";
+import { chmodSync } from "node:fs";
+
+// Kong serves these non-secret templates as an unprivileged user. Cloud
+// checkouts can default to 0600; only these public email assets need 0644.
+for (const name of ["confirmation", "recovery", "magic-link"])
+  chmodSync(`supabase/templates/${name}.html`, 0o644);
 
 // The CLI's status output contains local credentials. Keep it out of logs.
 // BusyBox health probes need a loopback-only proxy correction in this cloud.
@@ -37,6 +43,15 @@ child.on("exit", (code) => {
     );
     console.error(safe);
     process.exitCode = code ?? 1;
+    return;
+  }
+  const authProxy = spawnSync("python3", ["scripts/fix-local-auth-proxy.py"], {
+    stdio: ["ignore", "inherit", "ignore"],
+    timeout: 45000,
+  });
+  if (authProxy.status !== 0) {
+    console.error("Cannot configure local Auth template access.");
+    process.exitCode = 1;
     return;
   }
   fixHealth();

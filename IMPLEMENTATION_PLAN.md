@@ -80,27 +80,27 @@ dopo l'agenda, senza aspettare tutta M5.
 Lo stato corrente è nella tabella seguente e nel registro finale. Gli item
 non avviati restano **pianificati**.
 
-| Item         | Stato corrente                        | Limite residuo                                                                                                                                |
-| ------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| W01          | Verificato localmente                 | Workflow CI definito, run GitHub da verificare dopo push.                                                                                     |
-| W02          | Verificato nell’incremento            | Monarch reale, quattro viste, viewport desktop/telefono e revisione grafica. Dispositivi fisici in W20.                                       |
-| W03          | Verificato nell’incremento            | Reset locale, ledger/checksum/lock e RLS provati; schema base applicato al remoto.                                                            |
-| W04          | In corso                              | Registrazione, conferma e recupero provati con SMTP locale; SMTP e dominio finale da collaudare.                                              |
-| W05          | Implementato, verifiche core superate | Ampliare accettazione su omonime e archivio via UI prima di R1.                                                                               |
-| W06          | Verificato nell’incremento            | Concorrenza, idempotenza, sovrapposizioni, versioni e outbox; worker separato in W15.                                                         |
-| W07          | In corso                              | Agenda/report implementati; drag/resize e stati da ampliare nel collaudo browser. Team migrato e verificato; collaudi fisici in W20.          |
-| W08          | Verificato nel browser                | Link/chat/testo corretti; apertura sulle app di dispositivi fisici prima di R1.                                                               |
-| W09          | Implementato e migrato                | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; migrazioni remote applicate e revisione grafica ship.                          |
-| W18          | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                                  |
-| W10          | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                                |
-| W11          | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                          |
-| W12          | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota.                  |
-| W13          | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma.                                                          |
-| W14          | Implementato, verificato nel browser  | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota.    |
-| W15          | Motore implementato e verificato      | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione. |
-| W16          | In corso: backend e UI verificati    | Adapter, identità, webhook live, inbox e preferenze/esiti disponibili. Runner/monitor W16.c con richieste firmate; restano allarme esterno, gate operativo e SMTP Auth separato. Invii automatici disattivati. |
-| W17          | Implementato, verificato nel browser | Link personale, conferma/disdetta, revoca, regola configurabile e ricevute; contratto APPOINTMENT_RESPONSES.md. |
-| W19–W25      | Pianificato                           | Seguire dipendenze e gate; completare collaudo operativo prima del pilota. |
+| Item    | Stato corrente                        | Limite residuo                                                                                                                                                                                                 |
+| ------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| W01     | Verificato localmente                 | Workflow CI definito, run GitHub da verificare dopo push.                                                                                                                                                      |
+| W02     | Verificato nell’incremento            | Monarch reale, quattro viste, viewport desktop/telefono e revisione grafica. Dispositivi fisici in W20.                                                                                                        |
+| W03     | Verificato nell’incremento            | Reset locale, ledger/checksum/lock e RLS provati; schema base applicato al remoto.                                                                                                                             |
+| W04     | In corso                              | Registrazione, conferma e recupero provati con SMTP locale; SMTP e dominio finale da collaudare.                                                                                                               |
+| W05     | Implementato, verifiche core superate | Ampliare accettazione su omonime e archivio via UI prima di R1.                                                                                                                                                |
+| W06     | Verificato nell’incremento            | Concorrenza, idempotenza, sovrapposizioni, versioni e outbox; worker separato in W15.                                                                                                                          |
+| W07     | In corso                              | Agenda/report implementati; drag/resize e stati da ampliare nel collaudo browser. Team migrato e verificato; collaudi fisici in W20.                                                                           |
+| W08     | Verificato nel browser                | Link/chat/testo corretti; apertura sulle app di dispositivi fisici prima di R1.                                                                                                                                |
+| W09     | Implementato e migrato                | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; migrazioni remote applicate e revisione grafica ship.                                                                                           |
+| W18     | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                                                                                                   |
+| W10     | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                                                                                                 |
+| W11     | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                                                                                           |
+| W12     | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota.                                                                                   |
+| W13     | Implementato e verificato             | Firma, snapshot immutabile, PDF privato, lease e recupero dopo upload senza rifirma.                                                                                                                           |
+| W14     | Implementato, verificato nel browser  | Foto per seduta, acquisizione/compressione, confronto e scelte firmate separate. Collaudo iPhone/Android e testi privacy prima del pilota.                                                                     |
+| W15     | Motore implementato e verificato      | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione.                                                                  |
+| W16     | In corso: backend e UI verificati     | Adapter, identità, webhook live, inbox e preferenze/esiti disponibili. Runner/monitor W16.c con richieste firmate; restano allarme esterno, gate operativo e SMTP Auth separato. Invii automatici disattivati. |
+| W17     | Implementato, verificato nel browser  | Link personale, conferma/disdetta, revoca, regola configurabile e ricevute; contratto APPOINTMENT_RESPONSES.md.                                                                                                |
+| W19–W25 | Pianificato                           | Seguire dipendenze e gate; completare collaudo operativo prima del pilota.                                                                                                                                     |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -180,8 +180,9 @@ target, comportamento su dati esistenti e strategia di recupero sono espliciti.
 
 W17 implementa i link personali di conferma/disdetta e le regole configurabili
 dello studio. Il prossimo incremento funzionale è W19: export autorizzato,
-richieste privacy e conservazione dei contenuti. Prima del pilota completare
-anche recupero PDF e pulizia file schedulati, Auth SMTP e collaudo operativo W16.
+richieste privacy e conservazione dei contenuti. Recupero PDF e pulizia file schedulati e Auth SMTP sono implementati
+nel completamento operativo W17; prima del pilota restano il collaudo operativo
+W16/W20, i dispositivi reali W18 e le politiche contenuti W19.
 Resend, webhook e dominio sono già configurati; reminder ON su richiesta utente,
 monitor persistente e retention tecnica attivi. Le notifiche tecniche attendono
 la casella dedicata, senza bloccare le funzioni già implementate.
@@ -190,8 +191,8 @@ Motore W15 e runbook in [REMINDER_WORKER.md](REMINDER_WORKER.md). Foto W14 in [P
 Contratto W12 in [INTAKE.md](INTAKE.md).
 Seguire [DEVELOPMENT_CHECKPOINT.md](DEVELOPMENT_CHECKPOINT.md) e
 [STORAGE.md](STORAGE.md) per contratti e limiti. W04 sul dominio/SMTP reale,
-W05/W07 nei collaudi browser residui e runner continui di file/PDF/reminder
-restano aperti nei rispettivi collaudi, senza disattivare i reminder operativi.
+W05/W07 nei collaudi browser residui e collaudi operativi di file/PDF/reminder
+restano aperti prima del pilota, senza disattivare i reminder operativi.
 Nessun dato clinico reale prima dei relativi
 permessi, flussi e criteri di conservazione.
 
@@ -392,3 +393,18 @@ includono il link senza riscrivere quelli storici. Migrazione 25 e tipi aggiorna
 regressioni reminder/Resend), comprese concorrenza e verifiche del focus.
 Il prossimo incremento funzionale è W19, con le verifiche operative W16/W20
 ancora aperte per il pilota. Contratto: APPOINTMENT_RESPONSES.md.
+
+## Completamento operativo W17 — 20 ottobre 2026
+
+Recupero PDF continuo (1/minuto, cinque tentativi totali, backoff e fencing),
+pulizia di staging/scarti ogni 10 minuti (10 file/batch), monitor SQL ogni 5
+minuti senza email. Due heartbeat e cinque tipi di allarme al massimo; retention
+cron/HTTP estesa 7/30 giorni, dati clinici/audit preservati. Migrazione 026.
+Auth SMTP Resend con template italiani: accesso e recupero ricevuti nella posta
+in arrivo dalla casella autorizzata, senza modificare password o creare account.
+Ciclo registrazione/conferma verificato localmente. Contratto e comandi:
+[OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
+
+Le notifiche tecniche restano intenzionalmente sospese fino alla casella
+dedicata. W18 collaudo fisico, W19 privacy e W20 restore/monitor esterno
+restano separati: non dichiarare concluso il gate del pilota.

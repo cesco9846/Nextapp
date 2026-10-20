@@ -14,11 +14,15 @@ import { assertDocumentCharacters } from "@/documents/pdf-renderer";
 
 // The privileged client remains local to the document server modules. Ordinary
 // listing, issuance, revocation and read authorization use the user's session.
-export function documentAdmin() {
+export function documentAdmin(signal?: AbortSignal) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const host = new URL(url).hostname;
   const local = ["127.0.0.1", "localhost"].includes(host);
-  if (!local && host !== "mexokvvvxdyekauupwvt.supabase.co")
+  if (
+    !local &&
+    (host !== "mexokvvvxdyekauupwvt.supabase.co" ||
+      new URL(url).protocol !== "https:")
+  )
     throw new ApiError(503, "Archivio documenti non disponibile.");
   const key = local
     ? process.env.TEST_SUPABASE_SERVICE_KEY
@@ -26,6 +30,17 @@ export function documentAdmin() {
   if (!key) throw new ApiError(503, "Archivio documenti non configurato.");
   return createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      fetch: (input, init) =>
+        fetch(input, {
+          ...init,
+          signal: AbortSignal.any([
+            AbortSignal.timeout(10000),
+            ...(signal ? [signal] : []),
+            ...(init?.signal ? [init.signal] : []),
+          ]),
+        }),
+    },
   });
 }
 export const sha256 = (bytes: Uint8Array) =>
@@ -38,9 +53,12 @@ const fileSchema = z.object({
 export async function verifiedDocumentFile(
   bucket: "glow-private" | "glow-documents",
   input: unknown,
+  signal?: AbortSignal,
 ) {
   const file = fileSchema.parse(input);
-  const result = await documentAdmin().storage.from(bucket).download(file.path);
+  const result = await documentAdmin(signal)
+    .storage.from(bucket)
+    .download(file.path);
   if (result.error || !result.data)
     throw new ApiError(
       503,

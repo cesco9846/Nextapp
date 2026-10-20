@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   poweredByHeader: false,
   outputFileTracingIncludes: {
+    "/api/internal/maintenance/documents": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
     "/api/consent/read": [
       "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
     ],

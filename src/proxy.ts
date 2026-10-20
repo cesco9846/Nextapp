@@ -12,7 +12,9 @@ export async function proxy(request: NextRequest) {
     request.nextUrl.pathname === "/api/appointment-response/submit" ||
     request.nextUrl.pathname === "/api/webhooks/resend" ||
     request.nextUrl.pathname === "/api/internal/reminders/run" ||
-    request.nextUrl.pathname === "/api/internal/reminders/monitor"
+    request.nextUrl.pathname === "/api/internal/reminders/monitor" ||
+    request.nextUrl.pathname === "/api/internal/maintenance/documents" ||
+    request.nextUrl.pathname === "/api/internal/maintenance/cleanup"
   )
     return response;
   if (

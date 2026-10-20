@@ -37,8 +37,8 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 - Link personale per confermare/disdire: incluso nei nuovi reminder o creato
   e revocato dall’agenda, con regole di disdetta configurabili e ricevute.
 
-Restano export/retention dei contenuti, completamento dei runner PDF/pulizia file,
-collaudo operativo, ICS e funzioni commerciali. I reminder richiedono anche la
+Restano export/retention dei contenuti, collaudo operativo,
+ICS e funzioni commerciali. I reminder richiedono anche la
 preferenza attiva nello studio; aprire WhatsApp non registra un invio.
 Non è ancora il pilota R1. Contratto W17: [APPOINTMENT_RESPONSES.md](APPOINTMENT_RESPONSES.md).
 
@@ -76,11 +76,11 @@ Nessun segreto va incollato in chat, nei file versionati o nei log.
 
 Prima di usare un dominio distribuito, impostare la sua origine canonica e
 autorizzare i redirect Supabase Auth verso `/auth/conferma` e il recupero password.
-SMTP, consegna email e redirect sul dominio finale richiedono verifica reale.
+SMTP Auth Resend e ricezione reale di accesso/recupero verificati sul dominio finale.
 Sul progetto ufficiale sono già autorizzati i callback di sviluppo verso
 `http://localhost:3000/auth/conferma`, il recupero password e l’accettazione
 degli inviti. Conferma email obbligatoria, password minima dieci caratteri;
-SMTP personalizzato non ancora configurato.
+SMTP personalizzato Resend configurato; dettagli in OPERATIONS_AUTOMATION.md.
 
 ## Database ufficiale
 
@@ -185,3 +185,7 @@ Il flusso cliente implementato è descritto in [INTAKE.md](INTAKE.md).
 
 Worker e monitor dei reminder: [REMINDER_WORKER.md](REMINDER_WORKER.md).
 La configurazione ufficiale nasce disabled; i comandi non attivano email o cron.
+
+Automazione operativa e Auth SMTP: [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
+Recupero PDF, pulizia temporanei e monitor hanno scheduler separati dai reminder.
+Lo stato corrente e i collaudi effettivi prevalgono sulle note storiche in questa pagina.

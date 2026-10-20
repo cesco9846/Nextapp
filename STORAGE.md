@@ -120,9 +120,10 @@ TSX può avviare un figlio senza il flag proxy. Entrambe le credenziali server
 esistenti sono state provate; nessun nuovo segreto è necessario.
 
 Il comando stampa solo conteggi ed esce con errore se rimangono claim falliti.
-Non esiste un endpoint cron pubblico. La pianificazione automatica e l’allarme
-sui ritardi vanno configurati sull’hosting scelto prima del pilota; al momento il
-job è eseguibile manualmente. Non affidarsi a un timer nel server web.
+Il batch manuale resta limitato a cinquanta file, quello automatico a dieci. La pianificazione Supabase Cron ogni dieci
+minuti chiama un endpoint esclusivamente firmato; heartbeat e ritardi sono
+monitorati senza notifiche email. Contratto e comandi di stato/pausa in
+[OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
 
 ## Verifiche e riferimenti
 

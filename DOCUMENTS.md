@@ -83,9 +83,10 @@ finalizzazione interrotta in Supabase locale.
 Se `after()` non parte o il processo termina, la firma e il job restano salvati.
 Da **Documenti firmati → Riprova generazione PDF**, una professionista ancora
 autorizzata può riprendere il lavoro senza rifirma. Il lease attivo impedisce un
-doppio lavoro; un lease scaduto è recuperabile. Non c’è ancora uno scheduler di
-retry continuo: resta da collegare al runner prima del pilota. Il motore W15
-consegnato in REMINDER_WORKER.md riguarda l’outbox dei reminder.
+doppio lavoro; un lease scaduto è recuperabile. Lo scheduler recupera automaticamente un PDF al minuto, entro cinque tentativi
+totali e con backoff; errori d’integrità richiedono intervento. Il retry manuale
+resta disponibile oltre il budget automatico. Contratto operativo e pausa
+indipendente dai reminder in [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
 
 ## Lettura, limiti e prove
 

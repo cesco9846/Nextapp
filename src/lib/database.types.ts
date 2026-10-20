@@ -1485,6 +1485,10 @@ export type Database = {
       cancel_client_file: { Args: { p_id: string }; Returns: undefined };
       claim_document_job: { Args: { p_id: string }; Returns: Json };
       claim_file_cleanup: { Args: { p_limit?: number }; Returns: Json[] };
+      claim_next_document_job: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
       claim_reminder: { Args: { p_run: string }; Returns: Json };
       complete_document_job: {
         Args: {
@@ -1642,6 +1646,16 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      finish_maintenance_run: {
+        Args: {
+          p_failed: number;
+          p_kind: string;
+          p_ok: boolean;
+          p_processed: number;
+          p_run: string;
+        };
+        Returns: boolean;
+      };
       finish_reminder: {
         Args: {
           p_claim: string;
@@ -1656,6 +1670,10 @@ export type Database = {
         Returns: undefined;
       };
       lookup_reminder_acceptance: { Args: { p_id: string }; Returns: Json };
+      maintenance_worker_health: {
+        Args: { p_persist?: boolean };
+        Returns: Json;
+      };
       manage_appointment_action_links: {
         Args: {
           p_action?: string;
@@ -1998,6 +2016,10 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      start_maintenance_run: {
+        Args: { p_kind: string; p_run: string };
+        Returns: string;
       };
       start_reminder_run: {
         Args: { p_id: string; p_provider: string };

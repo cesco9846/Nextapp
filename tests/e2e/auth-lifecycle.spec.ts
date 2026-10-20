@@ -4,6 +4,7 @@ async function localEmailLink(
   request: APIRequestContext,
   email: string,
   excluded: string[] = [],
+  expectedSubject?: string,
 ) {
   let id: string | undefined;
   await expect
@@ -28,7 +29,15 @@ async function localEmailLink(
   const response = await request.get(
     `http://127.0.0.1:54324/api/v1/message/${id}`,
   );
-  const message = (await response.json()) as { HTML: string; Text: string };
+  const message = (await response.json()) as {
+    HTML: string;
+    Text: string;
+    Subject: string;
+  };
+  if (expectedSubject) {
+    expect(message.Subject).toBe(expectedSubject);
+    expect(message.HTML).toContain("Glow");
+  }
   const match = `${message.HTML}\n${message.Text}`
     .replaceAll("&amp;", "&")
     .match(/https?:\/\/[^\s"<>]+\/auth\/v1\/verify\?[^\s"<>]+/);
@@ -55,7 +64,9 @@ test("signup confirmation and password recovery work with real local Auth emails
   await expect(
     page.getByRole("status").filter({ hasText: "Controlla la tua email" }),
   ).toBeVisible();
-  await page.goto(await localEmailLink(request, email));
+  await page.goto(
+    await localEmailLink(request, email, [], "Conferma il tuo account Glow"),
+  );
   await expect(page).toHaveURL(/\/configurazione$/);
   await page.getByLabel("Il tuo nome").fill("Francesca Verdi");
   await page.getByLabel("Nome dello studio").fill("Studio Verdi");
@@ -87,7 +98,14 @@ test("signup confirmation and password recovery work with real local Auth emails
   await expect(
     page.getByRole("status").filter({ hasText: "Se l'indirizzo è associato" }),
   ).toBeVisible();
-  await page.goto(await localEmailLink(request, email, previousIds));
+  await page.goto(
+    await localEmailLink(
+      request,
+      email,
+      previousIds,
+      "Reimposta la password di Glow",
+    ),
+  );
   await expect(page).toHaveURL(/\/nuova-password$/);
   await page
     .getByLabel("Password", { exact: true })

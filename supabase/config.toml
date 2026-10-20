@@ -234,6 +234,18 @@ otp_length = 6
 # Number of seconds before the email OTP expires (defaults to 1 hour).
 otp_expiry = 3600
 
+[auth.email.template.confirmation]
+subject = "Conferma il tuo account Glow"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reimposta la password di Glow"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "Accedi a Glow"
+content_path = "./supabase/templates/magic-link.html"
+
 # Use a production-ready SMTP server
 # [auth.email.smtp]
 # enabled = true

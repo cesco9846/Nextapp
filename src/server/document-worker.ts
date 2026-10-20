@@ -3,7 +3,7 @@ import sharp from "sharp";
 import { z } from "zod";
 import { signedPayloadSchema } from "@/lib/consents";
 import { renderConsentPdf } from "@/documents/pdf-renderer";
-import { checkDb } from "./http";
+import { ApiError, checkDb } from "./http";
 import { documentAdmin, sha256, verifiedDocumentFile } from "./documents";
 const claimSchema = z.object({
   id: z.uuid(),
@@ -24,7 +24,15 @@ export async function processDocument(id: string) {
   const claimed = await admin.rpc("claim_document_job", { p_id: id });
   checkDb(claimed.error);
   if (!claimed.data) return;
-  const job = claimSchema.parse(claimed.data);
+  await processClaimedDocument(claimed.data);
+}
+
+export async function processClaimedDocument(
+  input: unknown,
+  signal?: AbortSignal,
+): Promise<boolean> {
+  const job = claimSchema.parse(input);
+  const admin = documentAdmin(signal);
   let reason: "render_failed" | "storage_failed" | "integrity_failed" =
     "render_failed";
   try {
@@ -37,9 +45,17 @@ export async function processDocument(id: string) {
       const file = job.labels.find(
         (f) => f.id === lot.label_file_id && f.sha256 === lot.label_sha256,
       );
-      if (!file) throw new Error("Historical label missing");
       reason = "integrity_failed";
-      const original = await verifiedDocumentFile("glow-private", file);
+      if (!file) throw new Error("Historical label missing");
+      reason = "storage_failed";
+      let original: Uint8Array;
+      try {
+        original = await verifiedDocumentFile("glow-private", file, signal);
+      } catch (error) {
+        if (error instanceof ApiError && error.code === "DOCUMENT_INTEGRITY")
+          reason = "integrity_failed";
+        throw error;
+      }
       reason = "render_failed";
       labels.push(
         await sharp(original, { limitInputPixels: 20000000 })
@@ -86,24 +102,31 @@ export async function processDocument(id: string) {
       bytes.length !== rendered.bytes.length
     )
       throw new Error("Immutable artifact differs");
+    reason = "storage_failed";
     const done = await admin.rpc("complete_document_job", {
       p_id: job.id,
       p_claim: job.claim,
       p_sha256: rendered.sha256,
       p_size: bytes.length,
     });
+    if (done.error?.code === "23514") reason = "integrity_failed";
     checkDb(done.error);
+    return true;
   } catch {
-    const failed = await admin.rpc("fail_document_job", {
-      p_id: job.id,
-      p_claim: job.claim,
-      p_reason: reason,
-    });
+    const failed = await documentAdmin(AbortSignal.timeout(5000)).rpc(
+      "fail_document_job",
+      {
+        p_id: job.id,
+        p_claim: job.claim,
+        p_reason: reason,
+      },
+    );
     if (failed.error)
       console.error("Document worker acknowledgement unavailable", {
         id: job.id,
       });
     // No payload, signature, tokens or Storage URLs in logs.
     console.error("Document generation deferred", { id: job.id, reason });
+    return false;
   }
 }

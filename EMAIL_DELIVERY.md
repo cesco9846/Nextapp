@@ -129,7 +129,11 @@ e prova operativa di arresto/restore per il pilota. Il 19 ottobre 2026
 l’utente ha autorizzato l’attivazione: interruttore generale ON, preferenza
 di ogni studio ancora necessaria. Nessuna notifica email tecnica finché
 l’utente non fornisce la casella dedicata.
-Auth SMTP (conferma/recupero password) va collaudato separatamente.
+Auth SMTP configurato il 20 ottobre su Resend, stesso mittente, template
+italiani e limite 20/ora. Due prove reali di accesso e recupero ricevute
+nella posta in arrivo, senza usare i link o cambiare password. Il ciclo
+registrazione/conferma resta verificato localmente; nessuna iscrizione sintetica
+ufficiale. Dettagli in [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
 
 Fonti ufficiali:
 [invio](https://resend.com/docs/api-reference/emails/send-email),
