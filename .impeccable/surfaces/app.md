@@ -166,8 +166,8 @@ direttamente `rename-375.png`, `client-allowed-1280.png` e
 `service-blocked-375.png`, verificando `captures.json`: nessun overflow
 riportato. Detector già eseguito una volta, zero rilievi in
 `.cache/logs/entity-design-detect.json`. Superati 640 pgTAP, 54 unit e 27 E2E
-pertinenti, registrati in `.cache/logs/entity-db-final.log`,
-`.cache/logs/entity-unit.log` e `.cache/logs/entity-e2e-release.log`; le prove
+pertinenti, registrati in `.cache/logs/entity-db-verified.log`,
+`.cache/logs/entity-unit.log` e `.cache/logs/entity-e2e-complete.log`; le prove
 coprono concorrenza reale DB/Storage e immutabilità dei PDF. Le catture usano
 contenuti sintetici e non costituiscono prove su dispositivi fisici. Le derive
 preesistenti di `buildPath` non impostato e provenienza storica del seed non
