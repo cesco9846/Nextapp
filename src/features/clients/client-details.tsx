@@ -19,6 +19,7 @@ import type { Client, Location, Row } from "@/lib/types";
 import { useWorkspace } from "@/components/app-shell";
 import { ClientEditor } from "@/components/client-editor";
 import { ClientAssignments } from "./client-assignments";
+import { ProtectedDelete } from "@/components/protected-delete";
 import { EmptyState, ErrorState, LoadingState } from "@/components/states";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -256,6 +257,16 @@ export function ClientDetails({
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
+                    <div className="mt-3">
+                      <ProtectedDelete
+                        kind="clients"
+                        id={client.id}
+                        version={client.version}
+                        name={`${client.first_name} ${client.last_name}`}
+                        disabled={archive.isPending}
+                        onDeleted={onClose}
+                      />
+                    </div>
                   </div>
                 )}
               </div>

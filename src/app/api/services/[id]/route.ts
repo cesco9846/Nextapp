@@ -2,6 +2,8 @@ import { z } from "zod";
 import { serviceSchema } from "@/lib/contracts";
 import { ApiError, checkDb, handleApi, json, readBody } from "@/server/http";
 import { requireWorkspace } from "@/server/session";
+import { deletionInput } from "@/lib/management";
+import { deleteUnused } from "@/server/management";
 
 export async function PATCH(
   request: Request,
@@ -23,5 +25,15 @@ export async function PATCH(
     checkDb(error);
     if (!data) throw new ApiError(404, "Servizio non trovato.");
     return json(data);
+  });
+}
+export async function DELETE(
+  request: Request,
+  context: { params: Promise<{ id: string }> },
+) {
+  return handleApi(async () => {
+    const id = z.uuid().parse((await context.params).id);
+    const body = await readBody(request, deletionInput);
+    return json(await deleteUnused("services", id, body));
   });
 }

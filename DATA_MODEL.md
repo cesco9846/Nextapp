@@ -301,3 +301,24 @@ sessioni ordinarie. Due heartbeat e cinque tipi di avviso al massimo; i soli
 metadati HTTP hanno retention. Il claim PDF automatico riusa document_jobs e
 non duplica snapshot o firme.
 Contratto, limiti e comandi: [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
+
+
+## Gestione sicura — migrazione 028
+
+`tenants.name_version` isola i conflitti sul nome dello studio da altre preferenze;
+`services.version` avanza a ogni modifica. RPC owner-only con lock tenant e
+ricontrollo dell’appartenenza attiva dopo l’attesa. La cancellazione controlla
+la revisione e tutte le dipendenze, senza grant DELETE ordinari. Vincoli FK e
+audit restano obbligatori; non vengono riscritti snapshot o documenti storici.
+
+Eccezione alla conservazione dell’anagrafica: il contatto senza appuntamenti,
+file/dossier o richieste privacy può essere eliminato definitivamente. Le sole
+assegnazioni operative senza storico vengono rimosse con esso. Non equivale
+alla distruzione di dossier clinici prevista nel percorso privacy.
+
+`privacy_exports.client_id` diventa nullable e la FK composta mantiene il tenant
+con `ON DELETE SET NULL (client_id)`. Soltanto export già scaduti/revocati e
+realmente ripuliti consentono la cancellazione del contatto. I metadati tecnici
+senza cliente sono nascosti dalle liste applicative, mantengono il percorso
+Storage per pulizie tardive e seguono la retention ordinaria di trenta giorni.
+Contratto: [SAFE_MANAGEMENT.md](SAFE_MANAGEMENT.md).

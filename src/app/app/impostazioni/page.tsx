@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { InstallApp } from "@/components/install-app";
 import { PrivacySettings } from "@/features/privacy/privacy-settings";
+import { StudioName } from "@/features/studio/studio-name";
 
 export default function SettingsPage() {
   const { tenant, profile, operators } = useWorkspace();
@@ -17,9 +18,12 @@ export default function SettingsPage() {
       </p>
       <section className="mt-8 rounded-xl border bg-white p-6 sm:p-8">
         <h2 className="flex items-center gap-3 text-xl">
-          <Building2 className="size-5 text-primary" />
-          {tenant.name}
+          <Building2 className="size-5 shrink-0 text-primary" />
+          <span className="min-w-0 break-words [overflow-wrap:anywhere]">
+            {tenant.name}
+          </span>
         </h2>
+        {profile.role === "owner" && <StudioName />}
         <dl className="mt-6 grid gap-6 sm:grid-cols-3">
           <div>
             <dt className="text-xs text-muted-foreground">Fuso orario</dt>

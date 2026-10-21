@@ -457,3 +457,18 @@ Nessuna cancellazione automatica degli originali: tempi/basi/testi e procedura
 definitiva rimangono gate privacy prima del pilota. Prossimo incremento W20,
 backup DB+Storage, restore verificato e monitor esterno; collaudo fisico W18
 ancora parzialmente aperto. Checkpoint `checkpoint-privacy-2026-10-21`.
+
+
+## Gestione sicura di studio e catalogo — 21 ottobre 2026
+
+Incremento richiesto durante il collaudo, prima di W20. Nome studio modificabile
+con controllo versione; cancellazione riservata alla titolare per sole anagrafiche
+inutilizzate. Appuntamenti di qualunque stato, modelli clinici, file, dossier e
+richieste privacy proteggono lo storico. Conferma esplicita, ragioni del blocco,
+archiviazione/disattivazione come alternative e nuovo controllo atomico al commit.
+Le copie export scadute/revocate vanno prima ripulite; i riferimenti tecnici
+restano per la pulizia di eventuali upload tardivi, esclusi dalle liste dell’app.
+
+Migrazione forward 028; 47 controlli SQL nuovi e 11 E2E di gestione aggiunti.
+Contratto e limiti: [SAFE_MANAGEMENT.md](SAFE_MANAGEMENT.md). Checkpoint
+`checkpoint-safe-management-2026-10-21`. W20 e gate R1 restano aperti.

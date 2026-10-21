@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 21 ottobre 2026: **W19 — export del dossier e gestione privacy**.
-Checkpoint di questo incremento: `checkpoint-privacy-2026-10-21` sul ramo `main`.
+Aggiornato il 21 ottobre 2026: **nome studio ed eliminazioni protette**.
+Checkpoint di questo incremento: `checkpoint-safe-management-2026-10-21` sul ramo `main`.
+Precedente W19: `checkpoint-privacy-2026-10-21` (`a357a3e`); Impeccable 4.7.0 (`f4ba2cb`).
 Precedente W18: `checkpoint-pwa-2026-10-21` (`9aa3543`), esiti iPhone `4a40f5b`.
 Precedente operativo W17: `checkpoint-operations-2026-10-20` (`bba1859`).
 Precedente W17 link: `checkpoint-appointment-responses-2026-10-20` (`22e6ccf`).
@@ -17,6 +18,44 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## Nome studio ed eliminazioni protette — stato corrente
+
+Contratto: [SAFE_MANAGEMENT.md](SAFE_MANAGEMENT.md). Solo titolare:
+«Il tuo studio» → «Modifica nome studio»; «Clienti» → scheda → «Elimina
+cliente»; «Servizi e sedi» → modifica servizio → «Elimina servizio».
+Il nome ha versione dedicata; snapshot e PDF già firmati restano identici.
+
+Nessuna cancellazione di servizi usati da appuntamenti, inclusi passati e
+annullati, o modelli clinici anche disattivati. Clienti eliminabili solo senza
+appuntamenti, file/dossier o richieste privacy da conservare. Le alternative
+restano archiviazione e disattivazione. Conferma esplicita e `ELIMINA` per la
+cliente; verifica preventiva e controllo ripetuto sotto lock, versione fissata
+all’apertura, idempotenza dopo risposta persa e audit senza nomi/contatti.
+
+Export ancora disponibili/non ripuliti bloccano l’eliminazione. Dopo revoca o
+scadenza e pulizia effettiva, i metadati tecnici perdono il riferimento cliente
+ma restano fino alla retention ordinaria per intercettare upload tardivi;
+non compaiono negli elenchi applicativi. Nessuna nuova coda, file, cron o email.
+La cancellazione di dossier clinici resta una procedura distinta e ancora aperta.
+
+Verifiche locali: 640 pgTAP/15 file, 54 unit e 27 E2E pertinenti (11 gestione,
+7 applicazione e 9 privacy). Coperti isolamento, ruoli, sospensione durante
+attesa reale del lock, associazione dopo preflight, modifiche concorrenti,
+offline, focus sicuro, PDF identico e pulizia di upload tardivo dopo cancellazione.
+Catture sintetiche: 15 stati a 375/820/1280 px, detector una volta senza rilievi.
+Review Impeccable `ship` su tutte le 15 catture, senza correzioni materiali;
+ruolo fresh equivalente al reviewer distribuito in assenza del relativo harness
+specializzato. Sistema grafico preservato. Lint, TypeScript e build produzione
+passati. Migrazione 028 applicata anche al progetto ufficiale: tutti i 28
+checksum verificati, sei cron attivi, reminder e manutenzione enabled/ok.
+Nessun dato dello studio eliminato e nessuna email di prova inviata.
+Lo stato di pubblicazione è verificabile dal tag del checkpoint e dalle
+esecuzioni GitHub/Vercel collegate allo stesso commit.
+
+Prossimo incremento pianificato: W20, backup DB+Storage/ripristino e monitor
+esterno. Rimangono i gate privacy e dispositivi W18; notifiche tecniche email
+in attesa della casella dedicata. Non confondere questo hardening con chiusura R1.
 
 ## W19 — stato corrente
 

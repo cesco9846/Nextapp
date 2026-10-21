@@ -70,7 +70,8 @@ export function PrivacySettings() {
   const online = useOnline();
   const cache = useQueryClient();
   const refresh = () => cache.invalidateQueries({ queryKey: ["privacy"] });
-  const clientName = (id: string) => {
+  const clientName = (id: string | null) => {
+    if (!id) return "Cliente eliminata";
     const client = query.data?.clients.find((c) => c.id === id);
     return client
       ? `${client.first_name} ${client.last_name}`

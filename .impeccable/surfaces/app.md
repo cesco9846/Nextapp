@@ -132,3 +132,43 @@ nessun overflow riportato. Detector eseguito una volta, zero rilievi in
 non costituiscono prove su dispositivi fisici o validazione legale. Nessun
 nuovo raster pubblico da corredare di provenienza. Le derive preesistenti di
 configurazione e provenienza del seed non sono riparate né canonizzate.
+
+### Nome studio ed eliminazioni protette (21 ottobre 2026)
+
+Estensione Operate delle impostazioni, scheda cliente e modifica servizio,
+riservata alla titolare. Il nome studio si modifica inline, con limite di
+2–100 caratteri e controllo versione; documenti firmati e PDF esistenti
+mantengono il nome originale. L’eliminazione apre un dialog con verifica dei
+collegamenti e motivi scritti di blocco: appuntamenti anche passati o annullati,
+modelli clinici per i servizi, dossier/file e dati privacy da conservare per
+le clienti. Le alternative indicate sono archiviare la cliente o disattivare
+il servizio per nuove prenotazioni. Per eliminare una cliente si digita
+`ELIMINA`; la conferma ripete i controlli sul server. Errori e conflitti restano
+visibili nel flusso; offline salvataggio del nome ed eliminazione sono
+disabilitati. Questo flusso non rimuove file Storage e non sostituisce le
+procedure privacy o di distruzione dei dossier descritte in SAFE_MANAGEMENT.md.
+
+Confrontati `src/components/protected-delete.tsx`,
+`src/features/studio/studio-name.tsx`, `src/features/catalog/catalog-editor.tsx`,
+`src/features/clients/client-details.tsx`, `src/app/app/impostazioni/page.tsx`,
+foglio globale e primitivi Button/Input/AlertDialog con PRODUCT.md, DESIGN.md
+e `.impeccable/design.json`: fondo freddo, bianco, giada, rosso distruttivo,
+Bricolage/Instrument Sans e dialog shadcn rimangono quelli del sistema vigente.
+Nessun nuovo token, cambio di direzione o raster pubblico; DESIGN.md e sidecar
+conservati invariati.
+
+Finish review: `ship`, senza correzioni materiali, con apertura di tutte le
+15 catture valide `{rename,client-allowed,client-blocked,service-allowed,
+service-blocked}-{375,820,1280}.png` in `.impeccable/review/management/`.
+Review e documentazione eseguite da ruoli equivalenti freschi in sostituzione
+del harness specializzato non disponibile. Il controllo documentale ha aperto
+direttamente `rename-375.png`, `client-allowed-1280.png` e
+`service-blocked-375.png`, verificando `captures.json`: nessun overflow
+riportato. Detector già eseguito una volta, zero rilievi in
+`.cache/logs/entity-design-detect.json`. Superati 640 pgTAP, 54 unit e 27 E2E
+pertinenti, registrati in `.cache/logs/entity-db-final.log`,
+`.cache/logs/entity-unit.log` e `.cache/logs/entity-e2e-release.log`; le prove
+coprono concorrenza reale DB/Storage e immutabilità dei PDF. Le catture usano
+contenuti sintetici e non costituiscono prove su dispositivi fisici. Le derive
+preesistenti di `buildPath` non impostato e provenienza storica del seed non
+sono riparate né canonizzate.

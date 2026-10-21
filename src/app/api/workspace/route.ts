@@ -1,6 +1,7 @@
 import { bootstrapSchema } from "@/lib/contracts";
 import { checkDb, handleApi, json, readBody } from "@/server/http";
 import { requireSession, requireWorkspace } from "@/server/session";
+import { workspaceNameSchema } from "@/lib/management";
 
 export async function GET() {
   return handleApi(async () => {
@@ -37,5 +38,17 @@ export async function POST(request: Request) {
     });
     checkDb(error);
     return json({ tenant_id: data }, 201);
+  });
+}
+export async function PATCH(request: Request) {
+  return handleApi(async () => {
+    const body = await readBody(request, workspaceNameSchema);
+    const { db } = await requireWorkspace(true);
+    const result = await db.rpc("rename_workspace", {
+      p_name: body.name,
+      p_version: body.version,
+    });
+    checkDb(result.error);
+    return json(result.data);
   });
 }

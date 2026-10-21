@@ -231,3 +231,29 @@ nove catture valide 375/820/1280 di stati vuoto, con dati e informativa;
 detector una volta senza rilievi. Nessuna prova fisica o validazione legale
 attribuita a queste evidenze. Gate R1 ancora aperto per revisione privacy,
 procedura di cancellazione definitiva, dispositivi W18 e ripristino W20.
+
+
+## Gestione sicura — 21 ottobre 2026
+
+640 pgTAP in 15 file (47 nuovi), 54 unit e 27 E2E pertinenti passati:
+11 gestione, 7 applicazione, 9 privacy. Vere sessioni, DB, Storage e PDF locali;
+nessuna eliminazione o fixture nel progetto ufficiale. Cancellazione consentita
+solo per contatti/servizi inutilizzati, blocchi anche per appuntamenti annullati,
+modelli clinici inattivi e export non ancora ripuliti. Verificati versione fissata
+all’apertura, doppio invio, CSRF/ruoli/tenant, sospensione commessa durante attesa
+del lock e associazione creata dopo la verifica preventiva. Nome studio cambiato
+senza alterare snapshot firmato e byte/hash del PDF.
+
+Un export già ripulito resta come metadato tecnico senza cliente: un upload
+Storage realmente arrivato dopo la cancellazione è stato intercettato e rimosso
+dal worker esistente. La lista API esclude questi metadati. Nessuna cancellazione
+a cascata di prove cliniche, nessun nuovo cron o log contenente contatti.
+Catture sintetiche locali dei cinque stati a 375/820/1280 px; detector una volta
+senza rilievi. Queste prove non sostituiscono il collaudo fisico W18 o il restore W20.
+
+
+Review Impeccable `ship` su tutte le 15 catture, senza fix materiali, con ruolo
+fresh equivalente al reviewer distribuito poiché il relativo harness specializzato
+non è disponibile. Lint, TypeScript e build produzione passati. Migrazione 028
+applicata al progetto ufficiale e tutti i 28 checksum verificati; sei cron attivi,
+reminder e manutenzione enabled/ok. Nessun dato dello studio cancellato nei probe.

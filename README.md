@@ -6,6 +6,10 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 
 ## Incremento disponibile
 
+- Nome studio modificabile nelle impostazioni; eliminazione di clienti e servizi
+  inutilizzati, con conferma e blocchi sui dati collegati. Regole e alternative
+  in [SAFE_MANAGEMENT.md](SAFE_MANAGEMENT.md).
+
 - Dati e privacy nelle impostazioni: export privato del dossier, richieste di
   cancellazione, regole di conservazione e informativa con pubblicazione esplicita.
   Contratto, limiti e gate prima del pilota in [PRIVACY_OPERATIONS.md](PRIVACY_OPERATIONS.md).
@@ -40,8 +44,8 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 - Link personale per confermare/disdire: incluso nei nuovi reminder o creato
   e revocato dall’agenda, con regole di disdetta configurabili e ricevute.
 
-Restano export/retention dei contenuti, collaudo operativo,
-ICS e funzioni commerciali. I reminder richiedono anche la
+Restano approvazione delle regole privacy e distruzione dei dossier, backup/restore,
+collaudo operativo, ICS e funzioni commerciali. I reminder richiedono anche la
 preferenza attiva nello studio; aprire WhatsApp non registra un invio.
 Non è ancora il pilota R1. Contratto W17: [APPOINTMENT_RESPONSES.md](APPOINTMENT_RESPONSES.md).
 

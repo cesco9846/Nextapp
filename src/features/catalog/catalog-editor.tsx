@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { ProtectedDelete } from "@/components/protected-delete";
 import {
   Dialog,
   DialogContent,
@@ -200,6 +201,18 @@ export function CatalogEditor({
             </Button>
           </div>
         </form>
+        {services && service && (
+          <div className="border-t pt-3">
+            <ProtectedDelete
+              kind="services"
+              id={service.id}
+              version={service.version}
+              name={service.name}
+              disabled={mutation.isPending}
+              onDeleted={onClose}
+            />
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

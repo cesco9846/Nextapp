@@ -998,7 +998,7 @@ export type Database = {
       };
       privacy_exports: {
         Row: {
-          client_id: string;
+          client_id: string | null;
           created_at: string;
           expires_at: string;
           failure_code: string | null;
@@ -1012,7 +1012,7 @@ export type Database = {
         };
         ComputedFields: never;
         Insert: {
-          client_id: string;
+          client_id?: string | null;
           created_at?: string;
           expires_at?: string;
           failure_code?: string | null;
@@ -1025,7 +1025,7 @@ export type Database = {
           tenant_id: string;
         };
         Update: {
-          client_id?: string;
+          client_id?: string | null;
           created_at?: string;
           expires_at?: string;
           failure_code?: string | null;
@@ -1191,6 +1191,7 @@ export type Database = {
           name: string;
           price_cents: number;
           tenant_id: string;
+          version: number;
         };
         ComputedFields: never;
         Insert: {
@@ -1202,6 +1203,7 @@ export type Database = {
           name: string;
           price_cents?: number;
           tenant_id: string;
+          version?: number;
         };
         Update: {
           active?: boolean;
@@ -1212,6 +1214,7 @@ export type Database = {
           name?: string;
           price_cents?: number;
           tenant_id?: string;
+          version?: number;
         };
         Relationships: [
           {
@@ -1357,6 +1360,7 @@ export type Database = {
           currency: string;
           id: string;
           name: string;
+          name_version: number;
           reminders_enabled: boolean;
           timezone: string;
         };
@@ -1367,6 +1371,7 @@ export type Database = {
           currency?: string;
           id?: string;
           name: string;
+          name_version?: number;
           reminders_enabled?: boolean;
           timezone?: string;
         };
@@ -1376,6 +1381,7 @@ export type Database = {
           currency?: string;
           id?: string;
           name?: string;
+          name_version?: number;
           reminders_enabled?: boolean;
           timezone?: string;
         };
@@ -1780,6 +1786,15 @@ export type Database = {
         Args: { p_clinical_access?: boolean; p_email: string };
         Returns: Json;
       };
+      delete_unused_resource: {
+        Args: {
+          p_confirmation: string;
+          p_id: string;
+          p_kind: string;
+          p_version: number;
+        };
+        Returns: boolean;
+      };
       fail_document_job: {
         Args: { p_claim: string; p_id: string; p_reason: string };
         Returns: undefined;
@@ -1899,6 +1914,10 @@ export type Database = {
       finish_reminder_run: {
         Args: { p_id: string; p_ok: boolean };
         Returns: undefined;
+      };
+      inspect_deletion: {
+        Args: { p_id: string; p_kind: string };
+        Returns: Json;
       };
       lookup_reminder_acceptance: { Args: { p_id: string }; Returns: Json };
       maintenance_worker_health: {
@@ -2085,6 +2104,25 @@ export type Database = {
         Returns: Json;
       };
       reminder_worker_health: { Args: { p_persist?: boolean }; Returns: Json };
+      rename_workspace: {
+        Args: { p_name: string; p_version: number };
+        Returns: {
+          cancellation_notice_hours: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          name: string;
+          name_version: number;
+          reminders_enabled: boolean;
+          timezone: string;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "tenants";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       request_document_retry: { Args: { p_id: string }; Returns: undefined };
       revoke_intake_link: {
         Args: { p_id: string; p_version: number };

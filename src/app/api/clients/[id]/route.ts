@@ -2,6 +2,8 @@ import { z } from "zod";
 import { archiveSchema, clientUpdateSchema } from "@/lib/contracts";
 import { ApiError, checkDb, handleApi, json, readBody } from "@/server/http";
 import { requireWorkspace } from "@/server/session";
+import { deletionInput } from "@/lib/management";
+import { deleteUnused } from "@/server/management";
 
 type Context = { params: Promise<{ id: string }> };
 export async function GET(_request: Request, context: Context) {
@@ -41,5 +43,12 @@ export async function PATCH(request: Request, context: Context) {
     });
     checkDb(error);
     return json(data);
+  });
+}
+export async function DELETE(request: Request, context: Context) {
+  return handleApi(async () => {
+    const id = z.uuid().parse((await context.params).id);
+    const body = await readBody(request, deletionInput);
+    return json(await deleteUnused("clients", id, body));
   });
 }
