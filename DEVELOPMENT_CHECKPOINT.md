@@ -19,8 +19,11 @@ Non è ancora il pilota R1.
 
 ## W18 — stato corrente
 
-PWA installabile e sempre connessa; iPhone/iPad fisici disponibili all’utente,
-collaudo ancora da eseguire. Checklist, riproduzione e distinzione fra prove
+PWA installabile e sempre connessa; iPhone/iPad fisici disponibili all’utente.
+Il 21 ottobre l’utente conferma riuscite su iPhone le tre prove richieste in
+chat: installazione/riapertura Home, tastiera/rotazione e offline senza coda.
+Modello/versione iOS non comunicati; iPad e altri controlli fisici ancora aperti.
+Checklist, riproduzione e distinzione fra prove
 software/fisiche in [PWA_TEST_PLAN.md](PWA_TEST_PLAN.md). Non segnare W18
 completata o R1 chiuso finché mancano gli esiti dei dispositivi. Android fisico
 resta da reperire prima del pilota.
@@ -37,14 +40,16 @@ Verifiche locali: 43 scenari E2E passati, inclusi 24 PWA su Chromium desktop,
 Chromium Android, WebKit iPhone e WebKit iPad; regressioni team, clinica e PDF.
 42 unit, build produzione, lint e TypeScript passati. Review Impeccable ship
 su 9 catture valide; detector eseguito una volta senza rilievi. Nessun raster
-pubblico creato/modificato. CI installa anche WebKit e lancia la matrice; il
-collaudo di tastiera software, installazione Home e sospensione iOS resta fisico.
+pubblico creato/modificato. Entrambe le esecuzioni CI su GitHub del codice
+`9aa3543` sono riuscite; deploy Vercel READY e disponibile su glowlabs.it.
+CI installa anche WebKit e lancia la matrice; la sospensione reale iOS e gli
+altri controlli fisici non ancora confermati restano nella checklist.
 
 Cloud Debian senza root: download Playwright ufficiale più
 `python3 scripts/setup-webkit-cloud.py`, poi test con
 `--config playwright.cloud.config.ts`. Librerie dal repository APT snapshot
 configurato, con firme/checksum, senza modifiche al browser o flag di skip.
-Il helper ha verificato l’avvio reale WebKit 27.2. Riprodurre screenshot con
+L’helper ha verificato l’avvio reale WebKit 27.2. Riprodurre screenshot con
 `GLOW_CLOUD_WEBKIT=1 node --use-env-proxy --import tsx scripts/capture-pwa-ui.ts`
 dopo build E2E. Processi e servizi locali vanno riavviati a ogni nuova task.
 

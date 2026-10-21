@@ -428,8 +428,14 @@ La CI include WebKit; il cloud senza root usa un helper con librerie APT
 verificate nel workspace e un avvio reale del binario Playwright fissato.
 Nessuna migrazione o modifica ai job/email ufficiali.
 
-W18 resta aperta per il collaudo fisico: l’utente ha iPhone/iPad, tabella
-[PWA_TEST_PLAN.md](PWA_TEST_PLAN.md) da compilare dopo la pubblicazione del
-checkpoint `checkpoint-pwa-2026-10-21`. Servono ancora installazione Home,
-tastiera software, sospensione reale, safe area e gesti/fotocamera; Android
-fisico prima del pilota. W19 può procedere come prossimo incremento funzionale.
+W18 resta aperta per il collaudo fisico nella tabella
+[PWA_TEST_PLAN.md](PWA_TEST_PLAN.md). Il checkpoint
+`checkpoint-pwa-2026-10-21` (`9aa3543`) è pubblicato su glowlabs.it, con
+entrambe le esecuzioni CI GitHub riuscite. Restano iPad, sospensione reale,
+safe area e gesti/fotocamera; Android fisico prima del pilota.
+W19 può procedere come prossimo incremento funzionale.
+
+Riscontro fisico del 21 ottobre: l’utente conferma passate su iPhone le tre
+sequenze chieste in chat (installazione/avvio Home, tastiera/rotazione,
+rifiuto offline e nessun invio alla riconnessione). Modello/OS non comunicati;
+iPad e prove avanzate restano aperti nella checklist.

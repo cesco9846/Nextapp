@@ -200,10 +200,16 @@ reali, istruzioni installazione, refresh su ritorno rete/foreground entro
 finestra di cache, revoca accesso, bozza conservata senza invii in coda,
 font touch16 px,44 px e dialoghi scorribili in portrait/landscape, assenza di
 archivi offline e mancato ripristino dello studio dopo logout/Indietro.
-42 unit, lint, TypeScript e build produzione passati.
+42 unit, lint, TypeScript e build produzione passati. Entrambe le esecuzioni CI
+GitHub sul codice `9aa3543` riuscite; deploy Vercel READY su glowlabs.it.
 
 Impeccable ship sulle9catture locali sintetiche; detector una volta, zero
 rilievi. Le catture WebKit e gli eventi di visibilità sintetici non equivalgono
 a dispositivi Apple. Il gate fisico resta aperto per iPhone/iPad indicati
 dall’utente e per Android prima del pilota: [PWA_TEST_PLAN.md](PWA_TEST_PLAN.md).
 Nessun account, email o contenuto clinico sintetico nel progetto ufficiale.
+
+Riscontro fisico riferito dall’utente il 21 ottobre: pass su iPhone per
+installazione/avvio Home, bozza con tastiera/rotazione e rifiuto offline
+senza invio al ritorno rete. Non è un’osservazione diretta dell’agente;
+modello/versione iOS non comunicati. iPad e altri controlli restano aperti.
