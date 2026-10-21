@@ -213,3 +213,21 @@ Riscontro fisico riferito dall’utente il 21 ottobre: pass su iPhone per
 installazione/avvio Home, bozza con tastiera/rotazione e rifiuto offline
 senza invio al ritorno rete. Non è un’osservazione diretta dell’agente;
 modello/versione iOS non comunicati. iPad e altri controlli restano aperti.
+
+## Evidenze W19 — 21 ottobre 2026
+
+593 pgTAP in 14 file e 54 unit. Dodici E2E pertinenti: nove privacy e tre
+manutenzione con vere sessioni e Storage soltanto locale. Verificati export
+con risposte, firma, PDF/foto/etichette e hash; CSV protetti, snapshot e ZIP
+deterministici, retry di upload già riuscito, scadenza/revoca e pulizia che
+preserva gli originali. Operatrice, altro tenant e anonimo respinti; revoca
+clinica dopo l’inizio del download ma prima del lock impedisce la restituzione.
+Liste paginate, conflitti di versione, stati delle richieste e rifiuto offline.
+Bozze dell’informativa private; testo pubblicato esplicitamente, HTML escapato,
+ritiro della pubblicazione e nessuna esposizione delle regole interne.
+
+Lint, TypeScript e build produzione passati. Review Impeccable `ship` sulle
+nove catture valide 375/820/1280 di stati vuoto, con dati e informativa;
+detector una volta senza rilievi. Nessuna prova fisica o validazione legale
+attribuita a queste evidenze. Gate R1 ancora aperto per revisione privacy,
+procedura di cancellazione definitiva, dispositivi W18 e ripristino W20.

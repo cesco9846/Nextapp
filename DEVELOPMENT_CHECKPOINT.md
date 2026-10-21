@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 21 ottobre 2026: **W18 — collaudo PWA nei browser e preparazione dispositivi fisici**.
-Checkpoint di questo incremento: `checkpoint-pwa-2026-10-21` sul ramo `main`.
+Aggiornato il 21 ottobre 2026: **W19 — export del dossier e gestione privacy**.
+Checkpoint di questo incremento: `checkpoint-privacy-2026-10-21` sul ramo `main`.
+Precedente W18: `checkpoint-pwa-2026-10-21` (`9aa3543`), esiti iPhone `4a40f5b`.
 Precedente operativo W17: `checkpoint-operations-2026-10-20` (`bba1859`).
 Precedente W17 link: `checkpoint-appointment-responses-2026-10-20` (`22e6ccf`).
 Precedente retention: `checkpoint-log-retention-2026-10-19` (`2459bf9`).
@@ -16,6 +17,47 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## W19 — stato corrente
+
+Contratto e procedura: [PRIVACY_OPERATIONS.md](PRIVACY_OPERATIONS.md).
+«Il tuo studio» → «Gestisci dati e privacy», soltanto titolare. ZIP completo
+per cliente con JSON, CSV protetti da formule, foto, etichette e PDF disponibili;
+risposte e prove firmate, metadati dei link senza token, esiti messaggi,
+conferme/disdette e audit del dossier. Richiede `clinical_access` anche alla
+titolare, ricontrollato dopo il lock e prima di restituire il download.
+
+Copie private per 24 ore, revocabili, senza URL pubblici/firmati: limite di tre
+copie non revocate per studio, comprese le fallite, due nuove al minuto,
+200 allegati, 50 MiB e 2 MiB di metadati. Nessun archivio parziale in caso
+di superamento. Retry sullo stesso snapshot e ZIP deterministico, massimo
+tre tentativi, senza sovrascritture. Pulizia integrata nel runner esistente
+con budget totale dieci; snapshot revocati svuotati subito, scaduti ripuliti
+anche dalla retention oraria, metadati delle copie eliminate dopo trenta giorni.
+Il monitor include ritardi export in `cleanup_backlog`; nessun nuovo cron/email.
+
+Richieste ricevute/in verifica/conservazione motivata/diniego/ritiro, con
+identità verificata e controllo versione. Registrarle non archivia né cancella.
+Regole di conservazione versionate e informativa inizialmente vuote: niente
+termini inventati. Il testo diventa pubblico in `/informativa/{studio-id}`
+solo con conferma esplicita di revisione/pubblicazione; le bozze restano private.
+La consegna/accettazione del testo e la distruzione definitiva non sono simulate.
+
+Prima del pilota restano l’approvazione di basi, tempi e testi con il consulente
+e la procedura di cancellazione definitiva coerente con prove firmate e backup.
+W20 copre backup DB+Storage/ripristino e monitor esterno. W18 iPad e controlli
+fisici aggiuntivi restano aperti; le tre sequenze iPhone sono passate per
+riscontro utente, senza modello/versione iOS comunicati.
+
+Verifiche: 593 pgTAP/14 file, 54 unit, lint/TypeScript/build produzione;
+12 E2E pertinenti, inclusi nove privacy e tre manutenzione, con sessioni,
+Storage e PDF reali locali e dati sintetici. Verificata anche revoca clinica
+commessa mentre il download attende il lock. Review Impeccable `ship` sulle
+nove catture 375/820/1280, detector una volta senza rilievi. Sistema grafico
+preservato; nessun nuovo raster pubblico. Migrazione forward 027 applicata
+anche al progetto ufficiale e checksum verificato: 27 migrazioni, successiva 028.
+Bucket export privato, sei cron ancora attivi, reminder e manutenzione enabled/ok.
+Nessun account, email o contenuto clinico di prova creato sul progetto ufficiale.
 
 ## W18 — stato corrente
 

@@ -94,3 +94,41 @@ né corretto nell’estensione. Sette E2E mirati superati in
 `.cache/logs/reminders-e2e-final.log`, inclusi accesso titolare, isolamento,
 paginazione e distinzione degli esiti; build presente nello stesso log.
 Nessun nuovo raster pubblico da corredare di provenienza.
+
+### W19: dati e privacy (21 ottobre 2026)
+
+Estensione della superficie App in modalità Operate: «Dati e privacy» si apre
+inline in «Il tuo studio», soltanto per la titolare. La ricerca distingue le
+clienti tramite ID e include un filtro per le archiviate. Export e richieste
+sono presentati in righe paginate, con nome, data, stato scritto e azioni
+esplicite. Il download dell’export completo richiede anche l’abilitazione
+clinica; preparazione, retry, scadenza e revoca non sono sinonimi di consegna.
+La scadenza della copia in Glow non elimina un file già scaricato.
+
+Le richieste separano ricezione, verifica dell’identità, conservazione motivata,
+diniego e ritiro; nessuno stato dichiara una cancellazione non avvenuta.
+Conservazione, motivazioni, contatto e informativa rimangono modificabili come
+bozza. Una conferma esplicita di revisione/pubblicazione rende consultabile il
+solo testo dell’informativa in `/informativa/{studio-id}`. Questa superficie
+Read usa una colonna entro 768 px con marchio, titolo, studio, versione/data,
+testo e contatto, senza navigazione dell’archivio o contenuti del dossier.
+Offline i comandi di scrittura sono disabilitati; le modifiche non vengono
+accodate. La UI non dichiara conformità legale o prova di consegna dei testi.
+
+Confrontati `src/features/privacy/privacy-settings.tsx`,
+`src/app/app/impostazioni/page.tsx`, `src/app/informativa/[id]/page.tsx`,
+`src/app/globals.css` e i componenti Button/Input/Textarea con PRODUCT.md,
+DESIGN.md e `.impeccable/design.json`. Fondo freddo, superfici bianche, giada,
+Bricolage/Instrument Sans, controlli shadcn e disposizione impilata sul telefono
+restano quelli del sistema vigente. Nessun nuovo token o cambiamento di mondo:
+DESIGN.md e sidecar conservati invariati.
+
+Finish review: `ship`, senza correzioni materiali, sulle nove catture locali
+`{empty,history,notice}-{375,820,1280}.png` in `.impeccable/review/privacy/`.
+Il controllo documentale ha aperto direttamente `history-1280.png`,
+`history-375.png` e `notice-375.png`, confrontando anche `captures.json`:
+nessun overflow riportato. Detector eseguito una volta, zero rilievi in
+`.cache/logs/w19-design-detect.json`. I contenuti delle catture sono sintetici;
+non costituiscono prove su dispositivi fisici o validazione legale. Nessun
+nuovo raster pubblico da corredare di provenienza. Le derive preesistenti di
+configurazione e provenienza del seed non sono riparate né canonizzate.

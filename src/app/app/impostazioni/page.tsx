@@ -5,6 +5,7 @@ import { useWorkspace } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { InstallApp } from "@/components/install-app";
+import { PrivacySettings } from "@/features/privacy/privacy-settings";
 
 export default function SettingsPage() {
   const { tenant, profile, operators } = useWorkspace();
@@ -103,6 +104,7 @@ export default function SettingsPage() {
           </Button>
         </section>
       )}
+      {profile.role === "owner" && <PrivacySettings />}
       <InstallApp />
     </div>
   );

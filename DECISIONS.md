@@ -150,3 +150,24 @@ sul server. I token manuali nuovi revocano quelli manuali precedenti; i link
 congelati nelle email restano indipendenti e revocabili esplicitamente.
 Nessuna notifica push o email tecnica aggiunta: rispettivamente W22 e casella
 dedicata ancora da fornire. Dettagli in APPOINTMENT_RESPONSES.md.
+
+## Scelte W19 — export e conservazione (21 ottobre 2026)
+
+Decisioni tecniche dell’incremento, non termini legali approvati: export per
+cliente, accesso solo titolare con abilitazione clinica, ZIP privato per 24 ore,
+tre copie non revocate massimo, incluse fallite; due nuove al minuto, massimo
+200 allegati, 50 MiB e 2 MiB di metadati. I limiti falliscono esplicitamente,
+senza troncamenti. Stesso snapshot e bytes ZIP a ogni retry, tre tentativi.
+Il download richiede sempre sessione e nuova autorizzazione; nessun URL pubblico.
+
+Le regole per contatti/dossier/audit partono senza tempi o basi precompilati.
+I mesi configurati indicano una revisione manuale dall’ultima attività e non
+attivano distruzioni automatiche. Il testo dello studio è pubblicato solo con
+conferma esplicita; salvataggio come bozza ritira la pubblicazione corrente.
+Le versioni precedenti rimangono conservate, senza affermare consegna al cliente.
+
+Il registro gestisce la richiesta, non simula una cancellazione: identità,
+ricezione/verifica, conservazione motivata, diniego e ritiro. La distruzione
+definitiva richiede una procedura approvata compatibile con prove immutabili,
+backup e obblighi applicabili. Questo resta un gate prima dei dati reali.
+Nessun invio alla cliente, alert email o cancellazione degli originali in W19.

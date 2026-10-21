@@ -6,6 +6,9 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 
 ## Incremento disponibile
 
+- Dati e privacy nelle impostazioni: export privato del dossier, richieste di
+  cancellazione, regole di conservazione e informativa con pubblicazione esplicita.
+  Contratto, limiti e gate prima del pilota in [PRIVACY_OPERATIONS.md](PRIVACY_OPERATIONS.md).
 - Accesso, registrazione, recupero password e configurazione iniziale dello studio.
 - Clienti con ricerca/paginazione, scheda, storico, modifica e archivio.
 - Catalogo servizi e sedi; conservazione del prezzo e nome servizio prenotati.

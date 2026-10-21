@@ -996,6 +996,191 @@ export type Database = {
           },
         ];
       };
+      privacy_exports: {
+        Row: {
+          client_id: string;
+          created_at: string;
+          expires_at: string;
+          failure_code: string | null;
+          id: string;
+          requested_by: string;
+          revoked_at: string | null;
+          sha256: string | null;
+          size_bytes: number | null;
+          state: string;
+          tenant_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          client_id: string;
+          created_at?: string;
+          expires_at?: string;
+          failure_code?: string | null;
+          id: string;
+          requested_by: string;
+          revoked_at?: string | null;
+          sha256?: string | null;
+          size_bytes?: number | null;
+          state?: string;
+          tenant_id: string;
+        };
+        Update: {
+          client_id?: string;
+          created_at?: string;
+          expires_at?: string;
+          failure_code?: string | null;
+          id?: string;
+          requested_by?: string;
+          revoked_at?: string | null;
+          sha256?: string | null;
+          size_bytes?: number | null;
+          state?: string;
+          tenant_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "privacy_exports_requested_by_fkey";
+            columns: ["requested_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "privacy_exports_tenant_id_client_id_fkey";
+            columns: ["tenant_id", "client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "privacy_exports_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      privacy_requests: {
+        Row: {
+          client_id: string;
+          created_by: string;
+          id: string;
+          identity_verified: boolean;
+          policy_version: number | null;
+          reason: string | null;
+          received_at: string;
+          resolution_note: string | null;
+          review_due_at: string;
+          state: string;
+          tenant_id: string;
+          updated_at: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          client_id: string;
+          created_by: string;
+          id: string;
+          identity_verified?: boolean;
+          policy_version?: number | null;
+          reason?: string | null;
+          received_at?: string;
+          resolution_note?: string | null;
+          review_due_at?: string;
+          state?: string;
+          tenant_id: string;
+          updated_at?: string;
+          version?: number;
+        };
+        Update: {
+          client_id?: string;
+          created_by?: string;
+          id?: string;
+          identity_verified?: boolean;
+          policy_version?: number | null;
+          reason?: string | null;
+          received_at?: string;
+          resolution_note?: string | null;
+          review_due_at?: string;
+          state?: string;
+          tenant_id?: string;
+          updated_at?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "privacy_requests_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "privacy_requests_tenant_id_client_id_fkey";
+            columns: ["tenant_id", "client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["tenant_id", "id"];
+          },
+          {
+            foreignKeyName: "privacy_requests_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: false;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      privacy_settings: {
+        Row: {
+          contact_email: string;
+          notice: string;
+          reviewed: boolean;
+          rules: NonNullable<Json>;
+          tenant_id: string;
+          updated_at: string;
+          updated_by: string;
+          version: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          contact_email: string;
+          notice: string;
+          reviewed?: boolean;
+          rules: NonNullable<Json>;
+          tenant_id: string;
+          updated_at?: string;
+          updated_by: string;
+          version?: number;
+        };
+        Update: {
+          contact_email?: string;
+          notice?: string;
+          reviewed?: boolean;
+          rules?: NonNullable<Json>;
+          tenant_id?: string;
+          updated_at?: string;
+          updated_by?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "privacy_settings_tenant_id_fkey";
+            columns: ["tenant_id"];
+            isOneToOne: true;
+            referencedRelation: "tenants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "privacy_settings_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       services: {
         Row: {
           active: boolean;
@@ -1454,6 +1639,10 @@ export type Database = {
         Args: { p_display_name: string; p_token: string };
         Returns: string;
       };
+      access_privacy_export: {
+        Args: { p_action: string; p_id: string };
+        Returns: Json;
+      };
       appointment_response_preferences: {
         Args: { p_notice_hours?: number };
         Returns: Json;
@@ -1489,6 +1678,10 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: Json;
       };
+      claim_privacy_export_cleanup: {
+        Args: { p_limit?: number };
+        Returns: Json;
+      };
       claim_reminder: { Args: { p_run: string }; Returns: Json };
       complete_document_job: {
         Args: {
@@ -1504,6 +1697,10 @@ export type Database = {
         Returns: undefined;
       };
       complete_photo: { Args: { p_id: string }; Returns: Json };
+      complete_privacy_export_cleanup: {
+        Args: { p_claim: string; p_id: string };
+        Returns: boolean;
+      };
       completed_report: { Args: { p_year?: number }; Returns: Json };
       consume_reminder_invocation: {
         Args: { p_nonce: string; p_stamp: number };
@@ -1544,6 +1741,30 @@ export type Database = {
           p_request_id: string;
         };
         Returns: Json;
+      };
+      create_privacy_request: {
+        Args: { p_client_id: string; p_id: string };
+        Returns: {
+          client_id: string;
+          created_by: string;
+          id: string;
+          identity_verified: boolean;
+          policy_version: number | null;
+          reason: string | null;
+          received_at: string;
+          resolution_note: string | null;
+          review_due_at: string;
+          state: string;
+          tenant_id: string;
+          updated_at: string;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "privacy_requests";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
       };
       create_signature_request: {
         Args: {
@@ -1656,6 +1877,16 @@ export type Database = {
         };
         Returns: boolean;
       };
+      finish_privacy_export: {
+        Args: {
+          p_claim: string;
+          p_failure?: string;
+          p_id: string;
+          p_sha256: string;
+          p_size: number;
+        };
+        Returns: boolean;
+      };
       finish_reminder: {
         Args: {
           p_claim: string;
@@ -1671,6 +1902,10 @@ export type Database = {
       };
       lookup_reminder_acceptance: { Args: { p_id: string }; Returns: Json };
       maintenance_worker_health: {
+        Args: { p_persist?: boolean };
+        Returns: Json;
+      };
+      maintenance_worker_health_before_privacy: {
         Args: { p_persist?: boolean };
         Returns: Json;
       };
@@ -1786,6 +2021,10 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      prepare_privacy_export: {
+        Args: { p_client_id: string; p_id: string };
+        Returns: Json;
+      };
       publish_clinical_template: {
         Args: {
           p_body: string;
@@ -1818,6 +2057,7 @@ export type Database = {
       };
       read_consent_file: { Args: { p_id: string }; Returns: Json };
       read_photo: { Args: { p_id: string }; Returns: Json };
+      read_privacy_notice: { Args: { p_tenant_id: string }; Returns: Json };
       read_treatment_preparation: {
         Args: { p_appointment_id: string };
         Returns: Json;
@@ -1935,6 +2175,31 @@ export type Database = {
         SetofOptions: {
           from: "*";
           to: "pigment_lots";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      save_privacy_settings: {
+        Args: {
+          p_contact_email: string;
+          p_notice: string;
+          p_reviewed: boolean;
+          p_rules: Json;
+          p_version: number;
+        };
+        Returns: {
+          contact_email: string;
+          notice: string;
+          reviewed: boolean;
+          rules: NonNullable<Json>;
+          tenant_id: string;
+          updated_at: string;
+          updated_by: string;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "privacy_settings";
           isOneToOne: true;
           isSetofReturn: false;
         };
@@ -2069,6 +2334,36 @@ export type Database = {
         SetofOptions: {
           from: "*";
           to: "clients";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      update_privacy_request: {
+        Args: {
+          p_id: string;
+          p_identity_verified: boolean;
+          p_note?: string;
+          p_state: string;
+          p_version: number;
+        };
+        Returns: {
+          client_id: string;
+          created_by: string;
+          id: string;
+          identity_verified: boolean;
+          policy_version: number | null;
+          reason: string | null;
+          received_at: string;
+          resolution_note: string | null;
+          review_due_at: string;
+          state: string;
+          tenant_id: string;
+          updated_at: string;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "privacy_requests";
           isOneToOne: true;
           isSetofReturn: false;
         };

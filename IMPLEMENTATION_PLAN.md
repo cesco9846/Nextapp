@@ -100,7 +100,8 @@ non avviati restano **pianificati**.
 | W15     | Motore implementato e verificato      | Lease/fencing, retry/lookup, heartbeat/allarmi e CLI. Provider reale, runner continuo e notifica esterna da collegare prima dell’attivazione.                                                                  |
 | W16     | In corso: backend e UI verificati     | Adapter, identità, webhook live, inbox e preferenze/esiti disponibili. Runner/monitor W16.c con richieste firmate; restano allarme esterno, gate operativo e SMTP Auth separato. Invii automatici disattivati. |
 | W17     | Implementato, verificato nel browser  | Link personale, conferma/disdetta, revoca, regola configurabile e ricevute; contratto APPOINTMENT_RESPONSES.md.                                                                                                |
-| W19–W25 | Pianificato                           | Seguire dipendenze e gate; completare collaudo operativo prima del pilota.                                                                                                                                     |
+| W19     | Strumenti implementati, revisione privacy aperta | Export privati a scadenza, registro richieste, regole versionate e informativa. Approvare tempi/basi/testi e procedura di distruzione prima del pilota. |
+| W20–W25 | Pianificato | Seguire dipendenze e gate; completare collaudo operativo prima del pilota. |
 
 | Item | Consegna concreta                                                                                                                                                             | Dipende da                        | Requisiti                                      | Completato quando                                                                                                                                                                                                                 |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -439,3 +440,20 @@ Riscontro fisico del 21 ottobre: l’utente conferma passate su iPhone le tre
 sequenze chieste in chat (installazione/avvio Home, tastiera/rotazione,
 rifiuto offline e nessun invio alla riconnessione). Modello/OS non comunicati;
 iPad e prove avanzate restano aperti nella checklist.
+
+## Incremento W19 — 21 ottobre 2026
+
+Implementati export completi per cliente, richieste privacy e conservazione
+con il contratto [PRIVACY_OPERATIONS.md](PRIVACY_OPERATIONS.md). La titolare
+gestisce questi flussi dalle impostazioni; l’export richiede anche accesso
+clinico esplicito. Snapshot e ZIP privati per 24 ore, download rivalidato e
+auditato, revoca/retry, pulizia schedulata con lease e quote compatibili con
+lo spazio disponibile. Nessun dato sanitario nei log tecnici.
+
+Richiesta di cancellazione distinta dall’archiviazione e dalla cancellazione
+effettiva; conservazione motivata con riferimento alla versione delle regole.
+Informativa condivisibile soltanto dopo revisione/pubblicazione esplicita.
+Nessuna cancellazione automatica degli originali: tempi/basi/testi e procedura
+definitiva rimangono gate privacy prima del pilota. Prossimo incremento W20,
+backup DB+Storage, restore verificato e monitor esterno; collaudo fisico W18
+ancora parzialmente aperto. Checkpoint `checkpoint-privacy-2026-10-21`.

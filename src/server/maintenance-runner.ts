@@ -2,6 +2,7 @@ import "server-only";
 import { authenticateInvocation, reply } from "./scheduled-invocation";
 import { processClaimedDocument } from "./document-worker";
 import { cleanupFiles } from "@/documents/cleanup-worker";
+import { cleanupPrivacyExports } from "@/documents/privacy-cleanup";
 
 export async function maintenanceInvocation(
   request: Request,
@@ -35,6 +36,15 @@ export async function maintenanceInvocation(
       const result = await cleanupFiles(db, signal);
       processed = result.completed;
       failed = result.retry;
+      if (result.claimed < 10 && !signal.aborted) {
+        const exports = await cleanupPrivacyExports(
+          db,
+          signal,
+          10 - result.claimed,
+        );
+        processed += exports.completed;
+        failed += exports.retry;
+      }
     }
     const finished = await db.rpc("finish_maintenance_run", {
       p_kind: kind,
