@@ -244,7 +244,7 @@ Pannelli bianchi con bordo, raggio `xl` e senza ombra decorativa ripetuta. Tabel
 
 ### Inputs / Fields
 
-Bordo input, sfondo trasparente o bianco nel contesto, raggio `md`, altezza predefinita 44 px. Testo 16 px su telefono e 14 px da 768 px. Placeholder attenuato. Focus: bordo ring e anello da 3 px al 50%. Errori con bordo e testo destructive e istruzioni di recupero. Opzioni select alte almeno 44 px.
+Bordo input, sfondo trasparente o bianco nel contesto, raggio `md`, altezza predefinita 44 px. Input e textarea usano testo di 16 px sotto 768 px e con puntatore primario grossolano (`pointer: coarse`), anche alle larghezze tablet; da 768 px gli altri puntatori usano 14 px. Placeholder attenuato. Focus: bordo ring e anello da 3 px al 50%. Errori con bordo e testo destructive e istruzioni di recupero. Opzioni select alte almeno 44 px.
 
 ### Navigation
 
@@ -256,7 +256,7 @@ FullCalendar 7, tema ufficiale Monarch, locale italiano, settimana da lunedì. I
 
 ### Dialogs / Sheets
 
-Dialog centrati, padding 24 px e contenuto scorrevole. Editor appuntamento entro 92dvh e 560 px da 640 px. Sheet dettagli a destra, largo quanto il telefono ed entro 470 px da 640 px. Chiusure da 44 × 44 px. Dialog con durata dichiarata 200 ms; sheet 500 ms in apertura e 300 ms in chiusura. Il foglio globale riduce animazioni e transizioni a 0,01 ms con prefers-reduced-motion. Queste durate documentano il codice, senza garantire animazioni per utility non attivate nel bundle.
+Dialog di base centrati, padding 24 px, altezza massima `calc(100dvh - 2rem)` e scorrimento verticale interno: i contenuti lunghi restano raggiungibili anche in orizzontale. Editor appuntamento entro 92dvh e 560 px da 640 px. Sheet dettagli a destra, largo quanto il telefono ed entro 470 px da 640 px. Chiusure da 44 × 44 px. Dialog con durata dichiarata 200 ms; sheet 500 ms in apertura e 300 ms in chiusura. Il foglio globale riduce animazioni e transizioni a 0,01 ms con prefers-reduced-motion. Queste durate documentano il codice, senza garantire animazioni per utility non attivate nel bundle.
 
 ## Do's and Don'ts
 

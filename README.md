@@ -189,3 +189,7 @@ La configurazione ufficiale nasce disabled; i comandi non attivano email o cron.
 Automazione operativa e Auth SMTP: [OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
 Recupero PDF, pulizia temporanei e monitor hanno scheduler separati dai reminder.
 Lo stato corrente e i collaudi effettivi prevalgono sulle note storiche in questa pagina.
+
+W18 e collaudo PWA: [PWA_TEST_PLAN.md](PWA_TEST_PLAN.md). La suite browser include
+Chromium desktop/Android e WebKit iPhone/iPad; il collaudo fisico è distinto
+e rimane da eseguire. `npm run test:e2e -- tests/e2e/pwa.spec.ts` esegue la matrice.

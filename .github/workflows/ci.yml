@@ -24,7 +24,7 @@ jobs:
       - run: npm run db:migrate:local
       - run: npm run db:migrate:local
       - run: npm run test:db
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium webkit
       - run: npm run test:e2e
       - run: npm run typecheck
       - if: always()

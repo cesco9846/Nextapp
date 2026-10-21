@@ -11,7 +11,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
     () =>
       new QueryClient({
         defaultOptions: {
-          queries: { staleTime: 20000, retry: 1, refetchOnWindowFocus: true },
+          queries: {
+            staleTime: 20000,
+            retry: 1,
+            // A suspended PWA may return before staleTime expires. Revalidate
+            // permissions and active views even when the memory cache is fresh.
+            refetchOnWindowFocus: "always",
+            refetchOnReconnect: "always",
+          },
           mutations: { retry: false, networkMode: "always" },
         },
       }),

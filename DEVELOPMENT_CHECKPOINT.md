@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 20 ottobre 2026: **completamento operativo W17**.
-Checkpoint di questo incremento: `checkpoint-operations-2026-10-20` sul ramo `main`.
+Aggiornato il 21 ottobre 2026: **W18 — collaudo PWA nei browser e preparazione dispositivi fisici**.
+Checkpoint di questo incremento: `checkpoint-pwa-2026-10-21` sul ramo `main`.
+Precedente operativo W17: `checkpoint-operations-2026-10-20` (`bba1859`).
 Precedente W17 link: `checkpoint-appointment-responses-2026-10-20` (`22e6ccf`).
 Precedente retention: `checkpoint-log-retention-2026-10-19` (`2459bf9`).
 Precedente attivazione: `checkpoint-reminders-live-2026-10-19` (`a93c085`).
@@ -15,6 +16,41 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## W18 — stato corrente
+
+PWA installabile e sempre connessa; iPhone/iPad fisici disponibili all’utente,
+collaudo ancora da eseguire. Checklist, riproduzione e distinzione fra prove
+software/fisiche in [PWA_TEST_PLAN.md](PWA_TEST_PLAN.md). Non segnare W18
+completata o R1 chiuso finché mancano gli esiti dei dispositivi. Android fisico
+resta da reperire prima del pilota.
+
+Alla riconnessione e al ritorno in primo piano si rivalidano sempre le query
+attive, anche entro staleTime. Nessuna coda di scrittura: bozze in memoria e
+retry espliciti restano invariati. Sospensione dell’operatrice verificata alla
+ripresa; logout/cronologia non ripristinano lo studio precedente.
+Input e textarea su coarse-pointer mantengono 16 px anche su tablet e landscape;
+dialoghi con massimo calc(100dvh - 2rem), scroll verticale e azioni raggiungibili.
+Identità Glow e componenti shadcn preservati.
+
+Verifiche locali: 43 scenari E2E passati, inclusi 24 PWA su Chromium desktop,
+Chromium Android, WebKit iPhone e WebKit iPad; regressioni team, clinica e PDF.
+42 unit, build produzione, lint e TypeScript passati. Review Impeccable ship
+su 9 catture valide; detector eseguito una volta senza rilievi. Nessun raster
+pubblico creato/modificato. CI installa anche WebKit e lancia la matrice; il
+collaudo di tastiera software, installazione Home e sospensione iOS resta fisico.
+
+Cloud Debian senza root: download Playwright ufficiale più
+`python3 scripts/setup-webkit-cloud.py`, poi test con
+`--config playwright.cloud.config.ts`. Librerie dal repository APT snapshot
+configurato, con firme/checksum, senza modifiche al browser o flag di skip.
+Il helper ha verificato l’avvio reale WebKit 27.2. Riprodurre screenshot con
+`GLOW_CLOUD_WEBKIT=1 node --use-env-proxy --import tsx scripts/capture-pwa-ui.ts`
+dopo build E2E. Processi e servizi locali vanno riavviati a ogni nuova task.
+
+Nessuna migrazione nuova: restano 26 ufficiali, prossima forward 27. Reminder e
+manutenzione restano attivi; notifiche tecniche email attendono la casella.
+Nessuna prova email o fixture sul progetto ufficiale per W18.
 
 ## Completamento operativo W17 — stato corrente
 

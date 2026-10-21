@@ -91,7 +91,7 @@ non avviati restano **pianificati**.
 | W07     | In corso                              | Agenda/report implementati; drag/resize e stati da ampliare nel collaudo browser. Team migrato e verificato; collaudi fisici in W20.                                                                           |
 | W08     | Verificato nel browser                | Link/chat/testo corretti; apertura sulle app di dispositivi fisici prima di R1.                                                                                                                                |
 | W09     | Implementato e migrato                | Inviti, sospensione/riattivazione, assegnazioni e RLS testati; migrazioni remote applicate e revisione grafica ship.                                                                                           |
-| W18     | Implementato, verificato nel browser  | Manifest, istruzioni installazione e rete senza coda; dispositivi reali/HTTPS da collaudare.                                                                                                                   |
+| W18     | Implementato, verificato nel browser  | Matrice PWA Chromium/WebKit su desktop/telefono/tablet, revalidation e dialoghi touch; installazione fisica ancora da collaudare.                                                                              |
 | W10     | Base implementata e verificata        | API, Storage privato, verifica e pulizia recuperabile; scheduler hosting e collegamenti clinici ancora aperti.                                                                                                 |
 | W11     | Implementato e verificato             | Modelli versionati, pigmenti/lotti, etichette e preparazione non firmata. Testi reali da approvare prima del pilota.                                                                                           |
 | W12     | Implementato e verificato             | Link cliente con scadenza/revoca, consumo atomico, tablet con nuovo accesso professionale. Collaudo fisico prima del pilota.                                                                                   |
@@ -204,13 +204,13 @@ sono attivi dal 19 ottobre 2026, con preferenza separata per ciascuno studio.
 
 ## Registro di avanzamento
 
-| Data       | Item                            | Stato                                     | Evidenza / prossimo passo                                                                                                                                        |
-| ---------- | ------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-10-15 | Revisione e pianificazione      | Verificato come documentazione            | Specifica, modello, decisioni, architettura e qualità allineati; accessi Supabase e pacchetto Monarch verificati. Nessuna funzione applicativa implementata.     |
-| 2026-10-15 | Controllo di coerenza del piano | Verificato come documentazione            | 48 requisiti univoci collegati al backlog, 25 item senza cicli nelle dipendenze, 13 link locali validi nei sette documenti. Non sono test dell'applicazione.     |
-| 2026-10-15 | W01–W08, base W09               | Primo incremento verificato, limiti sopra | `npm ci`, lint, typecheck, build, 10 unit, 55 pgTAP, 7 E2E su Supabase locale; quattro viste calendario. Restart/reset e doppia migrazione verificati.           |
-| 2026-10-15 | Database ufficiale              | Schema base applicato                     | Due migrazioni con checksum, ripetizione idempotente, otto tabelle RLS, accesso anonimo negato e zero dati di prova.                                             |
-| 2026-10-15 | Stile                           | Revisione delle correzioni                | frontend-design/impeccable; detector senza rilievi, screenshot desktop/mobile e controlli touch misurati a 44px; verdetto `ship` sulle due correzioni richieste. |
+| Data       | Item                            | Stato                                     | Evidenza / prossimo passo                                                                                                                                         |
+| ---------- | ------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-15 | Revisione e pianificazione      | Verificato come documentazione            | Specifica, modello, decisioni, architettura e qualità allineati; accessi Supabase e pacchetto Monarch verificati. Nessuna funzione applicativa implementata.      |
+| 2026-10-15 | Controllo di coerenza del piano | Verificato come documentazione            | 48 requisiti univoci collegati al backlog, 25 item senza cicli nelle dipendenze, 13 link locali validi nei sette documenti. Non sono test dell'applicazione.      |
+| 2026-10-15 | W01–W08, base W09               | Primo incremento verificato, limiti sopra | `npm ci`, lint, typecheck, build, 10 unit, 55 pgTAP, 7 E2E su Supabase locale; quattro viste calendario. Restart/reset e doppia migrazione verificati.            |
+| 2026-10-15 | Database ufficiale              | Schema base applicato                     | Due migrazioni con checksum, ripetizione idempotente, otto tabelle RLS, accesso anonimo negato e zero dati di prova.                                              |
+| 2026-10-15 | Stile                           | Revisione delle correzioni                | frontend-design/impeccable; detector senza rilievi, screenshot desktop/mobile e controlli touch misurati a 44 px; verdetto `ship` sulle due correzioni richieste. |
 
 Aggiornare questo registro con evidenze brevi; gli item non elencati restano
 pianificati secondo il backlog. Un cambio di perimetro aggiorna SPEC, decisione,
@@ -414,3 +414,22 @@ riusciti, worker HTTP 200, health enabled/ok senza backlog, reminder ON.
 Migrazione 026 e checksum remoti verificati due volte. Checkpoint operativo
 `checkpoint-operations-2026-10-20`, codice `9cede93`; evidenze in
 DEVELOPMENT_CHECKPOINT.md. Nessuna notifica email tecnica attivata.
+
+## W18 — verifica PWA e touch, 21 ottobre 2026
+
+Sei scenari su quattro profili browser (24 esecuzioni) e 43 scenari di regressione
+complessivi passati localmente. Riconnessione e foreground rivalidano anche
+query ancora fresche; test di sospensione accesso e logout/cronologia. Niente
+coda di scritture, service worker o archivi offline. Campi touch16 px anche su
+tablet/landscape; dialoghi limitati e scorribili.42 unit, lint, TypeScript e build
+passati. Review Impeccable ship su 9 catture, detector senza rilievi.
+
+La CI include WebKit; il cloud senza root usa un helper con librerie APT
+verificate nel workspace e un avvio reale del binario Playwright fissato.
+Nessuna migrazione o modifica ai job/email ufficiali.
+
+W18 resta aperta per il collaudo fisico: l’utente ha iPhone/iPad, tabella
+[PWA_TEST_PLAN.md](PWA_TEST_PLAN.md) da compilare dopo la pubblicazione del
+checkpoint `checkpoint-pwa-2026-10-21`. Servono ancora installazione Home,
+tastiera software, sospensione reale, safe area e gesti/fotocamera; Android
+fisico prima del pilota. W19 può procedere come prossimo incremento funzionale.

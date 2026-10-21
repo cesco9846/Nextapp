@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-15T13:38:43.091Z",
+  "generatedAt": "2026-10-21T07:17:17.777Z",
   "title": "Design System: Glow",
   "extensions": {
     "colorMeta": {
@@ -423,9 +423,9 @@
       "name": "Campo",
       "kind": "input",
       "refersTo": "input",
-      "description": "Campo con etichetta, bordo discreto e focus verde.",
+      "description": "Campo con etichetta, bordo discreto e focus verde; testo di 16 px con pointer: coarse anche alle larghezze tablet.",
       "html": "<label class=\"ds-field\">Nome<input class=\"ds-input\" placeholder=\"Nome cliente\" /></label>",
-      "css": ".ds-field{display:flex;flex-direction:column;gap:8px;color:var(--foreground,#263e36);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;}.ds-input{height:44px;min-width:0;width:100%;padding:4px 12px;border:1px solid var(--color-input,#d5dfd8);border-radius:var(--radius-md,9px);background:transparent;color:var(--foreground,#263e36);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:16px;box-shadow:0 1px 2px rgb(0 0 0 / .05);transition:color .15s,box-shadow .15s}.ds-input::placeholder{color:var(--color-muted-foreground,#5b6e65)}.ds-input:focus-visible{border-color:var(--color-ring,#4a8062);outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-input:disabled{opacity:.5;cursor:not-allowed}@media(min-width:768px){.ds-input{font-size:14px}}"
+      "css": ".ds-field{display:flex;flex-direction:column;gap:8px;color:var(--foreground,#263e36);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:14px;font-weight:500;line-height:20px;}.ds-input{height:44px;min-width:0;width:100%;padding:4px 12px;border:1px solid var(--color-input,#d5dfd8);border-radius:var(--radius-md,9px);background:transparent;color:var(--foreground,#263e36);font-family:var(--font-sans,\"Instrument Sans Variable\",sans-serif);font-size:16px;box-shadow:0 1px 2px rgb(0 0 0 / .05);transition:color .15s,box-shadow .15s}.ds-input::placeholder{color:var(--color-muted-foreground,#5b6e65)}.ds-input:focus-visible{border-color:var(--color-ring,#4a8062);outline:2px solid var(--color-ring,#4a8062);outline-offset:3px;box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,#4a8062) 50%,transparent);}.ds-input:disabled{opacity:.5;cursor:not-allowed}@media(min-width:768px){.ds-input{font-size:14px}}@media(min-width:768px) and (pointer:coarse){.ds-input{font-size:16px}}"
     },
     {
       "name": "Navigazione attiva",

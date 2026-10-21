@@ -77,7 +77,7 @@ generati. Sono nomi di contratti futuri, non comandi già esistenti nel reposito
 | Scheduling       | Sposta/annulla prima del claim, durante il claim e dopo accettazione; crea appuntamento entro 24h; modifica destinatario.                         | Solo revisione corrente inviata ove ancora annullabile; limite dell'invio già accettato esplicito e visibile; niente reminder scaduti generati retroattivamente.              |
 | WhatsApp         | Telefono nazionale senza prefisso, internazionale valido, testo con accenti/&/newline, nessun numero, desktop senza app nativa.                   | URL corretto e fallback comprensibile; nessun invio/consegna fittizi in UI.                                                                                                   |
 | PWA/rete         | Rete spenta durante un modulo, riconnessione, risposta persa dopo POST, cambio account e revoca, prompt installazione presente/assente.           | Avviso chiaro, input conservati, nessun invio accodato o falso successo. Idempotenza preservata, letture aggiornate dopo riconnessione, nessuna persistenza offline dei dati. |
-| UI/accessibilità | Viewport 375/820/1280, tastiera, screen reader, errori form, rete lenta, liste vuote, touch e stato insoluto.                                     | Flussi eseguibili senza drag; focus preservato; nessun overflow principale; controlli tattili ≥44px.                                                                          |
+| UI/accessibilità | Viewport 375/820/1280, tastiera, screen reader, errori form, rete lenta, liste vuote, touch e stato insoluto.                                     | Flussi eseguibili senza drag; focus preservato; nessun overflow principale; controlli tattili ≥44 px.                                                                         |
 | Billing/fatture  | Trial/attivo/insoluto/cessato, grace period, webhook falsi/duplicati/fuori ordine, errore SdI.                                                    | Entitlement server coerente, export disponibile, dati preservati; esiti fiscali distinti dal pagamento.                                                                       |
 | ICS/push         | Revoca token, cambio evento, dati minimizzati, push negata/scaduta, iOS installata/non installata.                                                | Feed valido e accesso revocato; fallback reale; nessuna informazione clinica nei payload.                                                                                     |
 
@@ -171,7 +171,7 @@ Le prove fisiche iPhone/Android e la revisione dei testi sono ancora da eseguire
 
 Revisione grafica W14: disposizione `ship` sull’implementazione e sulle 15
 catture valide, senza correzioni materiali. Nessun overflow a 375/820/1280,
-azioni foto/confronto 44px. Detector una volta, zero rilievi; documenter senza
+azioni foto/confronto 44 px. Detector una volta, zero rilievi; documenter senza
 modifiche al sistema. Provenienza public: tre raster esistenti, zero mancanti.
 
 ## Evidenze W15 — 16 ottobre 2026
@@ -191,3 +191,19 @@ determinismo restano attive. Nessuna modifica al renderer o alle UI.
 Invii ufficiali disabled, nessun provider reale/cron/canale allarmi attivato.
 Comandi ufficiali worker/health verificati a zero claim e salute disabled/ok.
 Consegna inbox, webhook reali e runner continuo restano gate W16/pilota.
+
+## Evidenze W18 — 21 ottobre 2026
+
+24 esecuzioni PWA su quattro profili (Chromium desktop/Android e WebKit
+iPhone/iPad), dentro43 E2E pertinenti passati. Verificati avvio protetto, icone
+reali, istruzioni installazione, refresh su ritorno rete/foreground entro
+finestra di cache, revoca accesso, bozza conservata senza invii in coda,
+font touch16 px,44 px e dialoghi scorribili in portrait/landscape, assenza di
+archivi offline e mancato ripristino dello studio dopo logout/Indietro.
+42 unit, lint, TypeScript e build produzione passati.
+
+Impeccable ship sulle9catture locali sintetiche; detector una volta, zero
+rilievi. Le catture WebKit e gli eventi di visibilità sintetici non equivalgono
+a dispositivi Apple. Il gate fisico resta aperto per iPhone/iPad indicati
+dall’utente e per Android prima del pilota: [PWA_TEST_PLAN.md](PWA_TEST_PLAN.md).
+Nessun account, email o contenuto clinico sintetico nel progetto ufficiale.

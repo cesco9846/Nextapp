@@ -12,7 +12,24 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    {
+      name: "chromium-android",
+      testMatch: /pwa\.spec\.ts/,
+      use: { ...devices["Pixel 7"] },
+    },
+    {
+      name: "webkit-iphone",
+      testMatch: /pwa\.spec\.ts/,
+      use: { ...devices["iPhone 13"] },
+    },
+    {
+      name: "webkit-ipad",
+      testMatch: /pwa\.spec\.ts/,
+      use: { ...devices["iPad Pro 11"] },
+    },
+  ],
   webServer: {
     command:
       "node --use-env-proxy node_modules/next/dist/bin/next start --port 3100",
