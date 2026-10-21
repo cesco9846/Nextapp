@@ -13,6 +13,7 @@ coverage/
 supabase/.temp/
 supabase/.branches/
 .impeccable/bin/
+.agents/skills/impeccable/scripts/bin/
 .impeccable/mocks/
 .impeccable/critique/
 .impeccable/review/
