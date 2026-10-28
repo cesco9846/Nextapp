@@ -27,6 +27,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { LabelPreview } from "./label-preview";
 import { useRequestKey } from "./use-request-key";
 import { IntakePanel } from "@/features/intake/intake-panel";
+import { PackagePreparation } from "@/features/packages/packet-preparation";
 import { ConsentPanel } from "@/features/consents/consent-panel";
 
 // Sensitive answers stay only in this mounted view, never in a query cache or
@@ -64,7 +65,30 @@ function PreparationLoader({ id, reload }: { id: string; reload: () => void }) {
   }, [id]);
   if (error) return <ErrorState error={error} retry={reload} />;
   if (!data) return <LoadingState />;
-  return <PreparationForm context={data} onSaved={reload} />;
+  return <PreparationChoice context={data} onSaved={reload} />;
+}
+function PreparationChoice({
+  context,
+  onSaved,
+}: {
+  context: PreparationContext;
+  onSaved: () => void;
+}) {
+  const [native, setNative] = useState(!!context.native_packet);
+  if (native)
+    return (
+      <PackagePreparation context={context} back={() => setNative(false)} />
+    );
+  return (
+    <>
+      <div className="page-container pb-0">
+        <Button variant="outline" onClick={() => setNative(true)}>
+          Usa un modulo predefinito per questa seduta
+        </Button>
+      </div>
+      <PreparationForm context={context} onSaved={onSaved} />
+    </>
+  );
 }
 function PreparationForm({
   context: c,

@@ -6,6 +6,11 @@ Monarch ufficiale. Database e autenticazione: Supabase.
 
 ## Incremento disponibile
 
+- Moduli predefiniti Microblading e Lip Blush: copia personalizzabile per servizio,
+  anamnesi, istruzioni, dati sanitari e foto distinti; percorso minori con
+  rappresentanti verificati, controfirma operatrice e PDF completo. Adozione e
+  revisione esplicite: [DEFAULT_CONSENTS.md](DEFAULT_CONSENTS.md).
+
 - Nome studio modificabile nelle impostazioni; eliminazione di clienti e servizi
   inutilizzati, con conferma e blocchi sui dati collegati. Regole e alternative
   in [SAFE_MANAGEMENT.md](SAFE_MANAGEMENT.md).

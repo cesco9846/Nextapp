@@ -71,3 +71,39 @@ palette, font, controlli e regole incumbent confermati. DESIGN.md e design.json
 rimangono invariati. Nessun nuovo raster pubblico: le catture documentano prove
 con dati sintetici locali. Deriva preesistente del focus negli snippet sidecar e
 label mobili da 11 px non riparata né canonizzata, fuori dal perimetro richiesto.
+
+## Estensione del 28 ottobre 2026 — pacchetti predefiniti
+
+Ordinary extension in modalità Operate: basi native Microblading/Lip Blush,
+profilo professionale, bozze persistite e pubblicazioni per servizio. Il confronto
+con una nuova base precede l’adozione esplicita; aggiornare la bozza non riscrive
+lo storico pubblicato. Preparazione con identità verificata, uno o due
+rappresentanti verificati e link personali. Restano originali i controlli shadcn,
+le righe separate e le sezioni ariose; nessun nuovo mondo, comp, seed o asset.
+Direzione e comportamento approvati in DEFAULT_CONSENT_PLAN.md e DEFAULT_CONSENTS.md.
+
+Evidenza comune alle estensioni clinical/intake/signature: inventario
+`../review/packages/captures.json`, 21 full-page e sei crop supplementari delle
+conferme a 375/820/1280 px, tutti rigenerati dopo la correzione; nessun overflow
+nelle misure full-page. Prima review completa delle 27 catture: unico rilievo
+sull’identità temporale dell’appuntamento. Il nuovo reviewer equivalente
+`packages_verdict_reviewer`, in sostituzione del reviewer iniziale, ha ispezionato
+tutte le 27 catture finali: rilievo `RESOLVED`, nessuna regressione introdotta osservata,
+disposizione `ship` limitata alla correzione valutata. La sostituzione non è una
+nuova review completa con ampliamento del perimetro. Detector già eseguito una
+sola volta: `.cache/logs/defaults-design-detect.json` contiene `[]`; non rieseguito.
+Verifiche locali: 683 pgTAP in 16 file, 56 unit e 48 E2E (14 specifici e 34
+regressioni); lint, typecheck, build di produzione e idempotenza migrazione
+superati. Sono prove sintetiche locali, non verifica fisica o revisione legale.
+
+Documenter fresco equivalente, eseguito come ruolo separato perché il harness
+non espone un selettore specializzato: confronto di PRODUCT.md, DESIGN.md,
+sidecar, globals, Button/Input/Checkbox e dei cinque moduli
+`src/features/packages/{package-library,packet-preparation,client-packet,packet-document,packet-label}.tsx`.
+Campione visivo diretto: library-1280, health-375 e counter-confirmation-820.
+Confermati fondo freddo, giada, Bricolage/Instrument Sans, titoli pagina da 32 px,
+controlli da 44 px e colonne staff/client entro 1024/768 px. Nessun nuovo token o
+cambio di sistema: PRODUCT.md, DESIGN.md e design.json conservati invariati.
+Focus degli snippet sidecar, label mobili da 11 px, buildPath non impostato e
+provenienza storica incompleta del seed restano preesistenti, non riparati né
+canonizzati. Nessun nuovo raster pubblico; catture e firme sono prove sintetiche.

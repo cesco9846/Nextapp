@@ -4,6 +4,18 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   poweredByHeader: false,
   outputFileTracingIncludes: {
+    "/api/packets/*": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
+    "/api/clinical/packages": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
+    "/api/clinical/packages/profile": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
+    "/api/appointments/*/packets": [
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+    ],
     "/api/internal/maintenance/documents": [
       "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
     ],
@@ -77,6 +89,18 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "no-referrer" },
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
         ],
+      },
+      {
+        source: "/documento",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+      {
+        source: "/api/packets/:path*",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
       },
       {
         source: "/firma",

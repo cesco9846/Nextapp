@@ -44,6 +44,7 @@ export const photoChoicesSchema = z
     message: "L’uso dimostrativo richiede anche la documentazione nel dossier.",
   });
 export const signedSnapshotSchema = z.object({
+  packet: z.unknown().optional(),
   schema: z.literal(1),
   studio: z.string(),
   timezone: z.string(),
@@ -92,6 +93,8 @@ export const consentReceiptSchema = z.object({
 });
 export type ConsentReceipt = z.infer<typeof consentReceiptSchema>;
 export const signedPayloadSchema = z.object({
+  packet_signatures: z.array(z.unknown()).optional(),
+  counter_signature: z.unknown().optional(),
   snapshot: signedSnapshotSchema,
   snapshot_hash: z.string(),
   signer_name: z.string(),

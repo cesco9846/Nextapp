@@ -275,6 +275,18 @@ export function PhotoGallery({
                                         ? "Non autorizzata dalla cliente"
                                         : "Nessuna scelta firmata"}
                               </p>
+                              {purpose === "demonstration" &&
+                                allowed &&
+                                permission?.image_scope && (
+                                  <p className="mt-2 text-sm">
+                                    {permission.image_scope === "detail"
+                                      ? "Solo dettaglio dell’area trattata; nessuna immagine riconoscibile autorizzata."
+                                      : permission.image_scope ===
+                                          "recognizable"
+                                        ? "Immagine riconoscibile autorizzata."
+                                        : "Nessun uso dimostrativo autorizzato."}
+                                  </p>
+                                )}
                             </div>
                             {allowed && permission && (
                               <Confirm

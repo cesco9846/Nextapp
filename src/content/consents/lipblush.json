@@ -1,0 +1,116 @@
+{
+  "key": "lipblush",
+  "revision": 1,
+  "title": "Consenso informato Lip Blush",
+  "source_date": "2026-08-09",
+  "source_scope": "Veneto — DGR n. 11/2013; GDPR; REACH. Verificare applicabilità e aggiornamento prima della pubblicazione.",
+  "description": "Il Lip Blush è una tecnica di micropigmentazione estetica delle labbra che deposita pigmento mediante aghi sterili e monouso,\ncon l’obiettivo di valorizzare colore, uniformità e definizione del contorno.\n• La micropigmentazione interessa la barriera cutanea e viene eseguita nel rispetto delle procedure igienico-sanitarie. Gli strumenti\ndestinati a penetrare la cute sono sterili e monouso.\n• Durante la guarigione possono comparire normali modificazioni temporanee come sensibilità, lieve arrossamento, gonfiore o piccole\ncrosticine/desquamazione, a seconda della zona trattata.\n• Come per ogni micropigmentazione, sono possibili reazioni individuali, tra cui irritazione o allergia, infezione, alterazioni della\ncicatrizzazione o del colore. Il rispetto delle indicazioni igieniche e post-trattamento riduce i rischi e favorisce una buona guarigione.\n• Durata, intensità e ritenzione del pigmento variano da persona a persona: non è possibile garantire una durata precisa né un\nrisultato perfettamente identico a fotografie o simulazioni.\n• Se in futuro si desiderasse modificare o rimuovere la pigmentazione, potrebbe essere necessario rivolgersi a professionisti\nspecializzati; l’esito può variare in base al pigmento e alla risposta individuale.\n\nINFORMAZIONI SPECIFICHE - LIP BLUSH\n• Prima di iniziare, forma e colore vengono condivisi e approvati insieme. Il trattamento ha finalità estetica e non modifica la struttura\nanatomica delle labbra.\n• Nelle prime ore o nei primi giorni le labbra possono apparire più intense, sensibili, secche o leggermente gonfie; il colore cambia\ngradualmente durante la guarigione e il risultato viene valutato solo a guarigione completata.\n• Se hai già sofferto di herpes labiale, il trattamento può favorirne una riattivazione: è importante segnalarlo prima della seduta e\nvalutare con il proprio medico, se opportuno, eventuali misure preventive.",
+  "treatment_statement": "Dopo aver letto le informazioni ricevute, aver potuto fare domande e aver compreso la naturale variabilità della guarigione e del\nrisultato, acconsento liberamente all’esecuzione del trattamento di Lip Blush. So che posso chiedere di interrompere la procedura in\nqualsiasi momento e che una seduta interrotta può lasciare temporaneamente il risultato incompleto. Confermo di aver approvato\nforma e colore prima dell’esecuzione, quando applicabile.\nIl presente consenso documenta l’informazione ricevuta e non costituisce rinuncia preventiva ai diritti o alle responsabilità previste dalla legge.",
+  "introduction": "Queste domande servono a capire se il trattamento può essere eseguito oggi nelle condizioni più adatte. Una risposta “SÌ” non\nesclude automaticamente il trattamento: può rendere opportuno rinviare la seduta o chiedere un parere medico. Non sospendere o\nmodificare farmaci prescritti senza indicazione medica.\n\nDichiaro che le informazioni fornite sono, per quanto a mia conoscenza, complete e corrette e mi impegno a segnalare eventuali variazioni importanti prima delle sedute successive.",
+  "questions": [
+    {
+      "id": "2712667f-36ec-515f-aad4-bb62b8a6209f",
+      "label": "La zona da trattare presenta oggi irritazioni importanti, ferite, croste, infezioni o altre alterazioni visibili?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "a2e280e0-97e4-5719-89da-7a1c68137467",
+      "label": "Hai allergie o sensibilità note a pigmenti, metalli, lattice, cosmetici, disinfettanti o prodotti applicati sulla pelle?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "844de2d3-0ed9-50c7-9429-26fae449e6a6",
+      "label": "Hai mai avuto una cicatrizzazione particolarmente difficile o tendenza a cicatrici rilevate (ipertrofiche o cheloidi)?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "c002abfe-6fb1-5a64-a127-4bf697112c8a",
+      "label": "Assumi farmaci o hai condizioni che possono aumentare il sanguinamento o richiedere maggiore attenzione nella guarigione (es. anticoagulanti, diabete, terapie immunosoppressive)?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "e3299dc8-704e-51d8-b56c-7219f1fbe811",
+      "label": "Hai febbre, un’infezione in corso oppure stai assumendo antibiotici per una condizione attiva?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "c896f516-879b-5c95-8d33-54cd60c5e197",
+      "label": "Sei in gravidanza o stai allattando?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "a0333321-1abc-5635-ab8f-24261a4d4f40",
+      "label": "Assumi o hai assunto di recente isotretinoina sistemica, oppure utilizzi retinoidi, acidi o esfolianti intensivi sulla zona?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "d29928e4-530d-5f06-b155-30dd38a0315d",
+      "label": "Stai seguendo o hai concluso di recente trattamenti medici importanti che possono influire sulla guarigione?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "52d112b2-a824-5e62-b005-bfbd1326cdbc",
+      "label": "Hai eseguito di recente interventi o trattamenti medici/estetici nella zona da trattare (es. laser, peeling, filler, tossina botulinica o simili)?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "e6ca192d-3fbf-5fdb-8cfc-cdd23a5d2ad9",
+      "label": "Hai avuto in passato herpes labiale (la cosiddetta “febbre sulle labbra”)?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "16fa33c0-bc3c-5e93-b581-56062dfb9da0",
+      "label": "Hai eseguito di recente filler o procedure odontoiatriche che hanno interessato la zona delle labbra?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "55430b82-733b-5d1c-ad93-e18305de1343",
+      "label": "Hai già effettuato PMU/tatuaggi o trattamenti di rimozione nella stessa zona? Se sì, hai avuto particolari difficoltà nella guarigione?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "3c06549f-316d-56cc-afa0-4e17fd01b55e",
+      "label": "Hai consumato alcol o sostanze che possono influire sulla lucidità, sensibilità o sanguinamento nelle ultime 24 ore?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "0735d595-c0b5-5508-8174-141601a016fa",
+      "label": "C’è qualche altra condizione, terapia o allergia che ritieni utile segnalare per la sicurezza e la buona guarigione del trattamento?",
+      "type": "yes_no",
+      "required": true
+    },
+    {
+      "id": "6ab44d95-3753-5727-a339-59d73e584200",
+      "label": "Se hai risposto Sì, specifica qui.",
+      "type": "text",
+      "required": false
+    }
+  ],
+  "aftercare": "Questa pagina riassume le informazioni più utili per affrontare la guarigione con serenità e riconoscere quando è opportuno\nchiedere un parere medico.\n\nCOSA È UTILE SAPERE\nIgiene e rischio infettivo: Il trattamento interessa la barriera cutanea; come in tutte le procedure di micropigmentazione esiste\nun rischio di infezione o di trasmissione di agenti infettivi. Il rischio viene ridotto con procedure igienico-sanitarie, materiale\nsterile e monouso e una corretta cura della zona nei giorni successivi.\nSensibilità individuale: Pigmenti o altri prodotti possono, in alcune persone, provocare irritazione o una reazione allergica.\nPer questo è importante segnalare eventuali allergie o sensibilità già note.\nGuarigione: Ogni pelle reagisce in modo personale. Arrossamento, sensibilità, lieve gonfiore, crosticine o desquamazione e\nvariazioni temporanee del colore possono rientrare nella normale evoluzione iniziale.\nPigmenti e risultato: Sono utilizzati pigmenti destinati al tatuaggio/trucco permanente nel rispetto delle prescrizioni REACH\napplicabili. Colore e ritenzione possono cambiare nel tempo e sono influenzati dalla risposta individuale e dalle abitudini di\ncura.\n\nINDICAZIONI ESSENZIALI PER LA GUARIGIONE\n• Tocca le labbra solo con mani pulite e segui le indicazioni ricevute per detersione e prodotto post-trattamento; non staccare pellicine\no crosticine.\n• Nei primi giorni mantieni una buona igiene ed evita di condividere cosmetici o oggetti che entrano direttamente in contatto con le\nlabbra.\n• Evita prodotti irritanti, trucco sulla zona, piscina e mare, sauna/bagno turco, esposizione solare o UV intensa e forte sudorazione\nper il periodo indicato.\n• Se compaiono vescicole o sintomi compatibili con herpes, contatta il medico; non iniziare terapie farmacologiche senza indicazione\nsanitaria.\n\nQUANDO CHIEDERE UN PARERE MEDICO\nSe la zona peggiora invece di migliorare oppure compaiono gonfiore importante, secrezioni, febbre, dolore in aumento o una reazione\nintensa e inattesa, è opportuno contattare un medico. In caso di difficoltà respiratoria o altra reazione grave, richiedere assistenza\nmedica immediata.\nPer dubbi sulla normale evoluzione della zona puoi contattare l’operatrice; diagnosi e terapie restano di competenza sanitaria.",
+  "aftercare_statement": "Dichiaro di aver ricevuto e compreso la nota informativa e le indicazioni post-trattamento e di aver avuto la possibilità di porre domande.",
+  "health_statement": "Acconsento al trattamento delle informazioni relative alla salute che fornisco nella scheda pre-trattamento, limitatamente alle finalità di sicurezza, valutazione della procedura e documentazione indicate nell’informativa.",
+  "photo_notice": "I consensi alle fotografie sono separati e facoltativi. Il rifiuto delle fotografie promozionali non modifica in alcun modo la possibilità di ricevere il trattamento. La revoca vale per il futuro e non richiama copie già diffuse.",
+  "photo_documentation": "Acconsento a fotografie dell’area trattata prima/dopo la seduta, utilizzate solo per documentazione tecnica, confronto del risultato e continuità del trattamento. Non saranno pubblicate sulla base di questo consenso.",
+  "photo_demonstration": "Acconsento gratuitamente alla pubblicazione di fotografie e/o brevi video del risultato nel portfolio professionale, sul sito e sui canali social dell’operatrice. I contenuti pubblicati sui social possono essere visibili al pubblico e soggetti anche alle regole delle relative piattaforme. Posso revocare il consenso per il futuro; l’operatrice rimuoverà dai propri canali, per quanto possibile e sotto il proprio controllo, i contenuti interessati dalla revoca.",
+  "guardian_statement": "Dichiaro di esercitare la responsabilità genitoriale o i poteri di rappresentanza verificati dallo studio e presto il consenso al trattamento della minore sopra descritta.",
+  "privacy_notice": "",
+  "jurisdiction": "",
+  "minors_enabled": false,
+  "minimum_age": null,
+  "representatives_required": null,
+  "minors_basis": "",
+  "reviewed": false
+}

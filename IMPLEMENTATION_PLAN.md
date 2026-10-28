@@ -472,3 +472,19 @@ restano per la pulizia di eventuali upload tardivi, esclusi dalle liste dell’a
 Migrazione forward 028; 47 controlli SQL nuovi e 11 E2E di gestione aggiunti.
 Contratto e limiti: [SAFE_MANAGEMENT.md](SAFE_MANAGEMENT.md). Checkpoint
 `checkpoint-safe-management-2026-10-21`. W20 e gate R1 restano aperti.
+
+
+## Pacchetti consenso PMU — 28 ottobre 2026
+
+Su richiesta dell’utente, implementato il piano DEFAULT_CONSENT_PLAN.md prima
+di W20. Libreria Microblading/Lip Blush, profilo studio, bozze/pubblicazioni e
+aggiornamenti espliciti; minori inclusi dall’inizio con rappresentanza verificata.
+Consenso sanitario prima delle risposte, istruzioni/ricezione, firme distinte,
+controfirma operatrice, PDF v3 e limiti d’uso foto. Riusati documenti, Storage,
+worker, export e policy contro eliminazioni. Nessuna attivazione automatica dei
+modelli negli studi o nuove email di prova. Contratto: DEFAULT_CONSENTS.md.
+
+Migrazione forward 029, compatibile con lo storico; checkpoint
+`checkpoint-consent-packages-2026-10-28`. Testi e requisiti territoriali
+richiedono revisione della titolare prima dell’uso reale. W20 e i gate R1
+restano aperti.

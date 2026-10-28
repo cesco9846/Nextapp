@@ -19,6 +19,7 @@ export type Photo = {
   version: number;
 };
 export type PhotoPermission = {
+  image_scope?: "none" | "detail" | "recognizable" | null;
   id: string;
   appointment_id: string;
   purpose: "documentation" | "demonstration";

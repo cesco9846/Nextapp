@@ -322,3 +322,29 @@ realmente ripuliti consentono la cancellazione del contatto. I metadati tecnici
 senza cliente sono nascosti dalle liste applicative, mantengono il percorso
 Storage per pulizie tardive e seguono la retention ordinaria di trenta giorni.
 Contratto: [SAFE_MANAGEMENT.md](SAFE_MANAGEMENT.md).
+
+
+## Pacchetti e rappresentanza — migrazione 029
+
+Sei tabelle private/RLS senza grant diretti: `document_profiles`,
+`consent_packages`, `consent_package_versions`, `consent_packets`,
+`consent_packet_parties`, `consent_packet_countersignatures`. Profilo e bozza
+hanno controllo versione; pubblicazioni, snapshot, ricevute e firme non si
+riscrivono. `clinical_templates.package_id` lega la coppia consenso/anamnesi
+alla pubblicazione del pacchetto. I vecchi entry point non possono aggirare
+il percorso sanitario/rappresentanza dei pacchetti.
+
+Nascita/tipo seduta e rappresentanti sono verificati e fissati per documento,
+con autrice/metodo/data delle verifiche. Non vengono dedotti dal nome dello
+studio o dai contatti della cliente. Ogni rappresentante ha una capability
+hash-only limitata alla seduta, non un accesso al dossier. Le ricevute sanitarie
+precedono le risposte; tutti i firmatari condividono l’hash del medesimo snapshot.
+
+Il commit finale aggiunge controfirma, `consents`, `signed_payloads`, job PDF v3
+ed esiti foto. `photo_permissions.image_scope` distingue none/detail/recognizable
+ed è null per prove storiche senza tale scelta. Il valore più restrittivo
+prevale fra rappresentanti. I renderer precedenti restano disponibili.
+
+Export e blocchi eliminazione includono le nuove prove, anche incomplete e
+revocate. Nessun nuovo bucket o cron; registri tecnici senza contenuti sanitari.
+Contratto, fonte e limiti: [DEFAULT_CONSENTS.md](DEFAULT_CONSENTS.md).

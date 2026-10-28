@@ -38,6 +38,21 @@ export function TemplateEditor({
     return (
       <ErrorState error={query.error} retry={() => void query.refetch()} />
     );
+  if (query.data?.template.package_id)
+    return (
+      <div className="page-container max-w-5xl">
+        <h1 className="text-[32px]">Modello del pacchetto</h1>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Testi, istruzioni e dichiarazioni si aggiornano insieme dalla bozza
+          del pacchetto. Le versioni già firmate restano conservate.
+        </p>
+        <Button asChild className="mt-6">
+          <Link href="/app/documenti/predefiniti">
+            Gestisci moduli predefiniti
+          </Link>
+        </Button>
+      </div>
+    );
   return <TemplateForm key={id ?? kind} initial={query.data} kind={kind} />;
 }
 function TemplateForm({

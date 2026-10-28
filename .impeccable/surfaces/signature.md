@@ -71,3 +71,31 @@ modificati e primitive shadcn conferma l’estensione del sistema esistente;
 nessuna modifica a DESIGN.md o design.json. Deriva preesistente del focus negli
 snippet sidecar e label mobili da 11 px non riparata né canonizzata, fuori dal
 perimetro richiesto.
+
+## Estensione del 28 ottobre 2026 — firme e controfirma dei pacchetti
+
+Ordinary extension in modalità Operate: tutti i firmatari richiesti rileggono
+le stesse risposte e i contenuti dello snapshot, poi confermano trattamento,
+istruzioni e identità/ruolo. Foto dossier e dimostrative rimangono facoltative
+e distinte, con ambito dettaglio/riconoscibile. Le etichette presenti appartengono
+allo snapshot; l’assenza resta esplicita. Dopo tutte le firme, la professionista
+assegnata verifica e controfirma prima del PDF finale. Stato della raccolta,
+firma ricevuta e disponibilità del PDF restano distinti; una difficoltà PDF non
+richiede di firmare nuovamente.
+
+La correzione valutata mostra anno, ora e fuso nell’intestazione; nella verifica
+raccolta/controfirma cliente, servizio e appuntamento provengono prima dallo
+snapshot. Conferme e pad mantengono composizione e controlli incumbent, con
+recupero dello stesso invio in memoria e nessun dato clinico persistito nel
+browser. Le catture sign/counter e i rispettivi crop di conferma a 375/820/1280
+px fanno parte dell’inventario finale di 27 immagini in clinical.md. Il reviewer
+fresco equivalente di sostituzione `packages_verdict_reviewer` ha dichiarato
+`RESOLVED` l’unico rilievo temporale e `ship` limitato alla correzione valutata.
+
+Documenter fresco equivalente: confronto packet-preparation/client-packet,
+packet-document/packet-label, globals e primitive con PRODUCT.md, DESIGN.md e
+sidecar; campione diretto counter-confirmation-820. Palette, font, bordi, scala
+dei controlli e regole Two Voices/Quiet Surface confermati; nessuna modifica ai
+file di sistema. Detector e verifiche comuni registrati in clinical.md, senza
+nuovo ciclo. Drift incumbent non riparato né canonizzato; nessun raster pubblico,
+promessa di pubblicazione o nuova dichiarazione di validità legale/dispositivo.

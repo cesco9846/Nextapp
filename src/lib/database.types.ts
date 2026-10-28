@@ -348,6 +348,7 @@ export type Database = {
           current_version_id: string;
           id: string;
           kind: string;
+          package_id: string | null;
           service_id: string | null;
           tenant_id: string;
           title: string;
@@ -361,6 +362,7 @@ export type Database = {
           current_version_id: string;
           id?: string;
           kind: string;
+          package_id?: string | null;
           service_id?: string | null;
           tenant_id: string;
           title: string;
@@ -373,6 +375,7 @@ export type Database = {
           current_version_id?: string;
           id?: string;
           kind?: string;
+          package_id?: string | null;
           service_id?: string | null;
           tenant_id?: string;
           title?: string;
@@ -738,6 +741,7 @@ export type Database = {
           client_id: string;
           consent_id: string;
           id: string;
+          image_scope: string | null;
           purpose: string;
           revoked_at: string | null;
           revoked_by: string | null;
@@ -753,6 +757,7 @@ export type Database = {
           client_id: string;
           consent_id: string;
           id?: string;
+          image_scope?: string | null;
           purpose: string;
           revoked_at?: string | null;
           revoked_by?: string | null;
@@ -767,6 +772,7 @@ export type Database = {
           client_id?: string;
           consent_id?: string;
           id?: string;
+          image_scope?: string | null;
           purpose?: string;
           revoked_at?: string | null;
           revoked_by?: string | null;
@@ -1658,6 +1664,10 @@ export type Database = {
         Returns: undefined;
       };
       authorize_file_read: { Args: { p_id: string }; Returns: string };
+      available_consent_packages: {
+        Args: { p_appointment_id: string };
+        Returns: Json;
+      };
       begin_reminder_dispatch: {
         Args: { p_claim: string; p_id: string };
         Returns: Json;
@@ -1708,9 +1718,17 @@ export type Database = {
         Returns: boolean;
       };
       completed_report: { Args: { p_year?: number }; Returns: Json };
+      consent_package_catalog: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
       consume_reminder_invocation: {
         Args: { p_nonce: string; p_stamp: number };
         Returns: boolean;
+      };
+      countersign_consent_packet: {
+        Args: { p_id: string; p_input: Json };
+        Returns: Json;
       };
       create_appointment: {
         Args: { p_data: Json; p_key: string };
@@ -1984,6 +2002,18 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      prepare_consent_packet: {
+        Args: {
+          p_appointment_id: string;
+          p_appointment_version: number;
+          p_details: Json;
+          p_lot_ids: string[];
+          p_mode: string;
+          p_package_version_id: string;
+          p_request_id: string;
+        };
+        Returns: Json;
+      };
       prepare_photo: {
         Args: {
           p_appointment_id: string;
@@ -2074,10 +2104,53 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      publish_clinical_template_before_packages: {
+        Args: {
+          p_body: string;
+          p_kind: string;
+          p_questions: Json;
+          p_request_id: string;
+          p_service_id?: string;
+          p_template_id: string;
+          p_title: string;
+          p_version: number;
+        };
+        Returns: {
+          body: string;
+          content_hash: string;
+          created_by: string;
+          id: string;
+          published_at: string;
+          questions: NonNullable<Json>;
+          revision: number;
+          template_id: string;
+          tenant_id: string;
+          title: string;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "clinical_template_versions";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      publish_consent_package: {
+        Args: { p_id: string; p_version: number };
+        Returns: Json;
+      };
       read_consent_file: { Args: { p_id: string }; Returns: Json };
+      read_consent_packets: {
+        Args: { p_appointment_id: string };
+        Returns: Json;
+      };
+      read_packet_review: { Args: { p_id: string }; Returns: Json };
       read_photo: { Args: { p_id: string }; Returns: Json };
       read_privacy_notice: { Args: { p_tenant_id: string }; Returns: Json };
       read_treatment_preparation: {
+        Args: { p_appointment_id: string };
+        Returns: Json;
+      };
+      read_treatment_preparation_before_packages: {
         Args: { p_appointment_id: string };
         Returns: Json;
       };
@@ -2159,6 +2232,20 @@ export type Database = {
         Returns: undefined;
       };
       revoke_team_invitation: { Args: { p_id: string }; Returns: undefined };
+      rotate_packet_party: { Args: { p_id: string }; Returns: Json };
+      save_consent_package: {
+        Args: {
+          p_content: Json;
+          p_id: string;
+          p_service_id: string;
+          p_version: number;
+        };
+        Returns: Json;
+      };
+      save_document_profile: {
+        Args: { p_details: Json; p_version: number };
+        Returns: undefined;
+      };
       save_pigment: {
         Args: {
           p_active: boolean;
@@ -2275,6 +2362,39 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      save_treatment_preparation_before_packages: {
+        Args: {
+          p_anamnesis_version_id: string;
+          p_answers: Json;
+          p_appointment_id: string;
+          p_appointment_version: number;
+          p_consent_version_id: string;
+          p_lot_ids: string[];
+          p_request_id: string;
+          p_version: number;
+        };
+        Returns: {
+          anamnesis_version_id: string | null;
+          appointment_id: string;
+          appointment_version: number;
+          client_id: string;
+          consent_version_id: string;
+          created_at: string;
+          created_by: string;
+          id: string;
+          status: string;
+          tenant_id: string;
+          updated_at: string;
+          updated_by: string | null;
+          version: number;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "treatment_preparations";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       set_client_assignment: {
         Args: {
           p_assigned: boolean;
@@ -2308,6 +2428,7 @@ export type Database = {
           current_version_id: string;
           id: string;
           kind: string;
+          package_id: string | null;
           service_id: string | null;
           tenant_id: string;
           title: string;
@@ -2432,6 +2553,10 @@ export type Database = {
       };
       use_appointment_action_link: {
         Args: { p_action: string; p_request_id?: string; p_token_hash: string };
+        Returns: Json;
+      };
+      use_consent_packet: {
+        Args: { p_action: string; p_input?: Json; p_token_hash: string };
         Returns: Json;
       };
       use_intake_link: {

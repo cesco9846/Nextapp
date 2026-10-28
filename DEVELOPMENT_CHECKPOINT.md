@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 21 ottobre 2026: **nome studio ed eliminazioni protette**.
-Checkpoint di questo incremento: `checkpoint-safe-management-2026-10-21` sul ramo `main`.
+Aggiornato il 28 ottobre 2026: **moduli predefiniti Microblading/Lip Blush, minori e controfirma**.
+Checkpoint di questo incremento: `checkpoint-consent-packages-2026-10-28` sul ramo `main`.
+Precedente gestione protetta: `checkpoint-safe-management-2026-10-21` (`7e650ab`, documentazione `cb65c03`).
 Precedente W19: `checkpoint-privacy-2026-10-21` (`a357a3e`); Impeccable 4.7.0 (`f4ba2cb`).
 Precedente W18: `checkpoint-pwa-2026-10-21` (`9aa3543`), esiti iPhone `4a40f5b`.
 Precedente operativo W17: `checkpoint-operations-2026-10-20` (`bba1859`).
@@ -18,6 +19,75 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## Moduli predefiniti — stato corrente
+
+Piano approvato: [DEFAULT_CONSENT_PLAN.md](DEFAULT_CONSENT_PLAN.md).
+Contratto e uso: [DEFAULT_CONSENTS.md](DEFAULT_CONSENTS.md).
+«Consensi e pigmenti» → «Usa un modello predefinito»: profilo documentale,
+copia Microblading/Lip Blush associata per ID servizio, bozza persistente,
+revisione e pubblicazione owner-only. Testi generici senza i contatti della
+professionista sorgente; informativa e requisiti territoriali dello studio da
+completare. Confronto per future revisioni della base, adozione esplicita in
+bozza e nuova revisione; nessun aggiornamento automatico di testi personalizzati.
+
+Dalla preparazione si selezionano nascita/tipo seduta/lotti e verifiche delle
+identità. Minori inclusi su richiesta esplicita: uno o due rappresentanti,
+ruolo, contatto e poteri verificati; requisiti configurati e confermati dalla
+titolare, nessuna età minima regionale inventata. Un imminente passaggio alla
+maggiore età rinvia il documento al compleanno. Il link non prova identità.
+
+Pagina capability `/documento#token`, hash-only, no-store/no-referrer, senza
+cookie professionali o persistenza locale. Ricevuta sanitaria prima delle
+risposte, rifiuto senza anamnesi o annullamento appuntamento, questionario
+13/14 Sì/No e spiegazioni. Con due rappresentanti, tutti prestano prima il
+consenso sanitario e il primo compila; tutti firmano lo stesso snapshot.
+Dichiarazioni distinte per trattamento/ricezione/ruolo, foto facoltative e
+ambito dettaglio/riconoscibile. Prevale la scelta più restrittiva.
+
+Firme e controfirma dell’operatrice assegnata sono immutabili. Il PDF v3 usa
+il worker esistente dopo l’ultima firma; v1/v2 e i relativi byte restano intatti.
+Upload/lease/checksum/recupero e download sono riusati; nessun nuovo cron.
+Tablet con logout, passaggio successivo a ogni rappresentante dopo nuovo accesso,
+retry esatto delle risposte perse e download PDF senza reload. Anteprime delle
+etichette pin-scoped, hash e autorizzazione ricontrollati dopo Storage.
+
+Export W19 include prove incomplete/rifiutate/revocate senza hash dei token;
+clienti/servizi collegati protetti dall’eliminazione. Migrazione forward 029,
+sei tabelle private RLS senza grant diretti, RPC autorizzate e legacy guardate.
+Nessun pacchetto pubblicato automaticamente nello studio ufficiale.
+
+Verifiche finali: 683 pgTAP/16 file, 56 unit e 48 E2E passati (14 specifici e
+34 regressioni clinica/documenti/privacy/gestione protetta), con sessioni,
+Storage e PDF reali locali. Coperti revoca durante attesa del lock, foto più
+restrittive, compleanno, ruoli/tenant/origine, risposta persa e tablet. Lint,
+TypeScript, build produzione e ripetizione idempotente delle migrazioni passati.
+Cliente, data, ora e fuso della seduta sono visibili nelle intestazioni pubbliche
+e professionali; in revisione si usano i dati fissati nello snapshot.
+
+Revisione grafica: 27 catture sintetiche locali a 375/820/1280 px (21 pagine
+complete e sei dettagli firma/controfirma), tutte aperte e valide, senza overflow
+orizzontale. Detector eseguito una volta: zero rilievi. Dopo la review completa,
+il solo fix materiale era l’identità temporale della seduta; la verifica finale
+lo valuta **risolto**, disposizione `ship` limitata a questa correzione. Ruoli
+fresh equivalenti ai reviewer/documenter distribuiti in assenza del relativo
+harness specializzato; il reviewer iniziale non era più disponibile dopo il
+ripristino dell’ambiente. Sistema grafico e precedenti contratti preservati.
+
+Migrazione 029 applicata al progetto ufficiale `mexokvvvxdyekauupwvt`: tutti i
+29 checksum verificati, sei tabelle private con RLS senza grant diretti,
+renderer v3 abilitato. Sei cron attivi, reminder e manutenzione `enabled/ok`.
+Nessun pacchetto, raccolta o dato di prova creato sul progetto ufficiale;
+nessun invio email di prova. Il tag del checkpoint identifica codice e documenti
+da pubblicare insieme su `main`; CI e Vercel vanno verificati sul medesimo SHA.
+
+Impeccable resta 4.7.0 per questo incremento. L’utente ha chiesto, con l’ultima
+risposta, aggiornamento a 4.8.0 **nel turno successivo**: non aggiornarlo durante
+questo rilascio. Un precedente «mantieni» è stato superato da quella risposta.
+
+Restano separati W18 dispositivi fisici avanzati/iPad, W20 backup DB+Storage e
+restore/monitor esterno, testi/requisiti specifici prima del pilota e casella
+per notifiche tecniche. Non dichiarare R1 o validità normativa universale conclusi.
 
 ## Nome studio ed eliminazioni protette — stato corrente
 

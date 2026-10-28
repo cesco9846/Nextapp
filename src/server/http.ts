@@ -35,6 +35,20 @@ const dbErrors: Record<string, [number, string]> = {
   P0002: [404, "L'elemento non è stato trovato."],
 };
 const reasons: Record<string, string> = {
+  INVALID_PROFILE: "Completa i dati professionali dello studio.",
+  INVALID_PACKAGE: "Controlla contenuti e servizio del pacchetto.",
+  PACKAGE_REVIEW_REQUIRED:
+    "Completa dati studio, informativa, ambito territoriale e revisione prima di pubblicare.",
+  PACKAGE_FLOW_REQUIRED:
+    "Questo modello usa il percorso Moduli predefiniti. Aprilo dalla preparazione del trattamento.",
+  INVALID_PACKET:
+    "Controlla dati, verifiche delle identità e stato del documento.",
+  BIRTHDAY_TRANSITION:
+    "La cliente diventerà maggiorenne prima della seduta. Avvia il documento dopo il compleanno, così potrà prestare personalmente i consensi.",
+  MINOR_REQUIREMENTS:
+    "Verifica età, requisiti per minori e tutti i rappresentanti richiesti dal modello.",
+  PACKET_INCOMPLETE:
+    "Servono tutte le firme previste e un collegamento ancora valido prima della controfirma.",
   SENDER_NOT_READY:
     "Verifica l’indirizzo email della titolare prima di attivare i promemoria.",
   PHOTO_PERMISSION_REQUIRED:

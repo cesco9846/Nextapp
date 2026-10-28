@@ -44,3 +44,24 @@ capability locali sintetiche; immagini e trace ignorati da Git. Suite: 225 pgTAP
 Documenter: confronto di DESIGN.md/sidecar, PRODUCT, globals, entrambi i moduli
 intake e primitive shadcn. Nessuna modifica necessaria al sistema. Snippet focus
 del sidecar e advisory 11 px preesistenti lasciati fuori dalla canonizzazione.
+
+## Estensione del 28 ottobre 2026 — raccolta dei pacchetti
+
+Ordinary extension in modalità Operate del modulo isolato: intestazione con
+studio, cliente, firmatario/ruolo e appuntamento con anno, ora e fuso forniti dal
+server. L’informativa e la scelta esplicita sui dati sanitari precedono le
+risposte; un rifiuto arresta la raccolta senza dichiarare annullata la seduta.
+Con due rappresentanti entrambi scelgono prima della compilazione del primo;
+gli altri attendono e aggiornano lo stato con un comando esplicito. Le domande
+Sì/No non hanno risposte preselezionate. Rete necessaria, nessuna persistenza
+clinica nel browser o coda automatica; invii ambigui conservano in memoria lo
+stesso tentativo per il recupero.
+
+La colonna entro 768 px, i testi Instrument Sans, i titoli Bricolage e i pulsanti
+giada/outline originali shadcn proseguono il sistema vigente. Le catture health
+e questionnaire a 375/820/1280 px appartengono alle 27 evidenze finali descritte
+in clinical.md: review equivalente di sostituzione `packages_verdict_reviewer`,
+`ship` solo sul rilievo temporale corretto. Il documenter fresco equivalente ha
+confrontato client-packet/packet-document, globals e primitive con PRODUCT,
+DESIGN e sidecar, con campione diretto health-375. Nessun cambio di sistema o
+nuovo raster pubblico; drift incumbent lasciato inalterato come in clinical.md.

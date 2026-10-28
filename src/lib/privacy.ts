@@ -96,6 +96,7 @@ export const exportSnapshotSchema = z
     templates: z.array(z.unknown()),
     treatment_lots: z.array(z.unknown()),
     consents: z.array(z.unknown()),
+    consent_packets: z.array(z.unknown()).optional(),
     photos: z.array(z.unknown()),
     photo_permissions: z.array(z.unknown()),
     privacy_requests: z.array(z.unknown()),

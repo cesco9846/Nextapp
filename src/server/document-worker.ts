@@ -8,7 +8,7 @@ import { documentAdmin, sha256, verifiedDocumentFile } from "./documents";
 const claimSchema = z.object({
   id: z.uuid(),
   claim: z.uuid(),
-  renderer: z.enum(["glow-pdf-v1", "glow-pdf-v2"]),
+  renderer: z.enum(["glow-pdf-v1", "glow-pdf-v2", "glow-pdf-v3"]),
   content_hash: z.string(),
   path: z.string(),
   payload: signedPayloadSchema,

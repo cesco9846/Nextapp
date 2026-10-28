@@ -43,7 +43,7 @@ export async function GET(request: Request, context: Context) {
       db
         .from("photo_permissions")
         .select(
-          "id,appointment_id,purpose,allowed,revoked_at,signed_at,version",
+          "id,appointment_id,purpose,allowed,revoked_at,signed_at,version,image_scope",
         )
         .eq("client_id", id)
         .is("superseded_at", null),

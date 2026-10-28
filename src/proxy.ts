@@ -6,6 +6,8 @@ export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
   // Capability-only endpoints deliberately ignore professional cookies.
   if (
+    request.nextUrl.pathname === "/api/packets/access" ||
+    request.nextUrl.pathname === "/api/packets/label" ||
     request.nextUrl.pathname.startsWith("/api/intake/") ||
     request.nextUrl.pathname.startsWith("/api/consent/") ||
     request.nextUrl.pathname === "/api/appointment-response/read" ||

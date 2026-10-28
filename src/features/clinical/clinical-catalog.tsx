@@ -74,12 +74,19 @@ export function ClinicalCatalog() {
           </p>
         </div>
         {owner && templates && (
-          <Button asChild>
-            <Link href={`/app/documenti/modelli/nuovo?tipo=${tab}`}>
-              <Plus />
-              Nuovo modello
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button variant="outline" asChild>
+              <Link href="/app/documenti/predefiniti">
+                Usa un modello predefinito
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href={`/app/documenti/modelli/nuovo?tipo=${tab}`}>
+                <Plus />
+                Nuovo modello
+              </Link>
+            </Button>
+          </div>
         )}
         {owner && tab === "pigments" && (
           <Button onClick={() => setEditor({ kind: "pigment" })}>

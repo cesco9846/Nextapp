@@ -27,6 +27,7 @@ export function ConsentPanel({
   dirty,
   editable,
   timezone,
+  documentsOnly = false,
 }: {
   id: string;
   appointmentVersion: number;
@@ -34,6 +35,7 @@ export function ConsentPanel({
   dirty: boolean;
   editable: boolean;
   timezone: string;
+  documentsOnly?: boolean;
 }) {
   const cache = useQueryClient();
   const [now, setNow] = useState(() => Date.now());
@@ -195,13 +197,15 @@ export function ConsentPanel({
       aria-labelledby="consent-panel-title"
     >
       <h2 id="consent-panel-title" className="text-xl">
-        Firma e documenti
+        {documentsOnly ? "Documenti firmati" : "Firma e documenti"}
       </h2>
-      <p className="mt-2 max-w-prose text-sm leading-relaxed text-muted-foreground">
-        Dopo aver completato la preparazione, apri il documento per la cliente.
-        Potrà controllare testi, risposte e lotti e firmare il consenso. Ogni
-        firma conserva i contenuti letti.
-      </p>
+      {!documentsOnly && (
+        <p className="mt-2 max-w-prose text-sm leading-relaxed text-muted-foreground">
+          Dopo aver completato la preparazione, apri il documento per la
+          cliente. Potrà controllare testi, risposte e lotti e firmare il
+          consenso. Ogni firma conserva i contenuti letti.
+        </p>
+      )}
       {editable && !signed && (
         <>
           <p className="mt-3 max-w-prose text-sm text-muted-foreground">
@@ -302,7 +306,7 @@ export function ConsentPanel({
           {error || query.error?.message}
         </p>
       )}
-      {!!query.data?.links.length && (
+      {!documentsOnly && !!query.data?.links.length && (
         <ul className="mt-5 divide-y rounded-xl border bg-white">
           {query.data.links.map((link) => (
             <li
@@ -341,7 +345,7 @@ export function ConsentPanel({
       )}
       {!!query.data?.documents.length && (
         <div className="mt-7">
-          <h3 className="text-lg">Documenti firmati</h3>
+          {!documentsOnly && <h3 className="text-lg">Documenti firmati</h3>}
           <ul className="mt-4 divide-y rounded-xl border bg-white">
             {query.data.documents.map((doc) => (
               <li

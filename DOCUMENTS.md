@@ -131,3 +131,13 @@ Foto e testo aggiunti dopo non cambiano una preparazione già salvata, una
 richiesta di firma o un documento firmato. Il ramo per i documenti con foto
 resta invariato; i renderer storici v1/v2 rimangono disponibili. Nessuna
 riscrittura di payload, hash o PDF esistenti.
+
+
+## Pacchetti PMU, rappresentanti e controfirma — 28 ottobre 2026
+
+Il percorso nativo `/documento#token` estende lo stesso motore con ricevute
+sanitarie precedenti alle risposte, uno o due rappresentanti verificati e
+controfirma dell’operatrice assegnata. Il PDF finale `glow-pdf-v3` viene prodotto
+solo quando tutti gli atti richiesti sono persistiti. v1/v2 non si riscrivono.
+Profilo/tipo seduta, istruzioni/ricezione, scelte foto e limite riconoscibilità
+rientrano nelle prove. Contratto e uso: [DEFAULT_CONSENTS.md](DEFAULT_CONSENTS.md).

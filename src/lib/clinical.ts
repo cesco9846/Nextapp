@@ -116,6 +116,7 @@ export const lotSnapshotSchema = z
     "L’etichetta e la sua verifica devono essere presenti insieme.",
   );
 export const preparationContextSchema = z.object({
+  native_packet: z.boolean().optional(),
   appointment: z.object({
     id: z.uuid(),
     client_id: z.uuid(),

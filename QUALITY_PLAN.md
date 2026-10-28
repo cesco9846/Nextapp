@@ -257,3 +257,38 @@ fresh equivalente al reviewer distribuito poiché il relativo harness specializz
 non è disponibile. Lint, TypeScript e build produzione passati. Migrazione 028
 applicata al progetto ufficiale e tutti i 28 checksum verificati; sei cron attivi,
 reminder e manutenzione enabled/ok. Nessun dato dello studio cancellato nei probe.
+
+
+## Pacchetti PMU — 28 ottobre 2026
+
+683 pgTAP in 16 file (43 nuovi), 56 unit e 48 E2E passati sul codice finale:
+14 dedicati e 34 regressioni clinica, documenti, privacy ed eliminazioni protette.
+Vere sessioni, Storage, PDF e contesa dei lock, esclusivamente con dati sintetici.
+
+Coperti consenso sanitario precedente ai dati e rifiuto senza risposte,
+immutabilità e rollback se audit fallisce, minori/requisiti e due rappresentanti,
+snapshot comune e foto più restrittive, controfirma solo della professionista
+assegnata, età oggi/alla seduta, isolamento e CSRF, revoca dopo attesa reale,
+etichette pin-scoped, tablet/logout e passaggio a un altro firmatario nello
+stesso browser. Per firma e controfirma, una vera risposta riuscita persa viene
+ripetuta senza nuova firma o duplicato; PDF disponibile senza reload.
+
+PDF v3 con due rappresentanti deterministico nei byte; testo estratto da Poppler
+include scelte, ruoli, istruzioni e controfirma. v1/v2 mantengono le verifiche
+precedenti. La proposta di aggiornamento della base conserva informativa/requisiti
+dello studio, richiede nuova revisione e non modifica le fonti in memoria.
+Lint, TypeScript, build produzione e ripetizione idempotente delle migrazioni
+passati. La prova browser verifica anche data, ora e fuso dello studio nel
+modulo pubblico rispetto all’appuntamento effettivo nel database.
+
+27 catture sintetiche finali a 375/820/1280 px: 21 pagine complete e sei dettagli
+di firma/controfirma, tutte valide e senza overflow orizzontale. Detector una
+volta, zero rilievi. La review completa richiedeva data e ora della seduta nelle
+intestazioni; il verdict pass le valuta risolte, `ship` sul solo fix, senza
+regressioni osservate. Reviewer fresh equivalente al ruolo distribuito, in
+sostituzione di quello non più disponibile dopo il ripristino dell’ambiente.
+
+Migrazione 029 applicata al progetto ufficiale: 29 checksum verificati, sei
+tabelle private con RLS senza grant diretti, renderer v3 abilitato. Nessun
+pacchetto o dato di prova ufficiale; sei cron attivi, reminder e manutenzione
+`enabled/ok`. Restano separati collaudo fisico W18 e ripristino W20.
