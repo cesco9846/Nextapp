@@ -2,8 +2,10 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@/lib/database.types";
+import { cache } from "react";
 
-export async function serverSupabase() {
+// React cache is scoped to a server render, never a cross-user/session cache.
+export const serverSupabase = cache(async function serverSupabase() {
   const store = await cookies();
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,4 +25,4 @@ export async function serverSupabase() {
       },
     },
   );
-}
+});

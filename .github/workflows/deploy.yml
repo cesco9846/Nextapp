@@ -1,0 +1,60 @@
+name: Checked production deployment
+on:
+  workflow_run:
+    workflows: [Application checks]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Successful Application checks run on main
+        required: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: glow-production-deployment
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: >-
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
+      || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Resolve checked source
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CI_SOURCE_RUN_ID: ${{ github.event.workflow_run.id || inputs.source_run_id }}
+        run: |
+          [[ "$CI_SOURCE_RUN_ID" =~ ^[0-9]+$ ]] || exit 1
+          # Validate provenance before checking out code that will receive the
+          # deployment credential. A manual run must never checkout a PR/fork.
+          glow_source_sha="$(gh api "repos/cesco9846/Nextapp/actions/runs/$CI_SOURCE_RUN_ID" --jq '
+            select(.name == "Application checks"
+              and .path == ".github/workflows/ci.yml"
+              and .event == "push" and .head_branch == "main"
+              and .repository.full_name == "cesco9846/Nextapp"
+              and .head_repository.full_name == "cesco9846/Nextapp"
+              and .status == "completed" and .conclusion == "success")
+            | .head_sha')"
+          [[ "$glow_source_sha" =~ ^[a-f0-9]{40}$ ]] || exit 1
+          glow_main_sha="$(gh api repos/cesco9846/Nextapp/git/ref/heads/main --jq '.object.sha')"
+          [[ "$glow_source_sha" == "$glow_main_sha" ]] || exit 1
+          printf 'sha=%s\n' "$glow_source_sha" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.source.outputs.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: node --use-env-proxy --import tsx scripts/deploy-checked.ts
+        env:
+          CI_SOURCE_RUN_ID: ${{ github.event.workflow_run.id || inputs.source_run_id }}
+          GITHUB_TOKEN: ${{ github.token }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { serverSupabase } from "@/server/supabase";
-import { checkDb } from "@/server/http";
+import { ApiError, checkDb } from "@/server/http";
+import { requireWorkspace } from "@/server/session";
 import { AppShell } from "@/components/app-shell";
 
 export const dynamic = "force-dynamic";
@@ -9,23 +9,14 @@ export default async function WorkspaceLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const db = await serverSupabase();
-  const {
-    data: { user },
-  } = await db.auth.getUser();
-  if (!user) redirect("/accedi");
-  const { data: profile, error } = await db
-    .from("users")
-    .select("*")
-    .eq("id", user.id)
-    .maybeSingle();
-  checkDb(error);
-  if (!profile) {
-    const membership = await db.rpc("membership_state");
-    checkDb(membership.error);
-    if (membership.data === "inactive") redirect("/accesso-sospeso");
-    redirect("/configurazione");
-  }
+  const { db, profile } = await requireWorkspace().catch((error) => {
+    if (error instanceof ApiError) {
+      if (error.code === "AUTH_REQUIRED") redirect("/accedi");
+      if (error.code === "ACCESS_REVOKED") redirect("/accesso-sospeso");
+      if (error.code === "WORKSPACE_REQUIRED") redirect("/configurazione");
+    }
+    throw error;
+  });
   const [tenant, locations, services, operators] = await Promise.all([
     db.from("tenants").select("*").eq("id", profile.tenant_id).single(),
     db.from("locations").select("*").order("name"),

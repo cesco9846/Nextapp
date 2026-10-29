@@ -1,6 +1,8 @@
 "use client";
-import { useDeferredValue, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { useWorkspace } from "@/components/app-shell";
 import {
   ChevronLeft,
   ChevronRight,
@@ -29,19 +31,26 @@ import {
 } from "@/components/ui/table";
 
 export default function ClientsPage() {
+  const { profile } = useWorkspace();
   const [search, setSearch] = useState("");
-  const q = useDeferredValue(search);
+  const q = useDebouncedValue(search);
   const [page, setPage] = useState(1);
   const [archived, setArchived] = useState(false);
   const [creating, setCreating] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const { data, isPending, error, refetch } = useQuery({
-    queryKey: ["clients", q, page, archived],
-    queryFn: () =>
-      api<ClientPage>(
-        `/api/clients?q=${encodeURIComponent(q)}&page=${page}&archived=${archived}`,
-      ),
-  });
+  const { data, isPending, isFetching, isPlaceholderData, error, refetch } =
+    useQuery({
+      queryKey: ["clients", profile.id, q, page, archived],
+      queryFn: () =>
+        api<ClientPage>(
+          `/api/clients?q=${encodeURIComponent(q)}&page=${page}&archived=${archived}`,
+        ),
+      refetchOnWindowFocus: "always",
+      refetchOnReconnect: "always",
+      placeholderData: (previous, query) =>
+        query?.queryKey[1] === profile.id ? previous : undefined,
+    });
+  const updating = isFetching || search !== q || isPlaceholderData;
   return (
     <div className="page-container">
       <div className="flex flex-wrap items-start justify-between gap-5">
@@ -84,7 +93,10 @@ export default function ClientsPage() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="soft-panel mt-5 overflow-hidden">
+      <div className="mt-2 min-h-6 text-sm text-muted-foreground" role="status">
+        {data && updating ? "Aggiornamento elenco…" : ""}
+      </div>
+      <div className="soft-panel mt-2 overflow-hidden" aria-busy={updating}>
         {isPending ? (
           <LoadingState label="Caricamento clienti…" />
         ) : error ? (
@@ -137,6 +149,7 @@ export default function ClientsPage() {
                       <button
                         className="flex min-h-11 items-center gap-3 text-left"
                         onClick={() => setSelected(c.id)}
+                        disabled={isPlaceholderData || search !== q}
                       >
                         <span
                           aria-hidden="true"
@@ -190,6 +203,7 @@ export default function ClientsPage() {
                         size="icon"
                         onClick={() => setSelected(c.id)}
                         aria-label={`Apri scheda di ${c.first_name} ${c.last_name}`}
+                        disabled={isPlaceholderData || search !== q}
                       >
                         <ChevronRight className="size-4" />
                       </Button>
@@ -207,7 +221,7 @@ export default function ClientsPage() {
                 <Button
                   variant="outline"
                   size="icon"
-                  disabled={page === 1}
+                  disabled={page === 1 || updating}
                   onClick={() => setPage(page - 1)}
                   aria-label="Pagina precedente"
                 >
@@ -216,7 +230,7 @@ export default function ClientsPage() {
                 <Button
                   variant="outline"
                   size="icon"
-                  disabled={page * data.pageSize >= data.total}
+                  disabled={page * data.pageSize >= data.total || updating}
                   onClick={() => setPage(page + 1)}
                   aria-label="Pagina successiva"
                 >

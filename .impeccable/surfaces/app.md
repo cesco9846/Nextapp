@@ -172,3 +172,40 @@ coprono concorrenza reale DB/Storage e immutabilità dei PDF. Le catture usano
 contenuti sintetici e non costituiscono prove su dispositivi fisici. Le derive
 preesistenti di `buildPath` non impostato e provenienza storica del seed non
 sono riparate né canonizzate.
+
+### Stabilizzazione degli aggiornamenti (29 ottobre 2026)
+
+Ordinary extension Operate: la ricerca clienti attende 300 ms dall’ultima
+modifica. L’elenco precedente resta visibile soltanto per la stessa identità;
+durante il cambio di ricerca o i risultati provvisori le aperture delle schede
+sono disabilitate. Una riga di stato con spazio riservato annuncia
+«Aggiornamento elenco…» senza spostare la tabella. Vuoto ed errore mantengono
+messaggi e recupero espliciti. L’agenda inizializza subito l’intervallo nel fuso
+dello studio, conservando Giorno su telefono e Settimana da 768 px.
+
+Il controllo leggero dell’appartenenza si aggiorna ogni 15 secondi; il workspace
+completo ogni cinque minuti. Permessi, clienti, agenda e pannelli documentali
+richiedono nuovamente i dati al ritorno del focus o della connessione. Il cambio
+di identità svuota la cache in memoria. Queste frequenze descrivono il codice
+attuale e non introducono persistenza offline.
+
+Confrontati PRODUCT.md, DESIGN.md, `.impeccable/design.json`, globals,
+Button/Input e gli artefatti clienti, AppShell, Providers, Agenda e pannelli
+consensi/intake. Fondo freddo, bianco, giada, Bricolage/Instrument Sans, regole
+Two Voices/Quiet Surface e componenti shadcn/Monarch restano incumbent; nessun
+nuovo token, mondo o asset pubblico. Sistema e seed conservati invariati.
+
+Finish reviewer fresco equivalente `stabilization_finish_reviewer`: `ship`,
+senza correzioni materiali, sulle 15 catture valide clienti
+`{375,820,1280}-{ready,updating,empty,error}` e agenda
+`{375,820,1280}-ready` in `.impeccable/review/stabilization/`. Documenter fresco
+equivalente in sostituzione del harness specializzato non disponibile: campione
+diretto `clients-375-updating.png`, `clients-1280-error.png` e
+`agenda-820-ready.png`. Verifica finale fornita: ricerca e agenda alle tre
+larghezze, controllo membership a riposo e 24 casi PWA browser/dispositivo
+superati; nessuna nuova esecuzione in questo passaggio documentale.
+Il detector manuale già eseguito una volta in
+`.cache/logs/stabilization-detector.json` contiene sei advisory su label
+preesistenti da 10/11 px; non riparati né promossi a nuovi token. Anche il focus
+degli snippet sidecar e la provenienza storica del seed restano fuori dal
+perimetro di questa estensione.

@@ -8,7 +8,9 @@ export async function POST(request: Request) {
       request,
       z.object({ token: intakeTokenSchema, id: z.uuid() }).strict(),
     );
-    const result = await accessSignature(b.token, "label", { id: b.id });
+    const result = await accessSignature(request, b.token, "label", {
+      id: b.id,
+    });
     if (!("image" in result) || !result.image || !result.mime)
       throw new Error("Label unavailable");
     return privateBinary(result.image, result.mime);

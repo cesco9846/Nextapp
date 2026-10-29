@@ -424,7 +424,7 @@ test("clinical revocation wins over a signature waiting on the tenant lock", asy
       .poll(() =>
         Number(
           documentSql(
-            "select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%use_signature_request%'",
+            "select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%use_public_link%'",
           ),
         ),
       )

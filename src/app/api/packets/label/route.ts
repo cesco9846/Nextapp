@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { linkSource, invokePublicLink } from "@/server/public-links";
 import { z } from "zod";
 import {
   documentAdmin,
@@ -15,18 +15,26 @@ export async function POST(request: Request) {
         .strict(),
     );
     async function authorize() {
-      const r = await documentAdmin().rpc("use_consent_packet", {
-        p_token_hash: createHash("sha256").update(b.token).digest("hex"),
-        p_action: "label",
-        p_input: { id: b.id },
-      });
+      const r = await invokePublicLink(
+        documentAdmin(),
+        linkSource(request),
+        "packet",
+        b.token,
+        "label",
+        { id: b.id },
+      );
       checkDb(r.error);
       const result = z
-        .object({ ok: z.boolean(), file: z.unknown().optional() })
+        .object({
+          ok: z.boolean(),
+          status: z.number().optional(),
+          code: z.string().optional(),
+          file: z.unknown().optional(),
+        })
         .parse(r.data);
       if (!result.ok)
         throw new ApiError(
-          410,
+          result.status ?? 410,
           "Etichetta non disponibile: chiedi allo studio di verificare il documento.",
         );
       return z

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CalendarDays,
@@ -13,12 +13,12 @@ import {
 } from "lucide-react";
 import { usePrivateDocument } from "@/lib/private-document";
 import { api, RequestError } from "@/lib/api";
-import type { Workspace } from "@/lib/types";
+import type { Profile, Workspace } from "@/lib/types";
 import { initials } from "@/lib/dates";
 import { browserSupabase } from "@/lib/supabase/browser";
 import { Brand } from "./brand";
 import { ConnectivityNotice } from "./connectivity-notice";
-import { ErrorState } from "./states";
+import { ErrorState, LoadingState } from "./states";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -61,11 +61,49 @@ export function AppShell({
   const queryClient = useQueryClient();
   usePrivateDocument();
   const { data, error, refetch } = useQuery({
-    queryKey: ["workspace"],
+    queryKey: ["workspace", initial.profile.id],
     queryFn: () => api<Workspace>("/api/workspace"),
     initialData: initial,
-    refetchInterval: 15000,
+    staleTime: 60000,
+    refetchInterval: 300000,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   });
+  const membership = useQuery({
+    queryKey: ["membership", initial.profile.id],
+    queryFn: () => api<Profile>("/api/membership"),
+    initialData: initial.profile,
+    staleTime: 10000,
+    refetchInterval: 15000,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+    retry: false,
+  });
+  const previousMembership = useRef(initial.profile);
+  async function refreshWorkspace() {
+    await Promise.all([refetch(), membership.refetch()]);
+  }
+  useEffect(() => {
+    if (membership.data.id !== initial.profile.id) {
+      queryClient.clear();
+      window.location.replace(
+        new URL("/app/agenda", window.location.origin).href,
+      );
+    } else if (
+      JSON.stringify(membership.data) !==
+      JSON.stringify(previousMembership.current)
+    ) {
+      previousMembership.current = membership.data;
+      queryClient.setQueryData<Workspace>(
+        ["workspace", initial.profile.id],
+        (previous) =>
+          previous ? { ...previous, profile: membership.data } : previous,
+      );
+      void queryClient.invalidateQueries({
+        queryKey: ["workspace", initial.profile.id],
+      });
+    }
+  }, [membership.data, initial.profile.id, queryClient]);
   async function logout() {
     await browserSupabase().auth.signOut();
     queryClient.clear();
@@ -81,8 +119,12 @@ export function AppShell({
           ? "Preparazione trattamento"
           : (navigation.find((n) => path.startsWith(n.href))?.title ??
             "Studio");
+  const workspaceError = error ?? membership.error;
   const accessError =
-    error instanceof RequestError && [401, 403].includes(error.status);
+    workspaceError instanceof RequestError &&
+    [401, 403].includes(workspaceError.status);
+  if (membership.data.id !== initial.profile.id)
+    return <LoadingState label="Aggiornamento dell’accesso…" />;
   return (
     <Context.Provider value={data}>
       <a
@@ -212,7 +254,7 @@ export function AppShell({
         </header>
         <main id="contenuto">
           <ConnectivityNotice />
-          {error && !accessError && (
+          {workspaceError && !accessError && (
             <div
               role="alert"
               className="flex flex-wrap items-center justify-between gap-3 border-b bg-secondary px-5 py-3 text-sm md:px-8"
@@ -222,13 +264,16 @@ export function AppShell({
                 potrebbero non essere aggiornati; i campi compilati sono
                 conservati.
               </p>
-              <Button variant="outline" onClick={() => void refetch()}>
+              <Button variant="outline" onClick={() => void refreshWorkspace()}>
                 Riprova aggiornamento
               </Button>
             </div>
           )}
           {accessError ? (
-            <ErrorState error={error} retry={() => void refetch()} />
+            <ErrorState
+              error={workspaceError}
+              retry={() => void refreshWorkspace()}
+            />
           ) : (
             children
           )}

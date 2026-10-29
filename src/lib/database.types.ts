@@ -2395,6 +2395,25 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      session_profile: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          active: boolean;
+          clinical_access: boolean;
+          created_at: string;
+          display_name: string;
+          id: string;
+          role: string;
+          tenant_id: string;
+          version: number;
+        }[];
+        SetofOptions: {
+          from: "*";
+          to: "users";
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       set_client_assignment: {
         Args: {
           p_assigned: boolean;
@@ -2565,6 +2584,17 @@ export type Database = {
           p_answers: Json;
           p_confirm_read: boolean;
           p_request_id: string;
+          p_token_hash: string;
+        };
+        Returns: Json;
+      };
+      use_public_link: {
+        Args: {
+          p_action: string;
+          p_family: string;
+          p_input?: Json;
+          p_request_id?: string;
+          p_source_hash: string;
           p_token_hash: string;
         };
         Returns: Json;

@@ -169,9 +169,10 @@ select ok((select not public from storage.buckets where id='glow-documents'),'do
 select is((select count(*)::int from public.audit_log where action='consent.signed' and actor_id is not null),0,'client signing does not impersonate professional');
 insert into app_private.signature_rate_limits values('old',date_trunc('minute',clock_timestamp())-interval '2 hours',1);
 set local role service_role;
-select is((select jsonb_agg(public.use_signature_request(repeat('e',64),'read') order by s)->30->>'status' from generate_series(1,31) s),'429','persistent token limiter counts rejected attempts');
+select is((select jsonb_agg(public.use_public_link(repeat('f',64),'signature',repeat('e',64),'read') order by s)->60->>'status' from generate_series(1,61) s),'429','persistent source limiter counts invalid attempts');
 reset role;
-select is((select max(attempts) from app_private.signature_rate_limits where key=repeat('e',64)),31,'rejected requests commit their counter');
-select is((select count(*)::int from app_private.signature_rate_limits where key='old'),0,'expired rate windows are cleaned');
+select is((select max(attempts) from app_private.public_link_limits where scope='invalid-source' and key_hash=repeat('f',64)),61,'rejected requests commit their counter');
+do $$begin perform app_private.prune_reminder_logs();end;$$;
+select is((select count(*)::int from app_private.signature_rate_limits where key='old'),0,'hourly cleanup removes expired legacy windows');
 select * from finish();
 rollback;

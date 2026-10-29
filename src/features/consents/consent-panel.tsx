@@ -5,6 +5,7 @@ import { Copy, Download, Link2, Tablet } from "lucide-react";
 import { api, RequestError } from "@/lib/api";
 import type { IntakeCreated, IntakeLink } from "@/lib/intake";
 import type { ConsentMetadata } from "@/lib/consents";
+import { consentPollDelay } from "@/lib/document-polling";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -57,7 +58,15 @@ export function ConsentPanel({
       api<{ links: IntakeLink[]; documents: ConsentMetadata[] }>(
         `/api/appointments/${id}/consents`,
       ),
-    refetchInterval: 10000,
+    refetchInterval: (state) =>
+      consentPollDelay(
+        state.state.data,
+        appointmentVersion,
+        preparationVersion,
+        now,
+      ),
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   });
   const signed = query.data?.documents.some(
     (d) => d.preparation_version === preparationVersion,

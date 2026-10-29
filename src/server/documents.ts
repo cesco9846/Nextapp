@@ -1,4 +1,5 @@
 import "server-only";
+import { linkSource, invokePublicLink } from "./public-links";
 import { createHash } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
@@ -94,6 +95,7 @@ export function privateBinary(
   });
 }
 export async function accessSignature(
+  request: Request,
   token: string,
   action: "read" | "sign" | "label",
   input?: SignatureInput | { id: string },
@@ -109,11 +111,14 @@ export async function accessSignature(
       );
     }
   }
-  const result = await documentAdmin().rpc("use_signature_request", {
-    p_token_hash: createHash("sha256").update(token).digest("hex"),
-    p_action: action,
-    p_input: input ?? null!,
-  });
+  const result = await invokePublicLink(
+    documentAdmin(),
+    linkSource(request),
+    "signature",
+    token,
+    action,
+    input ?? null,
+  );
   checkDb(result.error);
   const envelope = z
     .object({

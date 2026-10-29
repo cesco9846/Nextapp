@@ -488,3 +488,50 @@ Migrazione forward 029, compatibile con lo storico; checkpoint
 `checkpoint-consent-packages-2026-10-28`. Testi e requisiti territoriali
 richiedono revisione della titolare prima dell’uso reale. W20 e i gate R1
 restano aperti.
+
+## Adeguamento Italia/GDPR — piano del 28 ottobre 2026
+
+Su richiesta dell’utente, gap analysis in [COMPLIANCE_PLAN.md](COMPLIANCE_PLAN.md).
+Perimetro confermato: prima studio della sorella, poi SaaS; attualmente solo dati
+sintetici. I controlli tecnici già implementati non chiudono il gate normativo.
+
+| Incremento | Risultato richiesto | Dipendenze / gate |
+| --- | --- | --- |
+| CP-00 | Hosting e filiera contrattualmente idonei, trasferimenti e costi documentati | P0: verificare Vercel Hobby/uso commerciale e limiti del DPA sulle categorie particolari prima dei dati reali |
+| CP-01 | Soggetti, regione, registro, basi artt. 6/9, screening DPIA e decisione DPO | Studio/gestore e consulente; nessuna regola regionale inventata |
+| CP-02 | Informative gestore/studio, cookie, condizioni, versioni e consegna | Testi approvati; niente banner automatico se solo cookie tecnici |
+| CP-03 | Informativa/base prima dei dati in tutti i percorsi; salute, foto, minori, firme | Include percorsi legacy/personalizzati; requisiti PMU regionali verificati |
+| CP-04 | Diritti completi, termini di risposta, retention e cancellazione verificabile | Estende W19; gestione prove, Storage e ripristino backup |
+| CP-05 | DB+Storage backup/restore e sicurezza operativa | W20; requisiti e budget espliciti, separazione dei dati sintetici |
+| CP-06 | Responsabilità, accessi e procedura data breach provata | Studio/gestore per i rispettivi ruoli; notifiche soltanto quando dovute |
+| CP-07 | Gate documentato per il primo studio | CP-00–06 applicabili chiusi e controlli W18; dati reali solo nel perimetro validato |
+| CP-08 | Contratti/onboarding/uscita SaaS e verifica altre norme applicabili | Prima di altri studi; rinnovo screening con scala e fornitori |
+
+Informative e procedure saranno validate dal soggetto competente; questa analisi
+non pubblica testi legali, non attiva servizi a pagamento e non migra l’hosting.
+Le funzioni restano in collaudo sintetico mentre si chiudono i prerequisiti.
+
+## Stabilizzazione dalla revisione esterna — 29 ottobre 2026
+
+Letto integralmente `Glow_Revisione_2026-10-28.pdf` (12 pagine) e confrontati
+i rilievi urgenti con il codice `53d0f76`. Piano eseguibile e riscontri in
+[STABILIZATION_PLAN.md](STABILIZATION_PLAN.md); le proposte del documento non
+sono comandi o acquisti autorizzati. Il primo incremento è implementato; stato per task e limiti in STABILIZATION_PLAN.md
+e STABILIZATION_IMPLEMENTATION.md. Il piano completo resta aperto.
+
+Ordine: S01 rate limit come primo fix; S00 baseline autenticata e disegno S02
+backup in parallelo; S03 configurazione/deploy dopo CI; S04/S05 sessioni,
+richieste e interfaccia; S06 lock/indici/spazio; S07 destinatario/firma e S08
+prerequisiti CP; S09 cutover Hostinger prima dei dati reali. Ogni task ha prove
+di accettazione e mantiene invarianti di revoca, RLS, audit, snapshot e idempotenza.
+
+Decisione utente: **Hostinger VPS cloud privato** quando si passa in produzione
+con il gruppo di 3–5 utenti. Supabase resta il servizio DB/Auth/Storage; il VPS
+ospiterà app/API/SSR/PDF. Contratto/regione/costi e gestione da validare, backup
+off-site e rollback su hosting idoneo. Nessun passaggio Vercel Pro automatico.
+Il numero di utenti non rinvia i requisiti privacy del primo studio reale.
+
+Vetrina, Stripe/automazione SdI, eventuale repository privato e micro-ottimizzazioni
+non misurate restano secondari; gli obblighi fiscali applicabili al primo incasso
+vanno comunque assolti. La fase di analisi non ha modificato servizi remoti; il rilascio successivo è
+tracciato nel checkpoint di stabilizzazione.

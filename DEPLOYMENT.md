@@ -8,8 +8,9 @@
 - GitHub: `cesco9846/Nextapp`, production branch `main`.
 
 Il progetto è stato creato separatamente dagli altri progetti Vercel il 16 ottobre
-2026, con integrazione GitHub autorizzata alla repository. I push a `main`
-avviano il deploy. Verificare sempre lo stato **READY** e lo SHA del nuovo
+2026, con integrazione GitHub autorizzata alla repository. I push a `main` avviano Application checks; il deployment viene richiesto
+solo dopo la riuscita dello stesso SHA dal workflow Checked production deployment.
+L’autodeploy Git indipendente è disabilitato da `vercel.json`. Verificare sempre lo stato **READY** e lo SHA del nuovo
 deployment; un push GitHub non prova da solo la pubblicazione dell’app.
 
 ## Configurazione
@@ -34,24 +35,47 @@ le normali operazioni dello studio usano la sessione utente e RLS.
 I preview deploy sono disabilitati in questo progetto: origine canonica,
 redirect e database ufficiale sono configurati per il dominio sopra. Prima di
 attivarli definire domini e credenziali di staging, senza allargare indiscriminatamente
-i redirect Auth. Il ramo `main` continua a distribuire normalmente.
+i redirect Auth. Il ramo `main` viene distribuito tramite il gate CI descritto sotto.
 
 Supabase Auth usa il dominio pubblico come Site URL e autorizza soltanto i callback
 esatti `/auth/conferma`, `/auth/conferma?next=/nuova-password` e
 `/auth/conferma?next=/invito`. Restano autorizzati gli equivalenti locali.
-Conferma email obbligatoria; Auth SMTP ancora da configurare separatamente.
-Reminder Resend/glowlabs.it ripresi in W16.a: chiave solo nel binding del worker,
-mai nel browser. Il webhook richiede RESEND_WEBHOOK_SECRET sensitive/server-only
-su Vercel, distinto dalla chiave invio; configurato e verificato.
+Conferma email obbligatoria. SMTP Auth è configurato su Resend dal completamento
+W17, mittente Glow <reminder@glowlabs.it>, limite configurato 20/ora (non è la
+quota totale del piano Resend). Accesso e reset ricevuti nella posta in arrivo,
+confermati dall’utente; non ripetere invii di prova senza autorizzazione.
 
-Dominio glowlabs.it collegato e HTTPS attivo; DNS Register.it A216.198.79.1
-riconosciuto da Vercel. Record email preservati. Site URL Supabase aggiornato,
-con callback esatti sul nuovo dominio e precedenti localhost/Vercel conservati.
-Webhook esistente Resend aggiornato dall’utente a
-https://glowlabs.it/api/webhooks/resend; firme e callback dei simulatori verificati
-senza fixture remote. Master reminder ancora OFF; scheduler/monitor W16.c documentati sotto.
-Auth SMTP rimane separato: servizio predefinito Supabase con limite2email/ora;
-non è stato modificato per il rifiuto signup422 di password troppo corta.
+Dominio glowlabs.it collegato e HTTPS attivo; DNS Register.it riconosciuto da
+Vercel, record email preservati. Webhook Resend:
+https://glowlabs.it/api/webhooks/resend, firma sensitive/server-only.
+Reminder e manutenzione sono **attivi**; configurazioni e probe in
+[REMINDER_SCHEDULER.md](REMINDER_SCHEDULER.md) e
+[OPERATIONS_AUTOMATION.md](OPERATIONS_AUTOMATION.md).
+Per scelta utente gli alert tecnici via email attendono la casella dedicata.
+
+## Gate CI del 29 ottobre 2026
+
+`deploy.yml` accetta solo Application checks completato con successo da push
+sul main della repository cesco9846/Nextapp. Verifica provenienza prima del
+checkout e ricontrolla SHA/evento/stato prima di chiamare Vercel. Il commit deve
+coincidere con main; PR, fork, CI fallita o commit superato non vengono promossi.
+`gitSource.ref` e `sha` sono fissati al commit verificato. Nessuna pubblicazione
+del branch in movimento. Job serializzato; verifica READY e SHA conclusiva.
+
+Prerequisito: Actions secret `VERCEL_TOKEN` nella repository, con accesso al
+progetto Vercel. Il token presente in questo workspace non viene copiato
+implicitamente su GitHub. L’integrazione della chat non dispone dei permessi
+Secrets (403); finché il secret manca, usare dal workspace autenticato:
+
+```sh
+node --use-env-proxy --import tsx scripts/deploy-checked.ts <successful-main-run-id>
+```
+
+La stessa verifica blocca il deploy se CI è rossa. Non riattivare l’autodeploy
+per aggirarla. Un workflow dispatch deve riferirsi a un run main verificato.
+Prima di configurare staging remoto: progetto Supabase, domini callback,
+segreti, scheduler e destinatari separati; le attuali guardie di progetto non
+vanno rimosse per far funzionare un preview contro produzione.
 
 ## Pubblicazione e verifica
 
@@ -59,14 +83,16 @@ non è stato modificato per il rifiuto signup422 di password troppo corta.
 2. Migrazioni additive versionate con `scripts/migrate.py`; ledger/checksum
    ufficiale e riapplicazione idempotente, senza reset remoto.
 3. Build, commit, push di `main` e tag checkpoint. Non lasciare chiavi nei diff.
-4. Verificare GitHub Actions e deployment Vercel sul medesimo SHA.
+4. Attendere CI verde, avviare il deploy verificato (workflow o script) e
+   controllare Vercel READY sul medesimo SHA.
 5. Verificare via HTTPS health, accesso, manifest, pagine capability no-store e
    redirect/401 delle aree protette. Non inviare email o firme sintetiche in produzione.
 
 La PWA è installabile e richiede rete. I PDF usano la coda persistente descritta
 in [DOCUMENTS.md](DOCUMENTS.md); `after()` non sostituisce uno scheduler sempre
-attivo. Prima del pilota completare worker/monitoraggio, email, dispositivi e
-backup/restore del piano qualità.
+attivo. Worker, SMTP e scheduler sono operativi. Prima del pilota completare
+monitor indipendente, dispositivi, backup/restore e gate privacy; produzione
+prevista sul VPS Hostinger secondo STABILIZATION_PLAN.md, non ancora configurato.
 
 ## Runner e monitor W16.c
 

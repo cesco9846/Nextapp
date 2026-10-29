@@ -28,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { Temporal } from "temporal-polyfill";
 import { api } from "@/lib/api";
+import { initialAgendaRange } from "@/lib/calendar-range";
 import type { Appointment, Client } from "@/lib/types";
 import { formatDate, formatTime, initials, instantToLocal } from "@/lib/dates";
 import { statusLabels } from "@/lib/contracts";
@@ -65,18 +66,22 @@ export function Agenda() {
   const query = useQueryClient();
   const params = useSearchParams();
   const calendar = useRef<CalendarRef>(null);
+  const [day, setDay] = useState(() =>
+    Temporal.Now.zonedDateTimeISO(tenant.timezone).toPlainDate().toString(),
+  );
   const [view, setView] = useState(() =>
     window.innerWidth < 768 ? "timeGridDay" : "timeGridWeek",
   );
   const [title, setTitle] = useState("");
-  const [range, setRange] = useState<{ start: string; end: string } | null>(
-    null,
+  const [range, setRange] = useState(() =>
+    initialAgendaRange(
+      day,
+      view === "timeGridDay" ? "timeGridDay" : "timeGridWeek",
+      tenant.timezone,
+    ),
   );
   const [location, setLocation] = useState("all");
   const [operator, setOperator] = useState("all");
-  const [day, setDay] = useState(() =>
-    Temporal.Now.zonedDateTimeISO(tenant.timezone).toPlainDate().toString(),
-  );
   const [editor, setEditor] = useState<{
     appointment?: Appointment;
     date?: string;
@@ -123,6 +128,8 @@ export function Agenda() {
       ),
     enabled: !!range,
     refetchInterval: 30000,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   });
   const move = useMutation({
     mutationFn: ({

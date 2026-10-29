@@ -19,6 +19,8 @@ Revisione del 15 ottobre 2026: baseline di implementazione, con dettagli in
 
 | D08 | Resend per i reminder; dominio acquistato dall’utente. | U, 15 ottobre 2026. DNS, caselle e integrazione rinviati; nessun invio in W12. EMAIL_DELIVERY.md conserva la proposta dei mittenti. |
 
+| D09 | Hostinger VPS cloud privato per la produzione con il gruppo iniziale di 3–5 utenti. | U, 29 ottobre 2026. Preparare il trasferimento dell’app Next.js/API/SSR/PDF prima dell’attivazione reale; mantenere Supabase DB/Auth/Storage e glowlabs.it. Non implica trasferimento del database, acquisto immediato o idoneità contrattuale già verificata. Piano in STABILIZATION_PLAN.md, gate privacy in COMPLIANCE_PLAN.md. Fino ai prerequisiti, collaudo sintetico. |
+
 ## Baseline tecnica affinata, da implementare e verificare
 
 Queste scelte ingegneristiche rendono il lavoro eseguibile e sono reversibili con

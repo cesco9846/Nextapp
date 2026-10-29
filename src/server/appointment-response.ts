@@ -1,5 +1,5 @@
 import "server-only";
-import { createHash } from "node:crypto";
+import { linkSource, invokePublicLink } from "./public-links";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
 import {
@@ -10,6 +10,7 @@ import { ApiError, checkDb } from "./http";
 import { z } from "zod";
 
 export async function accessAppointmentResponse(
+  request: Request,
   token: string,
   action: "read" | "confirm" | "cancel",
   requestId?: string,
@@ -31,11 +32,15 @@ export async function accessAppointmentResponse(
         fetch(input, { ...init, signal: AbortSignal.timeout(10000) }),
     },
   });
-  const result = await db.rpc("use_appointment_action_link", {
-    p_token_hash: createHash("sha256").update(token).digest("hex"),
-    p_action: action,
-    p_request_id: requestId ?? null!,
-  });
+  const result = await invokePublicLink(
+    db,
+    linkSource(request),
+    "appointment",
+    token,
+    action,
+    null,
+    requestId ?? null,
+  );
   checkDb(result.error);
   const parsed = z
     .object({

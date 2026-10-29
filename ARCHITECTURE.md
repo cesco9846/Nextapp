@@ -1,13 +1,13 @@
 # Architettura di implementazione
 
-Stato al 16 ottobre 2026: Next.js/SSR Auth, API con sessione utente, RLS/RPC,
-React Query, Monarch/shadcn, team, Storage privata e preparazione clinica non firmata
-implementati, insieme a link cliente e passaggio tablet isolato. Firma, snapshot immutabile e PDF privati recuperabili W13 sono
-implementati; W14 estende con foto e scelte firmate separate. Motore worker email W15 implementato con trasporto locale;
-adattatore Resend e webhook firmati sono implementati in W16.a. Secret webhook live, inbox e scheduler continuo restano da configurare.
-La pulizia file ha un comando recuperabile, senza scheduler
-remoto ancora attivo. Offline rimosso dal perimetro per scelta utente. Requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md),
-consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
+Stato corrente al 29 ottobre 2026: Next.js/React, Supabase Auth/DB/Storage,
+Monarch/shadcn, dossier, consensi legacy e pacchetti PMU, PDF, foto ed export
+implementati. Reminder Resend e manutenzione automatica sono attivi; SMTP Auth
+configurato e ricevuto dall’utente. PWA installabile con rete necessaria.
+Stabilizzazione in [STABILIZATION_IMPLEMENTATION.md](STABILIZATION_IMPLEMENTATION.md),
+requisiti in [SPEC.md](SPEC.md), schema in [DATA_MODEL.md](DATA_MODEL.md).
+Produzione reale ancora subordinata a backup/restore, gate privacy e hosting
+idoneo; destinazione scelta Hostinger VPS, Supabase mantenuto.
 
 ## Componenti e confini
 
@@ -18,9 +18,9 @@ consegne in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 | Identità         | Supabase Auth con integrazione SSR/cookie supportata; sessione verificata sul server per ogni operazione riservata. Middleware solo per navigazione, non come unica autorizzazione.                                                                                          |
 | Persistenza      | Postgres Supabase, migrazioni versionate, RLS, FK tra tenant e RPC per operazioni atomiche. Tipi generati dallo schema.                                                                                                                                                      |
 | File             | Supabase Storage privato; metadati autorizzativi, staging/finalizzazione, URL firmati brevi e documenti immutabili.                                                                                                                                                          |
-| Lavori asincroni | Outbox in Postgres; pg_cron invoca worker Supabase Edge Functions autenticati. Batch limitati, lease, idempotenza e heartbeat. Nessun timer in memoria del server web.                                                                                                       |
+| Lavori asincroni | Outbox in Postgres; pg_cron/pg_net invoca route Node autenticate con HMAC e nonce. Batch limitati, lease, idempotenza e heartbeat. Nessun timer in memoria del server web.                                                                                                       |
 | PDF              | Worker con renderer e font versionati, verificati con firma, etichette, accenti e documenti lunghi; non dipende dal browser della cliente. Implementato con pdf-lib/fontkit e Noto Sans versionati; coda persistente, Next after e retry manuale. Contratto in DOCUMENTS.md. |
-| Email            | Adapter server minimo per invio con chiave idempotente ed esiti; Resend/glowlabs.it con adapter e webhook W16.a; attivazione automatica ancora disabilitata. Auth SMTP e reminder sono due configurazioni distinte.                                                          |
+| Email            | Adapter server minimo per invio con chiave idempotente ed esiti; Resend/glowlabs.it con adapter e webhook W16.a; invio automatico attivo e SMTP Auth configurato. Auth SMTP e reminder sono due configurazioni distinte.                                                          |
 | PWA              | Manifest installabile e istruzioni, connessione necessaria. Nessun service worker con dati riservati e nessuno snapshot IndexedDB. React Query mantiene soltanto memoria temporanea della sessione.                                                                          |
 
 ## Calendario: integrazione verificata
@@ -125,6 +125,15 @@ esplicita, evitando il loop agenda/configurazione. La revoca non può cancellare
 informazioni già lette o viste su un dispositivo disconnesso.
 
 ## Ambienti, migrazioni e rilascio
+
+Destinazione confermata dall’utente il 29 ottobre 2026: **Hostinger VPS cloud
+privato** per app Next.js, API/SSR e generazione PDF al passaggio alla produzione
+con il primo gruppo di 3–5 utenti. È una destinazione pianificata, non un deploy
+già eseguito. Supabase DB/Auth/Storage e dominio glowlabs.it restano previsti;
+nessuna scelta di self-hosting del database implicita. Datacenter/contratto
+idonei, staging, backup/restore, deploy subordinato a CI e rollback sono gate
+in STABILIZATION_PLAN.md (S03/S09) e COMPLIANCE_PLAN.md (CP-00/05/07).
+Il VPS non garantisce da solo conformità, alta disponibilità o manutenzione.
 
 Produzione designata: `mexokvvvxdyekauupwvt`, nome Nextapp, regione `eu-west-1`.
 Accesso amministrativo e CREATE verificati in lettura; schema public e bucket

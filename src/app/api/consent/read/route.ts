@@ -4,6 +4,6 @@ import { accessSignature } from "@/server/documents";
 export async function POST(request: Request) {
   return handleApi(async () => {
     const b = await readBody(request, intakeReadSchema);
-    return json(await accessSignature(b.token, "read"));
+    return json(await accessSignature(request, b.token, "read"));
   });
 }

@@ -1,5 +1,5 @@
 import "server-only";
-import { createHash } from "node:crypto";
+import { linkSource, invokePublicLink } from "./public-links";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/lib/database.types";
@@ -9,6 +9,7 @@ import { ApiError, checkDb } from "./http";
 // This client never leaves this module. Its only operation is the constrained
 // capability RPC, never arbitrary table reads or patient identifiers from callers.
 export async function accessIntake(
+  request: Request,
   token: string,
   action: "read" | "submit",
   input?: {
@@ -30,13 +31,15 @@ export async function accessIntake(
   const db = createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const result = await db.rpc("use_intake_link", {
-    p_token_hash: createHash("sha256").update(token).digest("hex"),
-    p_action: action,
-    p_request_id: input?.request_id ?? null!,
-    p_answers: input?.answers ?? null!,
-    p_confirm_read: input?.confirm_read ?? null!,
-  });
+  const result = await invokePublicLink(
+    db,
+    linkSource(request),
+    "intake",
+    token,
+    action,
+    input ? { answers: input.answers, confirm_read: input.confirm_read } : null,
+    input?.request_id ?? null,
+  );
   checkDb(result.error);
   const envelope = z
     .object({

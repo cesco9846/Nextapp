@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { linkSource, invokePublicLink } from "@/server/public-links";
 import { z } from "zod";
 import { packetActionSchema, packetSignSchema } from "@/lib/packages";
 import { documentAdmin } from "@/server/documents";
@@ -22,11 +22,14 @@ export async function POST(request: Request) {
         .strict()
         .parse(b.input);
     await assertPackageText(input);
-    const r = await documentAdmin().rpc("use_consent_packet", {
-      p_token_hash: createHash("sha256").update(b.token).digest("hex"),
-      p_action: b.action,
-      p_input: input as never,
-    });
+    const r = await invokePublicLink(
+      documentAdmin(),
+      linkSource(request),
+      "packet",
+      b.token,
+      b.action,
+      input,
+    );
     checkDb(r.error);
     const data = z
       .object({

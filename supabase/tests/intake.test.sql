@@ -115,20 +115,21 @@ select is(pg_temp.intake('revoked','read')->>'status','410','revoked capability 
 select is(pg_temp.intake('changed','read')->>'status','410','preparation edits invalidate open capability');
 reset role;
 -- Rejected-token attempts must persist rather than rolling back the counter.
-do $$ declare result jsonb; begin for n in 1..41 loop result:=public.use_intake_link(repeat('e',64),'read',null,null,null);exit when result->>'status'='429';end loop;end;$$;
-select ok(exists(select 1 from app_private.intake_rate_limits where key=repeat('e',64) and attempts>20),'invalid capability attempts are persisted and limited');
-select ok((select sum(attempts) from app_private.intake_rate_limits where key='global')>=20,'global counter includes unsuccessful attempts');
+do $$ declare result jsonb; begin for n in 1..70 loop result:=public.use_public_link(repeat('f',64),'intake',repeat('e',64),'read');exit when result->>'status'='429';end loop;end;$$;
+select ok(exists(select 1 from app_private.public_link_limits where scope='invalid-source' and key_hash=repeat('f',64) and attempts=61),'invalid capability attempts are persisted and limited');
+select ok(not exists(select 1 from app_private.intake_rate_limits where key='global'),'invalid attempts never spend a global quota');
 select is((select count(*)::int from public.audit_log where tenant_id='faaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' and action='intake.submitted'),1,'one completed submission has one explicit audit event');
 insert into app_private.intake_rate_limits(key,window_start,attempts) values('old-fixture',date_trunc('minute',clock_timestamp())-interval '2 hours',1);
 do $$ declare result jsonb; begin
  for n in 1..350 loop
-  result:=public.use_intake_link(encode(extensions.digest(n::text,'sha256'),'hex'),'read',null,null,null);
+  result:=public.use_public_link(repeat('a',64),'intake',encode(extensions.digest(n::text,'sha256'),'hex'),'read');
   exit when result->>'status'='429';
  end loop;
  insert into capabilities values('global-rate',result);
 end;$$;
-select is((select data->>'status' from capabilities where label='global-rate'),'429','rotating invalid tokens cannot bypass global rate cap');
-select is((select count(*)::int from app_private.intake_rate_limits where key='old-fixture'),0,'old rate windows are cleaned');
+select is((select data->>'status' from capabilities where label='global-rate'),'429','rotating invalid tokens cannot bypass their source limit');
+do $$begin perform app_private.prune_reminder_logs();end;$$;
+select is((select count(*)::int from app_private.intake_rate_limits where key='old-fixture'),0,'hourly cleanup removes expired legacy windows');
 set constraints all immediate;
 select * from finish();
 rollback;

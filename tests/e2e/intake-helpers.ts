@@ -42,7 +42,7 @@ export function waitingIntakeRequests() {
         "-d",
         "postgres",
         "-Atc",
-        "select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%use_intake_link%'",
+        "select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%use_public_link%'",
       ],
       { encoding: "utf8" },
     ).trim(),

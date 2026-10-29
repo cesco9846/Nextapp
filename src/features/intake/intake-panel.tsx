@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Copy, Link2, Tablet } from "lucide-react";
 import { api, RequestError } from "@/lib/api";
 import type { IntakeCreated, IntakeLink } from "@/lib/intake";
+import { hasOpenLink } from "@/lib/document-polling";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -51,7 +52,18 @@ export function IntakePanel({
     queryKey: ["intake-links", id],
     queryFn: () =>
       api<{ items: IntakeLink[] }>(`/api/appointments/${id}/intake`),
-    refetchInterval: 15000,
+    refetchInterval: (state) =>
+      !state.state.data ||
+      hasOpenLink(
+        state.state.data.items,
+        appointmentVersion,
+        preparationVersion,
+        Date.now(),
+      )
+        ? 15000
+        : false,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   });
   const date = (value: string) =>
     new Intl.DateTimeFormat("it-IT", {

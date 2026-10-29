@@ -7,6 +7,8 @@ export async function POST(request: Request) {
       request,
       responseSubmitSchema,
     );
-    return json(await accessAppointmentResponse(token, action, request_id));
+    return json(
+      await accessAppointmentResponse(request, token, action, request_id),
+    );
   });
 }

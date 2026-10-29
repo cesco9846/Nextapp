@@ -132,6 +132,13 @@ Obiettivi da misurare su staging, non garanzie già raggiunte:
 
 ## Gate R1 — pilota operativo
 
+- [ ] CP-00–07 applicabili di [COMPLIANCE_PLAN.md](COMPLIANCE_PLAN.md) chiusi:
+      hosting/contratti idonei anche per categorie particolari e uso commerciale,
+      informative/basi/diritti, valutazioni DPIA/DPO e procedure approvate.
+- [ ] Gate tecnici di [STABILIZATION_PLAN.md](STABILIZATION_PLAN.md): rate limit
+      isolati, backup DB+Storage ripristinato, deploy del solo SHA verificato,
+      prove di revoca/concorrenza e destinatario, prestazioni misurate. Produzione
+      su Hostinger VPS preparata prima dell’attivazione reale del gruppo di 3–5 utenti.
 - [ ] W01–W20 verificati, incluse prove reali dei provider necessari.
 - [ ] Nessun difetto noto di isolamento, autorizzazione, perdita dati o firma.
 - [ ] Template/informative/retention approvati per l'uso previsto e credenziali
@@ -292,3 +299,26 @@ Migrazione 029 applicata al progetto ufficiale: 29 checksum verificati, sei
 tabelle private con RLS senza grant diretti, renderer v3 abilitato. Nessun
 pacchetto o dato di prova ufficiale; sei cron attivi, reminder e manutenzione
 `enabled/ok`. Restano separati collaudo fisico W18 e ripristino W20.
+
+## Stabilizzazione del 29 ottobre 2026
+
+Contratto ed esiti in STABILIZATION_IMPLEMENTATION.md; stato residuo per task
+in STABILIZATION_PLAN.md. 722 pgTAP/19 file, 80 unit, lint, TypeScript e build
+produzione passati. Reset locale da zero e riapplicazione delle 32 migrazioni
+idempotente. Rate limit verificati solo in locale; logout Auth globale con JWT
+ancora firmato rifiutato dalle API, identità concorrenti isolate. Contesa provata
+con transazioni e lock PostgreSQL reali; PDF, revoche e integrazioni mantengono
+le regressioni esistenti. Non modificare SQL ufficiali 001–029.
+
+Quattro nuovi casi UI (tre larghezze più sospensione a riposo) e 24 PWA su
+quattro classi browser/dispositivo passati. Review Impeccable 4.8.0 `ship` sulle
+15 catture valide; sistema preservato, ruoli reviewer/documenter fresh equivalenti.
+Un detector manuale, sei advisory preesistenti su label compatte, nessun fix
+materiale. La suite browser completa deve partire da Supabase locale pulito:
+non usare le fixture residue dei benchmark come ambiente della verifica finale.
+
+Il workflow deploy controlla lo SHA e la provenienza della CI prima di usare
+credenziali Vercel; otto unit coprono CI fallita, PR/fork, stato incompleto e
+commit superato. La prova effettiva di pubblicazione è il run Actions associato
+al checkpoint e un deployment READY dello stesso SHA. S02 backup/restore,
+staging remoto, monitor indipendente e gate privacy restano aperti.

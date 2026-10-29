@@ -65,3 +65,21 @@ in clinical.md: review equivalente di sostituzione `packages_verdict_reviewer`,
 confrontato client-packet/packet-document, globals e primitive con PRODUCT,
 DESIGN e sidecar, con campione diretto health-375. Nessun cambio di sistema o
 nuovo raster pubblico; drift incumbent lasciato inalterato come in clinical.md.
+
+## Estensione del 29 ottobre 2026 — aggiornamenti del pannello
+
+Ordinary extension Operate del pannello professionale esistente: la lettura dei
+link si ripete ogni 15 secondi durante il caricamento iniziale o finché esiste
+un link non usato, non revocato, non scaduto e relativo alle versioni correnti
+di appuntamento/preparazione. Senza link utilizzabili il polling si arresta;
+focus e riconnessione richiedono comunque uno stato aggiornato. La validità del
+link resta distinta dall’invio delle risposte.
+
+Confrontati `src/features/intake/intake-panel.tsx` e
+`src/lib/document-polling.ts` con PRODUCT, DESIGN, sidecar, globals e primitive:
+nessun nuovo componente, token, asset o cambio del sistema Bricolage/Instrument,
+giada e Quiet Surface. Sistema e seed preservati. Evidenze comuni della
+stabilizzazione e disposizione `ship` registrate in app.md; questo passaggio
+non aggiunge nuove catture del modulo pubblico. Documenter fresco equivalente
+in sostituzione del harness specializzato non disponibile; drift preesistente
+non riparato né canonizzato.

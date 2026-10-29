@@ -4,6 +4,6 @@ import { accessAppointmentResponse } from "@/server/appointment-response";
 export async function POST(request: Request) {
   return handleApi(async () => {
     const { token } = await readBody(request, responseReadSchema);
-    return json(await accessAppointmentResponse(token, "read"));
+    return json(await accessAppointmentResponse(request, token, "read"));
   });
 }

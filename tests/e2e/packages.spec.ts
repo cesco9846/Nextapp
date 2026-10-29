@@ -607,7 +607,7 @@ test("committed issuer suspension while a signature waits for tenant lock preven
       .poll(() =>
         Number(
           documentSql(
-            "select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%use_consent_packet%'",
+            "select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%use_public_link%'",
           ),
         ),
       )

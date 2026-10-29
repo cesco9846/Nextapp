@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
@@ -7,6 +7,7 @@ import { browserSupabase } from "@/lib/supabase/browser";
 import { InstallProvider } from "@/components/install-app";
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const currentUser = useRef<string | null>(null);
   const [client] = useState(
     () =>
       new QueryClient({
@@ -14,10 +15,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
           queries: {
             staleTime: 20000,
             retry: 1,
-            // A suspended PWA may return before staleTime expires. Revalidate
-            // permissions and active views even when the memory cache is fresh.
-            refetchOnWindowFocus: "always",
-            refetchOnReconnect: "always",
+            // Permission and calendar observers explicitly revalidate on every
+            // return. Other views respect their freshness budget.
+            refetchOnWindowFocus: true,
+            refetchOnReconnect: true,
           },
           mutations: { retry: false, networkMode: "always" },
         },
@@ -43,7 +44,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
     window.addEventListener("glow:auth-required", expired);
     const {
       data: { subscription },
-    } = browserSupabase().auth.onAuthStateChange((event) => {
+    } = browserSupabase().auth.onAuthStateChange((event, session) => {
+      const nextUser = session?.user.id ?? null;
+      if (nextUser && currentUser.current && nextUser !== currentUser.current) {
+        client.clear();
+        if (window.location.pathname.startsWith("/app"))
+          window.location.replace(
+            new URL("/app/agenda", window.location.origin).href,
+          );
+      }
+      currentUser.current = nextUser;
       if (event === "SIGNED_OUT") {
         client.clear();
         // Full navigation also discards the authenticated RSC/navigation memory.

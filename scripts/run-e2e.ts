@@ -8,6 +8,7 @@ const env = {
   ...localEnvironment(),
   RESEND_WEBHOOK_SECRET: testResendSecret,
   REMINDER_RUNNER_SECRET: testRunnerSecret,
+  GLOW_PROXY_SECRET: testRunnerSecret,
   NODE_USE_ENV_PROXY: "1",
   NEXT_DIST_DIR: ".next-e2e",
   PLAYWRIGHT_BROWSERS_PATH:

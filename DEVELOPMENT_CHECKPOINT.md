@@ -1,7 +1,8 @@
 # Glow — punto di ripresa dello sviluppo
 
-Aggiornato il 28 ottobre 2026: **moduli predefiniti Microblading/Lip Blush, minori e controfirma**.
-Checkpoint di questo incremento: `checkpoint-consent-packages-2026-10-28` sul ramo `main`.
+Aggiornato il 29 ottobre 2026: **stabilizzazione link, sessioni, database e interfaccia**.
+Checkpoint: `checkpoint-stabilization-2026-10-29` sul ramo `main`.
+Precedente consensi: `checkpoint-consent-packages-2026-10-28` (`53d0f76`).
 Precedente gestione protetta: `checkpoint-safe-management-2026-10-21` (`7e650ab`, documentazione `cb65c03`).
 Precedente W19: `checkpoint-privacy-2026-10-21` (`a357a3e`); Impeccable 4.7.0 (`f4ba2cb`).
 Precedente W18: `checkpoint-pwa-2026-10-21` (`9aa3543`), esiti iPhone `4a40f5b`.
@@ -19,6 +20,58 @@ Precedenti: `checkpoint-photos-2026-10-16` (commit `05bdf0a`),
 `checkpoint-intake-2026-10-15` (commit `1a98da4`),
 `checkpoint-clinical-2026-10-15` e `checkpoint-2026-10-15`.
 Non è ancora il pilota R1.
+
+## Stabilizzazione — stato corrente del 29 ottobre 2026
+
+Contratto, limiti, misure ed esiti in
+[STABILIZATION_IMPLEMENTATION.md](STABILIZATION_IMPLEMENTATION.md).
+Piano completo: [STABILIZATION_PLAN.md](STABILIZATION_PLAN.md).
+Implementati S01, miglioramenti S00/S04/S05 e porzione lock/indici di S06;
+gate S03 per pubblicare solo lo SHA main con CI riuscita. Migrazioni additive
+030–032, nessuna modifica ai file SQL già ufficiali 001–029.
+
+Il gateway pubblico isola origine, token e tenant senza il precedente contatore
+globale. Identità IP derivata dal proxy fidato, HMAC giornaliero e pulizia oraria
+a lotti; nessun nuovo cron. Sessioni API controllate tramite JWT verificato e
+RPC con sessione Auth corrente; non si mantiene cache globale dei permessi.
+Ricerca clienti con debounce, stato di aggiornamento e elenco precedente sicuro;
+membership ogni 15 secondi senza ricaricare i cataloghi. PWA online invariata.
+Impeccable aggiornato a **4.8.0**, come richiesto nel turno precedente.
+
+S02 backup/restore resta bloccante prima dei dati reali: destinazione off-site,
+chiavi separate e accesso PostgreSQL da predisporre; non è stato prodotto un
+backup completo remoto. Per l’automazione S03 serve VERCEL_TOKEN nei Secrets
+Actions della repository; l’integrazione disponibile non può scriverli (403).
+Finché manca, eseguire il medesimo script dal workspace dopo CI verde.
+Staging isolato, S07/S08 e gate privacy non sono chiusi da questo rilascio.
+
+Produzione prevista su **Hostinger VPS cloud privato** per **3–5 utenti**;
+app/API/SSR/PDF sul VPS, Supabase DB/Auth/Storage e glowlabs.it mantenuti.
+Contratto, regione, budget, backup esterno e cutover da validare. Nessun VPS
+acquistato o modificato. Fino ai prerequisiti si usano soltanto dati sintetici.
+Non dichiarare R1, GDPR o disponibilità backup conclusi.
+
+Le sezioni sotto sono cronologia: i relativi conteggi e indicazioni «prossimo
+turno» non prevalgono sullo stato corrente o sul contratto di stabilizzazione.
+
+## Adeguamento privacy — prossimo lavoro prima dei dati reali
+
+Richiesta del 28 ottobre 2026: valutare GDPR e altre norme italiane.
+Gap analysis e incrementi CP-00–08 in [COMPLIANCE_PLAN.md](COMPLIANCE_PLAN.md),
+collegati al piano e al gate R1. L’utente conferma solo dati sintetici e percorso
+prima studio della sorella, poi SaaS. Regione e soggetto gestore da confermare.
+
+Priorità CP-00: piano Vercel Hobby osservato, funzioni dub1/Irlanda e Supabase
+eu-west-1. Hobby non è il piano per l’uso commerciale; il DPA pubblico Vercel
+Pro/Enterprise esclude categorie particolari in Schedule 1 §6, salvo diversa
+pattuizione da verificare. Non basta passare a Pro o scegliere una regione UE.
+Decidere accordi e hosting idonei prima di anamnesi/foto/documenti reali.
+
+Informative del gestore, contratti, percorsi sanitari personalizzati/legacy,
+diritti/cancellazione, DPIA e backup/restore richiedono completamento e verifica.
+Già presenti controlli di isolamento, documenti privati, export e nuovi consensi;
+non costituiscono attestazione legale. Nessuna modifica operativa o pubblicazione
+di testi legali durante questa analisi; lo stato di sviluppo dei consensi segue sotto.
 
 ## Moduli predefiniti — stato corrente
 
@@ -179,8 +232,9 @@ software/fisiche in [PWA_TEST_PLAN.md](PWA_TEST_PLAN.md). Non segnare W18
 completata o R1 chiuso finché mancano gli esiti dei dispositivi. Android fisico
 resta da reperire prima del pilota.
 
-Alla riconnessione e al ritorno in primo piano si rivalidano sempre le query
-attive, anche entro staleTime. Nessuna coda di scrittura: bozze in memoria e
+Alla riconnessione e al ritorno in primo piano si rivalidano sempre membership,
+workspace, clienti, agenda e documenti aperti, anche entro staleTime; le query
+secondarie rispettano la propria finestra di freschezza. Nessuna coda di scrittura: bozze in memoria e
 retry espliciti restano invariati. Sospensione dell’operatrice verificata alla
 ripresa; logout/cronologia non ripristinano lo studio precedente.
 Input e textarea su coarse-pointer mantengono 16 px anche su tablet e landscape;

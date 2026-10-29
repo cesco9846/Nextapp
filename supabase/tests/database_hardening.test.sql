@@ -1,0 +1,16 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set local search_path=public,extensions;
+select no_plan();
+select is((select count(*)::int from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in('public','app_private') and p.prokind='f' and p.prosrc ~ 'from public\.tenants[^;]*for update;'),0,'tenant operations use non-key-changing locks without a conflicting legacy helper');
+select ok((select prosrc like '%from public.tenants%for no key update;%' from pg_proc where oid='app_private.management_owner()'::regprocedure),'owner management still serializes on the tenant');
+select ok((select prosrc like '%from public.appointments%for update;%' from pg_proc where oid='app_private.lock_valid_packet(uuid)'::regprocedure),'packet appointment lock is retained');
+select ok((select prosrc like '%tenant_id=f.tenant_id and actor_id=auth.uid()%' from pg_proc where oid='public.authorize_file_read(uuid)'::regprocedure),'file quota is tenant constrained after authorization');
+select has_index('public','audit_log','audit_log_actor_action_time','audit lookup index exists');
+select has_index('public','audit_log','audit_log_tenant_resource','dossier audit index exists');
+select has_index('public','treatment_preparations','preparations_tenant_client','preparation client index exists');
+select has_index('public','consents','consents_tenant_client','document client index exists');
+select has_index('public','appointments','appointments_tenant_service','service reference index exists');
+select has_index('public','appointments','appointments_tenant_location','location reference index exists');
+select * from finish();
+rollback;

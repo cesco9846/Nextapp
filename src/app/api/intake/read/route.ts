@@ -4,6 +4,6 @@ import { accessIntake } from "@/server/intake";
 export async function POST(request: Request) {
   return handleApi(async () => {
     const body = await readBody(request, intakeReadSchema);
-    return json(await accessIntake(body.token, "read"));
+    return json(await accessIntake(request, body.token, "read"));
   });
 }

@@ -99,3 +99,23 @@ dei controlli e regole Two Voices/Quiet Surface confermati; nessuna modifica ai
 file di sistema. Detector e verifiche comuni registrati in clinical.md, senza
 nuovo ciclo. Drift incumbent non riparato né canonizzato; nessun raster pubblico,
 promessa di pubblicazione o nuova dichiarazione di validità legale/dispositivo.
+
+## Estensione del 29 ottobre 2026 — osservazione dei documenti
+
+Ordinary extension Operate del pannello professionale: caricamento iniziale,
+documenti in preparazione o link di firma correnti ancora utilizzabili
+mantengono una lettura ogni 10 secondi. In assenza di questi stati, un PDF
+fallito viene ricontrollato ogni 60 secondi per osservare il recupero previsto;
+senza documenti in attesa, fallimenti o link aperti il polling si arresta.
+Focus e riconnessione richiedono comunque lo stato corrente. Firma ricevuta,
+preparazione e disponibilità del PDF rimangono distinti, senza richiedere una
+nuova firma per una difficoltà PDF.
+
+Confrontati `src/features/consents/consent-panel.tsx` e
+`src/lib/document-polling.ts` con PRODUCT, DESIGN, sidecar, globals e primitive:
+palette, Two Voices, Quiet Surface e controlli originali shadcn confermati;
+nessun nuovo token, componente o asset pubblico. Sistema e seed preservati.
+Evidenze comuni della stabilizzazione e disposizione `ship` registrate in
+app.md; questo passaggio non aggiunge nuove catture della firma o del PDF.
+Documenter fresco equivalente in sostituzione del harness specializzato non
+disponibile; drift preesistente non riparato né canonizzato.

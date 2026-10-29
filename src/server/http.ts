@@ -1,6 +1,7 @@
 import "server-only";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { withApiTiming } from "./request-timing";
 
 export class ApiError extends Error {
   constructor(
@@ -135,12 +136,27 @@ export async function readBody<T>(
   schema: z.ZodType<T>,
 ): Promise<T> {
   requireSameOrigin(request);
-  const text = await request.text();
-  if (text.length > 32768)
-    throw new ApiError(413, "La richiesta contiene troppi dati.");
   try {
+    const reader = request.body?.getReader();
+    const decoder = new TextDecoder("utf-8", { fatal: true });
+    let size = 0;
+    let text = "";
+    if (reader) {
+      while (true) {
+        const chunk = await reader.read();
+        if (chunk.done) break;
+        size += chunk.value.byteLength;
+        if (size > 32768) {
+          await reader.cancel();
+          throw new ApiError(413, "La richiesta contiene troppi dati.");
+        }
+        text += decoder.decode(chunk.value, { stream: true });
+      }
+      text += decoder.decode();
+    }
     return schema.parse(JSON.parse(text));
   } catch (error) {
+    if (error instanceof ApiError) throw error;
     if (error instanceof z.ZodError) throw error;
     throw new ApiError(400, "Il formato della richiesta non è valido.");
   }
@@ -152,31 +168,39 @@ export function json(data: unknown, status = 200) {
   });
 }
 export async function handleApi(action: () => Promise<NextResponse>) {
-  try {
-    return await action();
-  } catch (error) {
-    if (error instanceof z.ZodError)
+  return withApiTiming(async () => {
+    try {
+      return await action();
+    } catch (error) {
+      if (error instanceof z.ZodError)
+        return json(
+          {
+            error: error.issues[0]?.message ?? "Controlla i dati inseriti.",
+            code: "VALIDATION_ERROR",
+          },
+          422,
+        );
+      if (error instanceof ApiError) {
+        const response = json(
+          { error: error.message, code: error.code },
+          error.status,
+        );
+        if (error.status === 429) response.headers.set("Retry-After", "60");
+        return response;
+      }
+      const id = crypto.randomUUID();
+      console.error("Request failed", {
+        id,
+        type: error instanceof Error ? error.name : "unknown",
+      });
       return json(
         {
-          error: error.issues[0]?.message ?? "Controlla i dati inseriti.",
-          code: "VALIDATION_ERROR",
+          error: "Si è verificato un errore. Riprova tra poco.",
+          code: "INTERNAL_ERROR",
+          reference: id,
         },
-        422,
+        500,
       );
-    if (error instanceof ApiError)
-      return json({ error: error.message, code: error.code }, error.status);
-    const id = crypto.randomUUID();
-    console.error("Request failed", {
-      id,
-      type: error instanceof Error ? error.name : "unknown",
-    });
-    return json(
-      {
-        error: "Si è verificato un errore. Riprova tra poco.",
-        code: "INTERNAL_ERROR",
-        reference: id,
-      },
-      500,
-    );
-  }
+    }
+  });
 }
